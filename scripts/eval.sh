@@ -26,8 +26,8 @@ eval_datasets=(
     # "data/datasets/test1_ForenSynths/test" \
     # "data/datasets/test2_Self-Synthesis/test" \
     # "data/datasets/test3_Ojha/test" \
-    # "/home/yiruolei/ALLDATASET/GenImage" \
-    "/home/yiruolei/ALLDATASET/Chameleon" 
+    "/home/yiruolei/ALLDATASET/GenImage" \
+    # "/home/yiruolei/ALLDATASET/Chameleon" 
 
 )
 for eval_dataset in "${eval_datasets[@]}"
@@ -43,3 +43,5 @@ do
         --resume $RESUME_PATH/checkpoint-best.pth \
         --eval True
 done
+
+#batchsize 256

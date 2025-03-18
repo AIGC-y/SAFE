@@ -1,5 +1,5 @@
 
-GPU_NUM=2
+GPU_NUM=4
 WORLD_SIZE=1
 RANK=0
 MASTER_ADDR=localhost
@@ -14,10 +14,10 @@ DISTRIBUTED_ARGS="
 "
 
 train_datasets=(
-    "/home/yiruolei/ALLDATASET/GenImage" \
+    "data/datasets/train_ForenSynths/train" \
 )
 eval_datasets=(
-    "/home/yiruolei/ALLDATASET/GenImage" \
+    "data/datasets/train_ForenSynths/val" \
 )
 
 MODEL="SAFE"
@@ -45,7 +45,7 @@ do
             --epochs 20 \
             --num_workers 16 \
             --output_dir $OUTPUT_PATH \
-        2>&1 | tee -a $OUTPUT_PATH/log_train.txt 
+        2>&1 | tee -a $OUTPUT_PATH/log_train.txt
 
     done
 done

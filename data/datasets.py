@@ -168,7 +168,7 @@ def Get_Transforms(args):
 
 class TrainDataset(Dataset):
 
-    def __init__(self, is_train, args):
+    def __init__(self, is_train, args):#*初始的时候会把所有路径整理出来.而不是图象,这也是一种方法,为了在getitem的时候速度比较快.
 
         TRANSFORM = Get_Transforms(args)
         self.transform = TRANSFORM[0] if is_train else TRANSFORM[1]
@@ -179,16 +179,16 @@ class TrainDataset(Dataset):
         num_datasets = len(dataset_list)
 
         if num_datasets == 1:#只有一个列表
-            real_list, fake_list = self.get_real_and_fake_lists(dataset_list[0])
+            real_list, fake_list = self.get_real_and_fake_lists(dataset_list[0],is_train)
             if is_train and args.num_train is not None:
                 self.data_list = real_list[:args.num_train//2] + fake_list[:args.num_train//2]
             else:
-                self.data_list = real_list + fake_list
+                self.data_list = real_list + fake_list #*明显分界
         else:
             assert args.num_train is not None
             self.data_list = []
             for dataset in dataset_list:
-                real_list, fake_list = self.get_real_and_fake_lists(dataset)
+                real_list, fake_list = self.get_real_and_fake_lists(dataset,is_train)
                 self.data_list.extend(real_list[:args.num_train//(2 * num_datasets)] + fake_list[:args.num_train//(2 * num_datasets)])
 
     def get_image_paths(self, dir_path):
@@ -200,17 +200,30 @@ class TrainDataset(Dataset):
                     image_paths.append(os.path.join(root, file))
         return image_paths
 
-    def get_real_and_fake_lists(self, folder_path):
+    def get_real_and_fake_lists(self, folder_path,is_train):
         real_list, fake_list = [], []
         for root, dirs, files in sorted(os.walk(folder_path, followlinks=True)):#*因为最后会回到大文件夹中,这个结构下是不存在两个列表的.
-            for dir_name in sorted(dirs):
-                if dir_name == "0_real":
-                    real_dir_path = os.path.join(root, dir_name)
-                    real_list.extend([{"image_path": image_path, "label" : 0} for image_path in self.get_image_paths(real_dir_path)])
-                elif dir_name == "1_fake":
-                    fake_dir_path = os.path.join(root, dir_name)
-                    fake_list.extend([{"image_path": image_path, "label" : 1} for image_path in self.get_image_paths(fake_dir_path)])
+            if is_train and  "train" in root:
+                for dir_name in sorted(dirs):
+                    if dir_name == "0_real":
+                        real_dir_path = os.path.join(root, dir_name)
+                        real_list.extend([{"image_path": image_path, "label" : 0} for image_path in self.get_image_paths(real_dir_path)])
+                    elif dir_name == "1_fake":
+                        fake_dir_path = os.path.join(root, dir_name)
+                        fake_list.extend([{"image_path": image_path, "label" : 1} for image_path in self.get_image_paths(fake_dir_path)])
+                continue
+            elif not is_train and  "val" in root:
+                for dir_name in sorted(dirs):
+                    if dir_name == "0_real":
+                        real_dir_path = os.path.join(root, dir_name)
+                        real_list.extend([{"image_path": image_path, "label" : 0} for image_path in self.get_image_paths(real_dir_path)])
+                    elif dir_name == "1_fake":
+                        fake_dir_path = os.path.join(root, dir_name)
+                        fake_list.extend([{"image_path": image_path, "label" : 1} for image_path in self.get_image_paths(fake_dir_path)])
+                continue
         return real_list, fake_list
+    
+            
 
     def __len__(self):
 
