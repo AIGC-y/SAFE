@@ -1,5 +1,11 @@
 
-GPU_NUM=4
+#!/bin/bash
+eval "$(conda shell.bash hook)"
+conda activate SAFE 
+
+
+
+GPU_NUM=2
 WORLD_SIZE=1
 RANK=0
 MASTER_ADDR=localhost
@@ -17,14 +23,16 @@ MODEL="SAFE"
 RESUME_PATH="./checkpoint"
 
 eval_datasets=(
-    "data/datasets/test1_ForenSynths/test" \
-    "data/datasets/test2_Self-Synthesis/test" \
-    "data/datasets/test3_Ojha/test" \
-    "data/datasets/test4_GenImage/test" \
+    # "data/datasets/test1_ForenSynths/test" \
+    # "data/datasets/test2_Self-Synthesis/test" \
+    # "data/datasets/test3_Ojha/test" \
+    # "/home/yiruolei/ALLDATASET/GenImage" \
+    "/home/yiruolei/ALLDATASET/Chameleon" 
+
 )
 for eval_dataset in "${eval_datasets[@]}"
 do
-    python -m torch.distributed.launch $DISTRIBUTED_ARGS main_finetune.py \
+    PYTHONWARNINGS="ignore" python -m torch.distributed.run $DISTRIBUTED_ARGS main_finetune.py \
         --input_size 256 \
         --transform_mode 'crop' \
         --model $MODEL \

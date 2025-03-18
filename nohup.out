@@ -1,0 +1,119 @@
+WARNING:__main__:
+*****************************************
+Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+*****************************************
+| distributed init (rank 0): env://, gpu 0
+| distributed init (rank 1): env://, gpu 1
+Namespace(jpeg_factor=None, blur_sigma=None, mask_ratio=None, mask_patch_size=None, transform_mode='crop', batch_size=256, epochs=100, update_freq=1, model='SAFE', input_size=256, layer_decay_type='single', model_ema=False, model_ema_decay=0.9999, model_ema_force_cpu=False, model_ema_eval=False, clip_grad=None, weight_decay=0.05, lr=None, blr=0.0005, layer_decay=1.0, min_lr=1e-06, warmup_epochs=20, warmup_steps=-1, opt='adamw', opt_eps=1e-08, opt_betas=None, momentum=0.9, weight_decay_end=None, smoothing=0.1, mixup=0.0, cutmix=0.0, cutmix_minmax=None, mixup_prob=1.0, mixup_switch_prob=0.5, mixup_mode='batch', pretrained=True, global_pool=True, head_init_scale=0.001, model_key='model|module', model_prefix='', num_train=10000000000, data_path='', nb_classes=2, output_dir='./checkpoint', log_dir=None, device='cuda', seed=None, resume='./checkpoint/checkpoint-best.pth', eval_data_path='/home/yiruolei/ALLDATASET/GenImage', imagenet_default_mean_and_std=True, data_set='IMNET', auto_resume=True, save_ckpt=True, save_ckpt_freq=5, save_ckpt_num=100, start_epoch=0, eval=True, dist_eval=True, disable_eval=False, num_workers=16, pin_mem=True, crop_pct=None, world_size=2, local_rank=-1, dist_on_itp=False, dist_url='env://', use_amp=False, rank=0, gpu=0, distributed=True, dist_backend='nccl')
+Number of params: 1.44M
+Base lr: 5.00e-04
+Actual lr: 1.00e-03
+Accumulate grad iterations: 1
+Effective batch size: 512
+criterion = LabelSmoothingCrossEntropy()
+Resume checkpoint ./checkpoint/checkpoint-best.pth
+Eval only mode
+Warning: Enabling distributed evaluation with an eval dataset not divisible by process number. This will slightly alter validation results as extra duplicate entries are added to achieve equal num of samples per-process.
+测试数据大小 335701
+Test:  [  0/656]  eta: 2:07:13  loss: 0.0949 (0.0949)  acc1: 0.9883 (0.9883)  time: 11.6359
+image error: /home/yiruolei/ALLDATASET/GenImage/Midjourney/train/1_fake/208_midjourney_76.png
+image error: /home/yiruolei/ALLDATASET/GenImage/Midjourney/train/1_fake/208_midjourney_92.png
+Test:  [655/656]  eta: 0:00:01  loss: 0.2400 (0.1550)  acc1: 0.9123 (0.9519)  time: 0.6687
+Test: Total time: 0:12:28 (2.1410 s / it)
+* Acc@1 95.24% loss 0.1541
+Accuracy of the network on 335701 test images: 95.24%
+test dataset is Midjourney acc: 95.24%, ap: 99.52%
+***********************************
+测试数据大小 336000
+Test:  [  0/657]  eta: 1:45:12  loss: 0.0623 (0.0623)  acc1: 1.0000 (1.0000)  time: 9.6078
+image error: /home/yiruolei/ALLDATASET/GenImage/stable_diffusion_v_1_4/train/1_fake/033_sdv4_00137.png
+Test:  [656/657]  eta: 0:00:00  loss: 0.0612 (0.0699)  acc1: 0.9961 (0.9931)  time: 0.3230
+Test: Total time: 0:05:18 (1.4854 s / it)
+* Acc@1 99.32% loss 0.0697
+Accuracy of the network on 336000 test images: 99.32%
+test dataset is stable_diffusion_v_1_4 acc: 99.32%, ap: 99.94%
+***********************************
+测试数据大小 335274
+Test:  [  0/655]  eta: 0:49:33  loss: 0.0678 (0.0678)  acc1: 0.9961 (0.9961)  time: 4.5393
+Test:  [654/655]  eta: 0:00:00  loss: 0.0649 (0.0699)  acc1: 0.9961 (0.9930)  time: 0.4766
+Test: Total time: 0:05:21 (1.4915 s / it)
+* Acc@1 99.30% loss 0.0699
+Accuracy of the network on 335274 test images: 99.30%
+test dataset is stable_diffusion_v_1_5 acc: 99.30%, ap: 99.94%
+***********************************
+Warning: Enabling distributed evaluation with an eval dataset not divisible by process number. This will slightly alter validation results as extra duplicate entries are added to achieve equal num of samples per-process.
+测试数据大小 331453
+Test:  [  0/648]  eta: 0:48:15  loss: 0.0655 (0.0655)  acc1: 1.0000 (1.0000)  time: 4.4678
+image error: /home/yiruolei/ALLDATASET/GenImage/ADM/train/1_fake/115_adm_141.PNG
+image error: /home/yiruolei/ALLDATASET/GenImage/ADM/train/1_fake/115_adm_164.PNG
+Test:  [647/648]  eta: 0:00:00  loss: 0.7882 (0.4103)  acc1: 0.6055 (0.8206)  time: 0.1568
+Test: Total time: 0:03:12 (1.2965 s / it)
+* Acc@1 82.09% loss 0.4099
+Accuracy of the network on 331453 test images: 82.09%
+test dataset is ADM acc: 82.09%, ap: 96.55%
+***********************************
+测试数据大小 0
+Traceback (most recent call last):
+  File "/home/yiruolei/project/SAFE/main_finetune.py", line 486, in <module>
+    main(args)
+  File "/home/yiruolei/project/SAFE/main_finetune.py", line 379, in main
+    test_stats, acc, ap = evaluate(data_loader_val, model, device, val)
+  File "/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/yiruolei/project/SAFE/engine_finetune.py", line 136, in evaluate
+    for index, batch in enumerate(metric_logger.log_every(data_loader, 1000, header)):
+  File "/home/yiruolei/project/SAFE/utils.py", line 185, in log_every
+    header, total_time_str, total_time / len(iterable)+1))
+ZeroDivisionError: float division by zero
+Traceback (most recent call last):
+  File "/home/yiruolei/project/SAFE/main_finetune.py", line 486, in <module>
+    main(args)
+  File "/home/yiruolei/project/SAFE/main_finetune.py", line 379, in main
+    test_stats, acc, ap = evaluate(data_loader_val, model, device, val)
+  File "/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/yiruolei/project/SAFE/engine_finetune.py", line 136, in evaluate
+    for index, batch in enumerate(metric_logger.log_every(data_loader, 1000, header)):
+  File "/home/yiruolei/project/SAFE/utils.py", line 185, in log_every
+    header, total_time_str, total_time / len(iterable)+1))
+ZeroDivisionError: float division by zero
+[2025-03-12 11:21:16,544] torch.distributed.elastic.multiprocessing.api: [ERROR] failed (exitcode: 1) local_rank: 0 (pid: 543844) of binary: /home/yiruolei/anaconda3/envs/SAFE/bin/python
+Traceback (most recent call last):
+  File "/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/distributed/run.py", line 816, in <module>
+    main()
+  File "/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 347, in wrapper
+    return f(*args, **kwargs)
+  File "/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/distributed/run.py", line 812, in main
+    run(args)
+  File "/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/distributed/run.py", line 803, in run
+    elastic_launch(
+  File "/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 135, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 268, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+main_finetune.py FAILED
+------------------------------------------------------------
+Failures:
+[1]:
+  time      : 2025-03-12_11:21:16
+  host      : huake-VMware7-1
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 543845)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-03-12_11:21:16
+  host      : huake-VMware7-1
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 543844)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

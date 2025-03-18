@@ -267,7 +267,7 @@ def main(args):
             label_smoothing=args.smoothing, num_classes=args.nb_classes)
 
     model_ema = None
-    if args.model_ema:
+    if args.model_ema:#?为什么进行滑动平均?
         # Important to create EMA model after cuda(), DP wrapper, and AMP but before SyncBN and DDP wrapper
         model_ema = ModelEma(
             model,
@@ -343,23 +343,23 @@ def main(args):
         ROOT = args.eval_data_path
         VAL_DICT = {
             "data/datasets/test1_ForenSynths/test": ['progan', 'stylegan', 'stylegan2', 'biggan', 'cyclegan', 'stargan', 'gaugan', 'deepfake'],
-            "data/datasets/test4_GenImage/test": ['Midjourney', 'stable_diffusion_v_1_4', 'stable_diffusion_v_1_5', 'ADM', 'Glide', 'wukong', 'VQDM', 'BigGAN'],
+            "/home/yiruolei/ALLDATASET/GenImage": ['Midjourney', 'stable_diffusion_v_1_4', 'stable_diffusion_v_1_5', 'ADM', 'Glide', 'wukong', 'VQDM', 'BigGAN'],
         }
         try:
             vals = VAL_DICT[args.eval_data_path]
-        except:
+        except:#!只能接受在在目录内部的为名字,所以要留一格或者目录位置写好.主要是数据结构不对应的问题.这真可以之后自己重建立一下
             vals = sorted(os.listdir(args.eval_data_path))
-
+        print(f"vals = {vals}")
         rows = [["{} model testing on...".format(args.resume)],
             ['testset', 'accuracy', 'avg precision']]
 
-        for v_id, val in enumerate(vals):
+        for v_id, val in enumerate(vals):#每个小类别
             
             args.eval_data_path = os.path.join(ROOT, val)
             dataset_val = TrainDataset(is_train=False, args=args)
 
             if args.dist_eval:
-                if len(dataset_val) % num_tasks != 0:
+                if len(dataset_val) % num_tasks != 0:#这个数所有的数据块来分
                     print('Warning: Enabling distributed evaluation with an eval dataset not divisible by process number. '
                             'This will slightly alter validation results as extra duplicate entries are added to achieve '
                             'equal num of samples per-process.')
@@ -375,7 +375,8 @@ def main(args):
                 pin_memory=args.pin_mem,
                 drop_last=False
             )
-
+            if len(dataset_val) == 0: break
+            print("测试数据大小",len(dataset_val))#?怎么会出来是0呢?
             test_stats, acc, ap = evaluate(data_loader_val, model, device, val)
             print(f"Accuracy of the network on {len(dataset_val)} test images: {test_stats['acc1']:.2%}")
 

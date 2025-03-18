@@ -100,6 +100,17 @@ data/datasets
 |   |-- FLUX.1-schnell
 |   |-- PixArt-Sigma-XL-2-1024-MS
 |   |-- stable-diffusion-3-medium-diffusers
+
+每个数据集使用的时候都是:所以需要直接使用train或者test或者其他的
+dataset_root/
+|── 0_real/
+│   ├── image1.jpg
+│   ├── image2.png
+│   └── ...
+└── 1_fake/
+    ├── image1.jpg
+    ├── image2.png
+    └── ...
 ```
 </details>
 

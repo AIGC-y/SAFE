@@ -134,6 +134,7 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
     model.eval()
 
     for index, batch in enumerate(metric_logger.log_every(data_loader, 1000, header)):
+        # print("数据:",batch[0].shape,batch[0])
         images = batch[0]
         target = batch[-1]
 

@@ -172,12 +172,13 @@ class TrainDataset(Dataset):
 
         TRANSFORM = Get_Transforms(args)
         self.transform = TRANSFORM[0] if is_train else TRANSFORM[1]
-        root = args.data_path if is_train else args.eval_data_path
+        root = args.data_path if is_train else args.eval_data_path #*是大路径的的不同,因为在ai检测中使用不同数据集来使用,而不测试训练数据集的效果
 
         dataset_list = root.replace(' ', '').split(',')
+        print(f"数据集列表: {dataset_list}")
         num_datasets = len(dataset_list)
 
-        if num_datasets == 1:
+        if num_datasets == 1:#只有一个列表
             real_list, fake_list = self.get_real_and_fake_lists(dataset_list[0])
             if is_train and args.num_train is not None:
                 self.data_list = real_list[:args.num_train//2] + fake_list[:args.num_train//2]
@@ -201,7 +202,7 @@ class TrainDataset(Dataset):
 
     def get_real_and_fake_lists(self, folder_path):
         real_list, fake_list = [], []
-        for root, dirs, files in sorted(os.walk(folder_path, followlinks=True)):
+        for root, dirs, files in sorted(os.walk(folder_path, followlinks=True)):#*因为最后会回到大文件夹中,这个结构下是不存在两个列表的.
             for dir_name in sorted(dirs):
                 if dir_name == "0_real":
                     real_dir_path = os.path.join(root, dir_name)
@@ -219,7 +220,12 @@ class TrainDataset(Dataset):
         
         sample = self.data_list[index]
         image_path, targets = sample['image_path'], sample['label']
-        image = Image.open(image_path).convert('RGB')
+        try:
+            image = Image.open(image_path).convert('RGB')
+        except:
+            print(f'image error: {image_path}')
+            return self.__getitem__(random.randint(0, len(self.data_list) - 1))
+
         image = self.transform(image)
 
         return image, torch.tensor(int(targets))
