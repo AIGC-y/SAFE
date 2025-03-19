@@ -33,7 +33,7 @@ do
 
         python -m torch.distributed.run $DISTRIBUTED_ARGS main_finetune.py \
             --input_size 256 \
-            --transform_mode 'crop' \ #?这个是什么?
+            --transform_mode 'crop' \ #?这个是什么?jj
             --model $MODEL \
             --data_path "$train_dataset" \
             --eval_data_path "$eval_dataset" \
