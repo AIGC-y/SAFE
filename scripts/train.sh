@@ -31,9 +31,9 @@ do
         OUTPUT_PATH="results/$MODEL/$current_time"
         mkdir -p $OUTPUT_PATH
 
-        python -m torch.distributed.launch $DISTRIBUTED_ARGS main_finetune.py \
+        python -m torch.distributed.run $DISTRIBUTED_ARGS main_finetune.py \
             --input_size 256 \
-            --transform_mode 'crop' \
+            --transform_mode 'crop' \ #?这个是什么?
             --model $MODEL \
             --data_path "$train_dataset" \
             --eval_data_path "$eval_dataset" \

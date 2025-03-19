@@ -1,0 +1,4 @@
+./results/SAFE/20250318_114617/checkpoint-last.pth model testing on...
+testset,accuracy,avg precision
+test,59.36083583006837,51.61497249303323
+mean,59.36083583006837,51.61497249303323

@@ -84,9 +84,9 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
                     model_ema.update(model)
         
         torch.cuda.synchronize()
-
+        #一个batch的准确率
         if mixup_fn is None:
-            class_acc = (output.max(-1)[-1] == targets).float().mean()
+            class_acc = (output.max(-1)[-1] == targets).float().mean()#二分类任务的output.max获得的是最大值和索引.
         else:
             class_acc = None
 

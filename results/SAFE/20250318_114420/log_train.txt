@@ -1,0 +1,44 @@
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/distributed/launch.py:183: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use-env is set by default in torchrun.
+If your script expects `--local-rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+[2025-03-18 11:44:21,928] torch.distributed.run: [WARNING] 
+[2025-03-18 11:44:21,928] torch.distributed.run: [WARNING] *****************************************
+[2025-03-18 11:44:21,928] torch.distributed.run: [WARNING] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+[2025-03-18 11:44:21,928] torch.distributed.run: [WARNING] *****************************************
+| distributed init (rank 0): env://, gpu 0
+| distributed init (rank 1): env://, gpu 1
+Namespace(jpeg_factor=None, blur_sigma=None, mask_ratio=None, mask_patch_size=None, transform_mode='crop', batch_size=32, epochs=20, update_freq=1, model='SAFE', input_size=256, layer_decay_type='single', model_ema=False, model_ema_decay=0.9999, model_ema_force_cpu=False, model_ema_eval=False, clip_grad=None, weight_decay=0.01, lr=None, blr=0.01, layer_decay=1.0, min_lr=1e-06, warmup_epochs=1, warmup_steps=-1, opt='adamw', opt_eps=1e-08, opt_betas=None, momentum=0.9, weight_decay_end=None, smoothing=0.1, mixup=0.0, cutmix=0.0, cutmix_minmax=None, mixup_prob=1.0, mixup_switch_prob=0.5, mixup_mode='batch', pretrained=True, global_pool=True, head_init_scale=0.001, model_key='model|module', model_prefix='', num_train=10000000000, data_path='/home/yiruolei/ALLDATASET/GenImage', nb_classes=2, output_dir='results/SAFE/20250318_114420', log_dir=None, device='cuda', seed=None, resume='', eval_data_path='/home/yiruolei/ALLDATASET/GenImage', imagenet_default_mean_and_std=True, data_set='IMNET', auto_resume=True, save_ckpt=True, save_ckpt_freq=1, save_ckpt_num=100, start_epoch=0, eval=False, dist_eval=True, disable_eval=False, num_workers=16, pin_mem=True, crop_pct=None, world_size=2, local_rank=0, dist_on_itp=False, dist_url='env://', use_amp=False, rank=0, gpu=0, distributed=True, dist_backend='nccl')
+数据集列表: ['/home/yiruolei/ALLDATASET/GenImage']
+Sampler_train = <torch.utils.data.distributed.DistributedSampler object at 0x7cf77b4f9100>
+数据集列表: ['/home/yiruolei/ALLDATASET/GenImage']
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Number of params: 1.44M
+Base lr: 1.00e-02
+Actual lr: 2.50e-03
+Accumulate grad iterations: 1
+Effective batch size: 64
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+criterion = LabelSmoothingCrossEntropy()
+Auto resume checkpoint: 
+Start training for 20 epochs
+[rank0]:[W reducer.cpp:1360] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+[rank1]:[W reducer.cpp:1360] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+Epoch: [0]  [    0/40330]  eta: 2 days, 2:00:31  lr: 0.000000  loss: 0.6770 (0.6770)  class_acc: 0.6875 (0.6875)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 4.4640
+Epoch: [0]  [  100/40330]  eta: 1:23:51  lr: 0.000006  loss: 0.6622 (0.6741)  class_acc: 0.5938 (0.5894)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.0863
+Epoch: [0]  [  200/40330]  eta: 1:10:43  lr: 0.000012  loss: 0.6366 (0.6628)  class_acc: 0.6250 (0.6060)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.0881
+Epoch: [0]  [  300/40330]  eta: 1:06:01  lr: 0.000019  loss: 0.6683 (0.6598)  class_acc: 0.6250 (0.6134)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.0833
+Epoch: [0]  [  400/40330]  eta: 1:03:51  lr: 0.000025  loss: 0.6397 (0.6572)  class_acc: 0.6250 (0.6171)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.0894
+Epoch: [0]  [  500/40330]  eta: 1:02:07  lr: 0.000031  loss: 0.6421 (0.6547)  class_acc: 0.6250 (0.6220)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.0805
+Epoch: [0]  [  600/40330]  eta: 1:01:06  lr: 0.000037  loss: 0.6268 (0.6512)  class_acc: 0.6562 (0.6286)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.0837
+Epoch: [0]  [  700/40330]  eta: 1:00:11  lr: 0.000043  loss: 0.6165 (0.6469)  class_acc: 0.6875 (0.6368)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.0831
+Epoch: [0]  [  800/40330]  eta: 0:59:33  lr: 0.000050  loss: 0.6015 (0.6435)  class_acc: 0.6875 (0.6430)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.0859
+Epoch: [0]  [  900/40330]  eta: 0:59:00  lr: 0.000056  loss: 0.5983 (0.6387)  class_acc: 0.7188 (0.6505)  min_lr: 0.0001 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.0855
+image error: /home/yiruolei/ALLDATASET/GenImage/ADM/train/1_fake/115_adm_141.PNG

@@ -102,7 +102,7 @@ class RandomMask(object):
 def Get_Transforms(args):
 
     size = args.input_size
-
+    #*
     TRANSFORM_DICT = {
         'resize_BILINEAR': {
             'train': [
@@ -170,7 +170,7 @@ class TrainDataset(Dataset):
 
     def __init__(self, is_train, args):#*初始的时候会把所有路径整理出来.而不是图象,这也是一种方法,为了在getitem的时候速度比较快.
 
-        TRANSFORM = Get_Transforms(args)
+        TRANSFORM = Get_Transforms(args)#!甚至这个是创新点
         self.transform = TRANSFORM[0] if is_train else TRANSFORM[1]
         root = args.data_path if is_train else args.eval_data_path #*是大路径的的不同,因为在ai检测中使用不同数据集来使用,而不测试训练数据集的效果
 
@@ -213,6 +213,15 @@ class TrainDataset(Dataset):
                         fake_list.extend([{"image_path": image_path, "label" : 1} for image_path in self.get_image_paths(fake_dir_path)])
                 continue
             elif not is_train and  "val" in root:
+                for dir_name in sorted(dirs):
+                    if dir_name == "0_real":
+                        real_dir_path = os.path.join(root, dir_name)
+                        real_list.extend([{"image_path": image_path, "label" : 0} for image_path in self.get_image_paths(real_dir_path)])
+                    elif dir_name == "1_fake":
+                        fake_dir_path = os.path.join(root, dir_name)
+                        fake_list.extend([{"image_path": image_path, "label" : 1} for image_path in self.get_image_paths(fake_dir_path)])
+                continue
+            elif not is_train and  "test" in root:
                 for dir_name in sorted(dirs):
                     if dir_name == "0_real":
                         real_dir_path = os.path.join(root, dir_name)
