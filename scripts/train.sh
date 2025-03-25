@@ -14,10 +14,10 @@ DISTRIBUTED_ARGS="
 "
 
 train_datasets=(
-    "/home/yiruolei/ALLDATASET/GenImage" \
+    "/home/yiruolei/ALLDATASET/CNNSpot/progan_train" \
 )
 eval_datasets=(
-    "/home/yiruolei/ALLDATASET/GenImage" \
+    "/home/yiruolei/ALLDATASET/CNNSpot/progan_val" \
 )
 #"/home/yiruolei/ALLDATASET/GenImage" \
 MODEL="TESTGENIMAGE"

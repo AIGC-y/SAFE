@@ -19,7 +19,7 @@ from torchvision.transforms import InterpolationMode
 from PIL import Image
 import random
 
-from patchingtest import ImageSampler
+from data.patchingtest import ImageSampler
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -209,7 +209,7 @@ class TrainDataset(Dataset):
     def get_real_and_fake_lists(self, folder_path,is_train):
         real_list, fake_list = [], []
         for root, dirs, files in sorted(os.walk(folder_path, followlinks=True)):#*因为最后会回到大文件夹中,这个结构下是不存在两个列表的.
-            if is_train and  "train" in root:
+            if is_train and  "train" in root:#训练集
                 for dir_name in sorted(dirs):
                     if dir_name == "0_real":
                         real_dir_path = os.path.join(root, dir_name)
@@ -218,7 +218,7 @@ class TrainDataset(Dataset):
                         fake_dir_path = os.path.join(root, dir_name)
                         fake_list.extend([{"image_path": image_path, "label" : 1} for image_path in self.get_image_paths(fake_dir_path)])
                 continue
-            elif not is_train and  "val" in root:
+            elif not is_train and  "val" in root: #测试集
                 for dir_name in sorted(dirs):
                     if dir_name == "0_real":
                         real_dir_path = os.path.join(root, dir_name)
