@@ -16,6 +16,11 @@ from torchvision import transforms
 from torchvision.transforms import functional as F
 from torchvision.transforms import InterpolationMode
 
+from PIL import Image
+import random
+
+from patchingtest import ImageSampler
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
@@ -49,7 +54,6 @@ class RandomGaussianBlur():
         if random.random() < self.p:
             return self.blur(img)
         return img
-
 
 class RandomMask(object):
     def __init__(self, ratio=0.5, patch_size=16, p=0.5):
@@ -99,6 +103,7 @@ class RandomMask(object):
         return tensor * mask.expand_as(tensor)
 
 
+
 def Get_Transforms(args):
 
     size = args.input_size
@@ -138,6 +143,7 @@ def Get_Transforms(args):
             'eval': [
             ],
         },
+        
     }
 
     # region [Augmentations]
@@ -148,7 +154,7 @@ def Get_Transforms(args):
         transforms.RandomRotation(180),
         transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5),
         transforms.ToTensor(),
-        RandomMask(ratio=(0.00, 0.75), patch_size=16, p=0.5),
+        RandomMask(ratio=(0.00, 0.75), patch_size=16, p=0.5),#*就单纯的随机掩码就行啊
     ])
 
     transform_eval.append(transforms.ToTensor())
@@ -248,6 +254,9 @@ class TrainDataset(Dataset):
             print(f'image error: {image_path}')
             return self.__getitem__(random.randint(0, len(self.data_list) - 1))
 
-        image = self.transform(image)
+        #*先重新拼接一下(其实最好是放在transform中,但是目前没放进去)
+        sampler = ImageSampler(image, target_size=(512, 512), min_patch_size=(32, 32), max_patch_size=(128, 128))
+        stitched_image = sampler.stitch_patches(num_patches=64)#*这个超参可以删除??
+        image = self.transform(stitched_image)
 
         return image, torch.tensor(int(targets))
