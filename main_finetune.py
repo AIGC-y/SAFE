@@ -251,10 +251,12 @@ def main(args):
             data_loader_val = None
 
     # Init Model
-    if args.model == 'SAFE':
-        model = resnet50(num_classes=2)
-    else:
-        model = timm.create_model(args.model, pretrained=args.pretrained, num_classes=2)
+    #!这里先改一下,之后在改回来
+    model = resnet50(num_classes=2)
+    # if args.model == 'SAFE':
+    #     model = resnet50(num_classes=2)
+    # else:
+    #     model = timm.create_model(args.model, pretrained=args.pretrained, num_classes=2)
     model.to(device)
 
     mixup_fn = None

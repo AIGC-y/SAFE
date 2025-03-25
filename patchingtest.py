@@ -10,7 +10,7 @@ class ImageSampler:
     #!目前很多部分没粘贴图象,不一定好用,试一试.
     """
 
-    def __init__(self, image, target_size=(512, 512), min_patch_size=(32, 32), max_patch_size=(128, 128)):
+    def __init__(self, image, target_size=(512, 512), min_patch_size=(32, 32)):
         """
         初始化ImageSampler。
 
@@ -23,7 +23,6 @@ class ImageSampler:
         self.image = image
         self.target_width, self.target_height = target_size
         self.min_patch_width, self.min_patch_height = min_patch_size
-        self.max_patch_width, self.max_patch_height = max_patch_size
         self.patches = []
         self.current_x = 0  # 当前拼接位置的x坐标
         self.current_y = 0  # 当前拼接位置的y坐标
@@ -37,9 +36,9 @@ class ImageSampler:
         """
         img_width, img_height = self.image.size
 
-        # 随机确定图像块的大小
-        patch_width = random.randint(self.min_patch_width, self.max_patch_width)
-        patch_height = random.randint(self.min_patch_height, self.max_patch_height)
+        # 随机确定图像块的大小,不手动设置,设置为图的大小为上限
+        patch_width = random.randint(self.min_patch_width, img_width)
+        patch_height = random.randint(self.min_patch_height, img_height)
 
         max_x = img_width - patch_width
         max_y = img_height - patch_height

@@ -37,7 +37,7 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
     use_amp = args.use_amp
     optimizer.zero_grad()
 
-    for data_iter_step, (samples, targets) in enumerate(metric_logger.log_every(data_loader, print_freq=100, header=header)):
+    for data_iter_step, (samples, targets) in enumerate(metric_logger.log_every(data_loader, print_freq=500, header=header)):
 
         # we use a per iteration (instead of per epoch) lr scheduler
         if data_iter_step % update_freq == 0:

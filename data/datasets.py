@@ -255,8 +255,9 @@ class TrainDataset(Dataset):
             return self.__getitem__(random.randint(0, len(self.data_list) - 1))
 
         #*先重新拼接一下(其实最好是放在transform中,但是目前没放进去)
-        sampler = ImageSampler(image, target_size=(512, 512), min_patch_size=(32, 32), max_patch_size=(128, 128))
-        stitched_image = sampler.stitch_patches(num_patches=64)#*这个超参可以删除??
-        image = self.transform(stitched_image)
+        #*这里设置的大小也比原本的大,反正会裁
+        sampler = ImageSampler(image, target_size=(512, 512), min_patch_size=(16, 16))
+        stitched_image = sampler.stitch_patches(num_patches=64)#*这个超参可以删除??或者修改为动态的?
+        image = self.transform(stitched_image)#这里用的size是超参数据
 
         return image, torch.tensor(int(targets))

@@ -19,8 +19,9 @@ train_datasets=(
 eval_datasets=(
     "/home/yiruolei/ALLDATASET/GenImage" \
 )
-
-MODEL="SAFE"
+#"/home/yiruolei/ALLDATASET/GenImage" \
+MODEL="TESTGENIMAGE"
+#这里都是有logging信息的所以不需要自己nohup了
 
 for train_dataset in "${train_datasets[@]}" 
 do
@@ -33,7 +34,7 @@ do
 
         python -m torch.distributed.run $DISTRIBUTED_ARGS main_finetune.py \
             --input_size 256 \
-            --transform_mode 'crop' \ 
+            --transform_mode 'crop' \
             --model $MODEL \
             --data_path "$train_dataset" \
             --eval_data_path "$eval_dataset" \
