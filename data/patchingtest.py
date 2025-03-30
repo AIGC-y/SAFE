@@ -10,7 +10,7 @@ class ImageSampler:
     #!目前很多部分没粘贴图象,不一定好用,试一试.
     """
 
-    def __init__(self, image, target_size=(512, 512), min_patch_size=(32, 32)):
+    def __init__(self, image, target_size=(512, 512), min_patch_size=(32, 32),transforms = None):
         """
         初始化ImageSampler。
 
@@ -21,6 +21,7 @@ class ImageSampler:
             max_patch_size (tuple): 每个采样块的最大大小（宽度，高度）。
         """
         self.image = image
+        self.transforms = transforms
         self.target_width, self.target_height = target_size
         self.min_patch_width, self.min_patch_height = min_patch_size
         self.patches = []
@@ -37,15 +38,15 @@ class ImageSampler:
         img_width, img_height = self.image.size
 
         # 随机确定图像块的大小,不手动设置,设置为图的大小为上限
-        patch_width = random.randint(self.min_patch_width, img_width)
-        patch_height = random.randint(self.min_patch_height, img_height)
+        patch_width = random.randint(self.min_patch_width, int(img_width/2))
+        patch_height = random.randint(self.min_patch_height, int(img_height/2))
 
         max_x = img_width - patch_width
         max_y = img_height - patch_height
 
         if max_x < 0 or max_y < 0:
             raise ValueError("图像块大小不能大于输入图像大小。")
-
+ 
         # 随机选择采样位置
         x = random.randint(0, max_x)
         y = random.randint(0, max_y)
@@ -62,13 +63,15 @@ class ImageSampler:
             num_patches (int): 要采样并拼接的图像块数量。
 
         返回：
-            PIL.Image: 拼接完成的图像。
+            PIL.Image: 拼接完成的图像。还没transform化
         """
         # 创建一个目标大小的空白图像
         stitched_image = Image.new('RGB', (self.target_width, self.target_height))
 
         for _ in range(num_patches):
             patch, patch_width, patch_height = self.sample_patch()
+
+            patch_trans = self.transforms(patch)
 
             # 计算放置图像块的位置
             if self.current_x + patch_width > self.target_width + 50:
@@ -79,21 +82,21 @@ class ImageSampler:
                 self.current_y = 0
 
             # 将图像块粘贴到拼接图像上
-            stitched_image.paste(patch, (self.current_x, self.current_y))
+            stitched_image.paste(patch_trans, (self.current_x, self.current_y))
 
             # 更新当前拼接位置
             self.current_x += patch_width
 
         # 如果拼接图像超出目标大小，则裁剪至目标大小
         stitched_image = stitched_image.crop((0, 0, self.target_width, self.target_height))
-
+        
         return stitched_image
 
 # 示例用法
 if __name__ == "__main__":
     image = Image.open("/home/yiruolei/ALLDATASET/Chameleon/test/0_real/0a4dcb15-6fe3-4a28-9821-ad8da7823f15.jpg").convert('RGB')
-    sampler = ImageSampler(image, target_size=(512, 512), min_patch_size=(32, 32), max_patch_size=(128, 128))
-    stitched_image = sampler.stitch_patches(num_patches=64)
+    sampler = ImageSampler(image, target_size=(512, 512), min_patch_size=(16, 16))
+    stitched_image = sampler.stitch_patches(num_patches=128)
     stitched_image.save("output.jpg")
     transform_to_tensor = transforms.ToTensor()
     a = transform_to_tensor(stitched_image)

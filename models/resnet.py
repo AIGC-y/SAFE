@@ -193,6 +193,27 @@ class ResNet(nn.Module):
             scale_factor=1/factor, 
             mode='nearest', recompute_scale_factor=True
         )
+    
+    # def soft_pool2d(x, kernel_size=2, stride=None, force_inplace=False):
+    #     if x.is_cuda and not force_inplace:
+    #         x = CUDA_SOFTPOOL2d.apply(x, kernel_size, stride)
+    #         # Replace `NaN's if found
+    #         if torch.isnan(x).any():
+    #             return torch.nan_to_num(x)
+    #         return x
+    #     kernel_size = _pair(kernel_size)
+    #     if stride is None:
+    #         stride = kernel_size
+    #     else:
+    #         stride = _pair(stride)
+    #     # Get input sizes
+    #     _, c, h, w = x.size()
+    #     # Create per-element exponential value sum : Tensor [b x c x h x w]
+    #     e_x = torch.exp(x)
+    #     # Apply mask to input and pool and calculate the exponential sum
+    #     # Tensor: [b x c x h x w] -> [b x c x h' x w']
+    #     return F.avg_pool2d(x.mul(e_x), kernel_size, stride=stride).mul_(sum(kernel_size)).div_(F.avg_pool2d(e_x, kernel_size, stride=stride).mul_(sum(kernel_size)))
+
 
     def forward(self, x):
 

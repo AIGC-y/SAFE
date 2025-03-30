@@ -20,27 +20,27 @@ DISTRIBUTED_ARGS="
 "
 
 MODEL="SAFE"
-RESUME_PATH="./checkpoint"
-# RESUME_PATH="./results/SAFE/20250318_114617"
+# RESUME_PATH="./checkpoint"
+RESUME_PATH="/home/yiruolei/project/SAFE/results/仅设置trans和resnet/20250326_113217"
 
 eval_datasets=(
     # "data/datasets/test1_ForenSynths/test" \
     # "data/datasets/test2_Self-Synthesis/test" \
     # "data/datasets/test3_Ojha/test" \
-    # "/home/yiruolei/ALLDATASET/GenImage" \
-    "/home/yiruolei/ALLDATASET/Chameleon" 
+    "/home/yiruolei/ALLDATASET/GenImage" \
+    # "/home/yiruolei/ALLDATASET/Chameleon" 
 
 )
 for eval_dataset in "${eval_datasets[@]}"
 do
     PYTHONWARNINGS="ignore" python -m torch.distributed.run $DISTRIBUTED_ARGS main_finetune.py \
         --input_size 256 \
-        --transform_mode 'crop' \
+        --transform_mode 'ori' \
         --model $MODEL \
         --eval_data_path $eval_dataset \
-        --batch_size 256 \
+        --batch_size 32 \
         --num_workers 16 \
-        --output_dir $RESUME_PATH \
+        --output_dir $RESUME_PATH/eval \
         --resume $RESUME_PATH/checkpoint-best.pth \
         --eval True
 done

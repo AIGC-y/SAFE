@@ -20,7 +20,7 @@ eval_datasets=(
     "/home/yiruolei/ALLDATASET/CNNSpot/progan_val" \
 )
 #"/home/yiruolei/ALLDATASET/GenImage" \
-MODEL="TESTGENIMAGE"
+MODEL="每个分小块都设置trans"
 #这里都是有logging信息的所以不需要自己nohup了
 
 for train_dataset in "${train_datasets[@]}" 
@@ -34,7 +34,7 @@ do
 
         python -m torch.distributed.run $DISTRIBUTED_ARGS main_finetune.py \
             --input_size 256 \
-            --transform_mode 'crop' \
+            --transform_mode 'ori' \
             --model $MODEL \
             --data_path "$train_dataset" \
             --eval_data_path "$eval_dataset" \
@@ -50,3 +50,5 @@ do
 
     done
 done
+
+#--transform_mode 'crop' \

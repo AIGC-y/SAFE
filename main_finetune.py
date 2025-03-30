@@ -345,7 +345,7 @@ def main(args):
         ROOT = args.eval_data_path
         VAL_DICT = {
             "data/datasets/test1_ForenSynths/test": ['progan', 'stylegan', 'stylegan2', 'biggan', 'cyclegan', 'stargan', 'gaugan', 'deepfake'],
-            "/home/yiruolei/ALLDATASET/GenImage": ['Midjourney', 'stable_diffusion_v_1_4', 'stable_diffusion_v_1_5', 'ADM', 'Glide', 'wukong', 'VQDM', 'BigGAN'],
+            "/home/yiruolei/ALLDATASET/GenImage": ['Midjourney', 'stable_diffusion_v_1_4', 'stable_diffusion_v_1_5', 'ADM', 'glide', 'wukong', 'VQDM', 'BigGAN'],
         }
         try:
             vals = VAL_DICT[args.eval_data_path]
