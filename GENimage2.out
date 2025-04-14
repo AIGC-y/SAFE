@@ -1,0 +1,90 @@
+nohup: 忽略输入
+WARNING:__main__:
+*****************************************
+Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+*****************************************
+| distributed init (rank 0): env://, gpu 0
+| distributed init (rank 1): env://, gpu 1
+Namespace(jpeg_factor=None, blur_sigma=None, mask_ratio=None, mask_patch_size=None, transform_mode='ori', batch_size=32, epochs=100, update_freq=1, model='SAFE', input_size=256, layer_decay_type='single', model_ema=False, model_ema_decay=0.9999, model_ema_force_cpu=False, model_ema_eval=False, clip_grad=None, weight_decay=0.05, lr=None, blr=0.0005, layer_decay=1.0, min_lr=1e-06, warmup_epochs=20, warmup_steps=-1, opt='adamw', opt_eps=1e-08, opt_betas=None, momentum=0.9, weight_decay_end=None, smoothing=0.1, mixup=0.0, cutmix=0.0, cutmix_minmax=None, mixup_prob=1.0, mixup_switch_prob=0.5, mixup_mode='batch', pretrained=True, global_pool=True, head_init_scale=0.001, model_key='model|module', model_prefix='', num_train=10000000000, data_path='', nb_classes=2, output_dir='/home/yiruolei/project/SAFE/results/仅设置trans和resnet/20250326_113217/eval', log_dir=None, device='cuda', seed=None, resume='/home/yiruolei/project/SAFE/results/仅设置trans和resnet/20250326_113217/checkpoint-best.pth', eval_data_path='/home/yiruolei/ALLDATASET/GenImage', imagenet_default_mean_and_std=True, data_set='IMNET', auto_resume=True, save_ckpt=True, save_ckpt_freq=5, save_ckpt_num=100, start_epoch=0, eval=True, dist_eval=True, disable_eval=False, num_workers=16, pin_mem=True, crop_pct=None, world_size=2, local_rank=-1, dist_on_itp=False, dist_url='env://', use_amp=False, rank=0, gpu=0, distributed=True, dist_backend='nccl')
+Number of params: 1.44M
+Base lr: 5.00e-04
+Actual lr: 1.25e-04
+Accumulate grad iterations: 1
+Effective batch size: 64
+criterion = LabelSmoothingCrossEntropy()
+Resume checkpoint /home/yiruolei/project/SAFE/results/仅设置trans和resnet/20250326_113217/checkpoint-best.pth
+With optim & sched!
+Eval only mode
+vals = ['Midjourney', 'stable_diffusion_v_1_4', 'stable_diffusion_v_1_5', 'ADM', 'glide', 'wukong', 'VQDM', 'BigGAN']
+数据集列表: ['/home/yiruolei/ALLDATASET/GenImage/Midjourney']
+测试数据大小 12000
+Test:  [  0/188]  eta: 0:30:43  loss: 0.0704 (0.0704)  acc1: 1.0000 (1.0000)  time: 9.8083
+Test:  [187/188]  eta: 0:00:00  loss: 0.4327 (0.2631)  acc1: 0.7812 (0.8898)  time: 0.4837
+Test: Total time: 0:01:34 (1.5001 s / it)
+* Acc@1 89.02% loss 0.2657
+Accuracy of the network on 12000 test images: 89.02%
+test dataset is Midjourney acc: 89.02%, ap: 99.17%
+***********************************
+数据集列表: ['/home/yiruolei/ALLDATASET/GenImage/stable_diffusion_v_1_4']
+测试数据大小 12000
+Test:  [  0/188]  eta: 0:17:49  loss: 0.0665 (0.0665)  acc1: 1.0000 (1.0000)  time: 5.6896
+Test:  [187/188]  eta: 0:00:00  loss: 0.0691 (0.0675)  acc1: 1.0000 (0.9975)  time: 0.1728
+Test: Total time: 0:00:44 (1.2376 s / it)
+* Acc@1 99.75% loss 0.0674
+Accuracy of the network on 12000 test images: 99.75%
+test dataset is stable_diffusion_v_1_4 acc: 99.75%, ap: 99.99%
+***********************************
+数据集列表: ['/home/yiruolei/ALLDATASET/GenImage/stable_diffusion_v_1_5']
+测试数据大小 16000
+Test:  [  0/250]  eta: 0:11:21  loss: 0.0632 (0.0632)  acc1: 1.0000 (1.0000)  time: 2.7249
+Test:  [249/250]  eta: 0:00:00  loss: 0.0644 (0.0688)  acc1: 1.0000 (0.9972)  time: 0.1783
+Test: Total time: 0:00:59 (1.2390 s / it)
+* Acc@1 99.59% loss 0.0708
+Accuracy of the network on 16000 test images: 99.59%
+test dataset is stable_diffusion_v_1_5 acc: 99.59%, ap: 99.92%
+***********************************
+数据集列表: ['/home/yiruolei/ALLDATASET/GenImage/ADM']
+测试数据大小 12000
+Test:  [  0/188]  eta: 0:12:03  loss: 0.0680 (0.0680)  acc1: 1.0000 (1.0000)  time: 3.8509
+Test:  [187/188]  eta: 0:00:00  loss: 0.5575 (0.2709)  acc1: 0.7188 (0.8883)  time: 0.1727
+Test: Total time: 0:00:40 (1.2134 s / it)
+* Acc@1 89.17% loss 0.2636
+Accuracy of the network on 12000 test images: 89.17%
+test dataset is ADM acc: 89.17%, ap: 98.73%
+***********************************
+数据集列表: ['/home/yiruolei/ALLDATASET/GenImage/glide']
+测试数据大小 12000
+Test:  [  0/188]  eta: 0:08:46  loss: 0.0678 (0.0678)  acc1: 1.0000 (1.0000)  time: 2.7985
+Test:  [187/188]  eta: 0:00:00  loss: 0.1752 (0.1258)  acc1: 0.9375 (0.9695)  time: 0.1724
+Test: Total time: 0:00:40 (1.2164 s / it)
+* Acc@1 96.82% loss 0.1277
+Accuracy of the network on 12000 test images: 96.82%
+test dataset is glide acc: 96.82%, ap: 99.40%
+***********************************
+数据集列表: ['/home/yiruolei/ALLDATASET/GenImage/wukong']
+测试数据大小 12000
+Test:  [  0/188]  eta: 0:08:24  loss: 0.0816 (0.0816)  acc1: 1.0000 (1.0000)  time: 2.6818
+Test:  [187/188]  eta: 0:00:00  loss: 0.0669 (0.0739)  acc1: 1.0000 (0.9942)  time: 0.1824
+Test: Total time: 0:00:42 (1.2243 s / it)
+* Acc@1 99.26% loss 0.0758
+Accuracy of the network on 12000 test images: 99.26%
+test dataset is wukong acc: 99.26%, ap: 99.92%
+***********************************
+数据集列表: ['/home/yiruolei/ALLDATASET/GenImage/VQDM']
+测试数据大小 12000
+Test:  [  0/188]  eta: 0:09:20  loss: 0.0969 (0.0969)  acc1: 0.9688 (0.9688)  time: 2.9788
+Test:  [187/188]  eta: 0:00:00  loss: 0.2407 (0.1487)  acc1: 0.8750 (0.9592)  time: 0.1728
+Test: Total time: 0:00:41 (1.2214 s / it)
+* Acc@1 96.11% loss 0.1452
+Accuracy of the network on 12000 test images: 96.11%
+test dataset is VQDM acc: 96.11%, ap: 99.29%
+***********************************
+数据集列表: ['/home/yiruolei/ALLDATASET/GenImage/BigGAN']
+测试数据大小 12000
+Test:  [  0/188]  eta: 0:13:30  loss: 0.0720 (0.0720)  acc1: 1.0000 (1.0000)  time: 4.3127
+Test:  [187/188]  eta: 0:00:00  loss: 0.2007 (0.1254)  acc1: 0.9688 (0.9843)  time: 0.1726
+Test: Total time: 0:00:40 (1.2173 s / it)
+* Acc@1 98.42% loss 0.1266
+Accuracy of the network on 12000 test images: 98.42%
+test dataset is BigGAN acc: 98.42%, ap: 99.77%
+***********************************

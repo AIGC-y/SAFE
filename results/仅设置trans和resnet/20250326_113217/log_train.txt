@@ -1,0 +1,745 @@
+WARNING:__main__:
+*****************************************
+Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+*****************************************
+| distributed init (rank 0): env://, gpu 0
+| distributed init (rank 1): env://, gpu 1
+Namespace(jpeg_factor=None, blur_sigma=None, mask_ratio=None, mask_patch_size=None, transform_mode='ori', batch_size=32, epochs=20, update_freq=1, model='仅设置trans和resnet', input_size=256, layer_decay_type='single', model_ema=False, model_ema_decay=0.9999, model_ema_force_cpu=False, model_ema_eval=False, clip_grad=None, weight_decay=0.01, lr=None, blr=0.01, layer_decay=1.0, min_lr=1e-06, warmup_epochs=1, warmup_steps=-1, opt='adamw', opt_eps=1e-08, opt_betas=None, momentum=0.9, weight_decay_end=None, smoothing=0.1, mixup=0.0, cutmix=0.0, cutmix_minmax=None, mixup_prob=1.0, mixup_switch_prob=0.5, mixup_mode='batch', pretrained=True, global_pool=True, head_init_scale=0.001, model_key='model|module', model_prefix='', num_train=10000000000, data_path='/home/yiruolei/ALLDATASET/CNNSpot/progan_train', nb_classes=2, output_dir='results/仅设置trans和resnet/20250326_113217', log_dir=None, device='cuda', seed=None, resume='', eval_data_path='/home/yiruolei/ALLDATASET/CNNSpot/progan_val', imagenet_default_mean_and_std=True, data_set='IMNET', auto_resume=True, save_ckpt=True, save_ckpt_freq=1, save_ckpt_num=100, start_epoch=0, eval=False, dist_eval=True, disable_eval=False, num_workers=16, pin_mem=True, crop_pct=None, world_size=2, local_rank=-1, dist_on_itp=False, dist_url='env://', use_amp=False, rank=0, gpu=0, distributed=True, dist_backend='nccl')
+数据集列表: ['/home/yiruolei/ALLDATASET/CNNSpot/progan_train']
+Sampler_train = <torch.utils.data.distributed.DistributedSampler object at 0x7ca9a49ea190>
+数据集列表: ['/home/yiruolei/ALLDATASET/CNNSpot/progan_val']
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Number of params: 1.44M
+Base lr: 1.00e-02
+Actual lr: 2.50e-03
+Accumulate grad iterations: 1
+Effective batch size: 64
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+criterion = LabelSmoothingCrossEntropy()
+Auto resume checkpoint: 
+Start training for 20 epochs
+[rank0]:[W reducer.cpp:1360] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+[rank1]:[W reducer.cpp:1360] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+Epoch: [0]  [    0/11251]  eta: 22:38:00  lr: 0.000000  loss: 0.7028 (0.7028)  class_acc: 0.5312 (0.5312)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 7.2420
+Epoch: [0]  [  500/11251]  eta: 0:44:10  lr: 0.000111  loss: 0.6959 (0.6962)  class_acc: 0.5312 (0.5077)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2316
+Epoch: [0]  [ 1000/11251]  eta: 0:40:53  lr: 0.000222  loss: 0.6970 (0.6978)  class_acc: 0.5000 (0.5028)  min_lr: 0.0002 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [0]  [ 1500/11251]  eta: 0:38:30  lr: 0.000333  loss: 0.6959 (0.6988)  class_acc: 0.4688 (0.5018)  min_lr: 0.0003 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2311
+Epoch: [0]  [ 2000/11251]  eta: 0:36:20  lr: 0.000444  loss: 0.6971 (0.6990)  class_acc: 0.5312 (0.5037)  min_lr: 0.0004 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [0]  [ 2500/11251]  eta: 0:34:16  lr: 0.000556  loss: 0.6890 (0.6992)  class_acc: 0.5312 (0.5070)  min_lr: 0.0006 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [0]  [ 3000/11251]  eta: 0:32:15  lr: 0.000667  loss: 0.5345 (0.6907)  class_acc: 0.6875 (0.5273)  min_lr: 0.0007 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2333
+Epoch: [0]  [ 3500/11251]  eta: 0:30:15  lr: 0.000778  loss: 0.4422 (0.6629)  class_acc: 0.8438 (0.5661)  min_lr: 0.0008 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [0]  [ 4000/11251]  eta: 0:28:16  lr: 0.000889  loss: 0.3986 (0.6331)  class_acc: 0.8750 (0.6027)  min_lr: 0.0009 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2336
+Epoch: [0]  [ 4500/11251]  eta: 0:26:18  lr: 0.001000  loss: 0.3817 (0.6065)  class_acc: 0.8438 (0.6338)  min_lr: 0.0010 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2315
+Epoch: [0]  [ 5000/11251]  eta: 0:24:20  lr: 0.001111  loss: 0.3145 (0.5834)  class_acc: 0.9375 (0.6600)  min_lr: 0.0011 (0.0006)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [0]  [ 5500/11251]  eta: 0:22:22  lr: 0.001222  loss: 0.3688 (0.5630)  class_acc: 0.8750 (0.6826)  min_lr: 0.0012 (0.0006)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [0]  [ 6000/11251]  eta: 0:20:25  lr: 0.001333  loss: 0.3315 (0.5458)  class_acc: 0.9375 (0.7014)  min_lr: 0.0013 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [0]  [ 6500/11251]  eta: 0:18:28  lr: 0.001444  loss: 0.3192 (0.5309)  class_acc: 0.9375 (0.7174)  min_lr: 0.0014 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [0]  [ 7000/11251]  eta: 0:16:31  lr: 0.001555  loss: 0.3255 (0.5174)  class_acc: 0.9062 (0.7318)  min_lr: 0.0016 (0.0008)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [0]  [ 7500/11251]  eta: 0:14:34  lr: 0.001667  loss: 0.3198 (0.5051)  class_acc: 0.9062 (0.7447)  min_lr: 0.0017 (0.0008)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [0]  [ 8000/11251]  eta: 0:12:37  lr: 0.001778  loss: 0.3203 (0.4944)  class_acc: 0.9375 (0.7559)  min_lr: 0.0018 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [0]  [ 8500/11251]  eta: 0:10:40  lr: 0.001889  loss: 0.3054 (0.4846)  class_acc: 0.9375 (0.7661)  min_lr: 0.0019 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [0]  [ 9000/11251]  eta: 0:08:44  lr: 0.002000  loss: 0.3174 (0.4757)  class_acc: 0.9688 (0.7755)  min_lr: 0.0020 (0.0010)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [0]  [ 9500/11251]  eta: 0:06:47  lr: 0.002111  loss: 0.2815 (0.4675)  class_acc: 0.9375 (0.7839)  min_lr: 0.0021 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [0]  [10000/11251]  eta: 0:04:51  lr: 0.002222  loss: 0.3109 (0.4602)  class_acc: 0.9375 (0.7913)  min_lr: 0.0022 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [0]  [10500/11251]  eta: 0:02:54  lr: 0.002333  loss: 0.3336 (0.4534)  class_acc: 0.9375 (0.7982)  min_lr: 0.0023 (0.0012)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [0]  [11000/11251]  eta: 0:00:58  lr: 0.002444  loss: 0.3027 (0.4475)  class_acc: 0.9375 (0.8043)  min_lr: 0.0024 (0.0012)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [0]  [11250/11251]  eta: 0:00:00  lr: 0.002500  loss: 0.2956 (0.4447)  class_acc: 0.9375 (0.8071)  min_lr: 0.0025 (0.0012)  weight_decay: 0.0100 (0.0100)  time: 0.2310
+Epoch: [0] Total time: 0:43:38 (1.2328 s / it)
+Averaged stats: lr: 0.002500  loss: 0.2956 (0.4449)  class_acc: 0.9375 (0.8069)  min_lr: 0.0025 (0.0012)  weight_decay: 0.0100 (0.0100)
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Test:  [  0/125]  eta: 0:05:08  loss: 0.1763 (0.1763)  acc1: 0.9688 (0.9688)  time: 2.4693
+Test:  [124/125]  eta: 0:00:00  loss: 0.0060 (0.0816)  acc1: 1.0000 (0.9810)  time: 0.0784
+Test: Total time: 0:00:14 (1.1141 s / it)
+* Acc@1 97.99% loss 0.0801
+Accuracy of the model on the 8000 test images: 97.99%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Max accuracy: 97.99%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [1]  [    0/11251]  eta: 16:07:24  lr: 0.002500  loss: 0.3073 (0.3073)  class_acc: 0.9375 (0.9375)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 5.1591
+Epoch: [1]  [  500/11251]  eta: 0:43:22  lr: 0.002500  loss: 0.2792 (0.3079)  class_acc: 0.9375 (0.9433)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [1]  [ 1000/11251]  eta: 0:40:27  lr: 0.002500  loss: 0.3247 (0.3089)  class_acc: 0.9062 (0.9429)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [1]  [ 1500/11251]  eta: 0:38:13  lr: 0.002500  loss: 0.2951 (0.3084)  class_acc: 0.9375 (0.9418)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2332
+Epoch: [1]  [ 2000/11251]  eta: 0:36:08  lr: 0.002499  loss: 0.2902 (0.3063)  class_acc: 0.9688 (0.9432)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [1]  [ 2500/11251]  eta: 0:34:07  lr: 0.002499  loss: 0.3004 (0.3051)  class_acc: 0.9375 (0.9436)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [1]  [ 3000/11251]  eta: 0:32:08  lr: 0.002499  loss: 0.2909 (0.3044)  class_acc: 0.9688 (0.9443)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [1]  [ 3500/11251]  eta: 0:30:09  lr: 0.002498  loss: 0.2568 (0.3028)  class_acc: 0.9688 (0.9454)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [1]  [ 4000/11251]  eta: 0:28:11  lr: 0.002498  loss: 0.2636 (0.3014)  class_acc: 0.9688 (0.9461)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2300
+Epoch: [1]  [ 4500/11251]  eta: 0:26:13  lr: 0.002497  loss: 0.2737 (0.2999)  class_acc: 0.9688 (0.9471)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [1]  [ 5000/11251]  eta: 0:24:16  lr: 0.002497  loss: 0.2776 (0.2992)  class_acc: 0.9375 (0.9477)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [1]  [ 5500/11251]  eta: 0:22:19  lr: 0.002496  loss: 0.2726 (0.2983)  class_acc: 0.9688 (0.9482)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [1]  [ 6000/11251]  eta: 0:20:22  lr: 0.002495  loss: 0.2622 (0.2975)  class_acc: 1.0000 (0.9488)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2331
+Epoch: [1]  [ 6500/11251]  eta: 0:18:26  lr: 0.002494  loss: 0.2937 (0.2964)  class_acc: 0.9688 (0.9495)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [1]  [ 7000/11251]  eta: 0:16:29  lr: 0.002493  loss: 0.2760 (0.2958)  class_acc: 0.9688 (0.9499)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2316
+Epoch: [1]  [ 7500/11251]  eta: 0:14:32  lr: 0.002492  loss: 0.2695 (0.2950)  class_acc: 0.9688 (0.9503)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [1]  [ 8000/11251]  eta: 0:12:36  lr: 0.002491  loss: 0.2712 (0.2938)  class_acc: 0.9688 (0.9511)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2312
+Epoch: [1]  [ 8500/11251]  eta: 0:10:39  lr: 0.002490  loss: 0.2802 (0.2930)  class_acc: 0.9375 (0.9515)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2310
+Epoch: [1]  [ 9000/11251]  eta: 0:08:43  lr: 0.002489  loss: 0.2650 (0.2923)  class_acc: 0.9688 (0.9519)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2315
+Epoch: [1]  [ 9500/11251]  eta: 0:06:47  lr: 0.002488  loss: 0.2672 (0.2916)  class_acc: 0.9688 (0.9522)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2306
+Epoch: [1]  [10000/11251]  eta: 0:04:50  lr: 0.002487  loss: 0.2666 (0.2906)  class_acc: 0.9688 (0.9529)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [1]  [10500/11251]  eta: 0:02:54  lr: 0.002485  loss: 0.2507 (0.2898)  class_acc: 0.9688 (0.9534)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2343
+Epoch: [1]  [11000/11251]  eta: 0:00:58  lr: 0.002484  loss: 0.2428 (0.2889)  class_acc: 0.9688 (0.9539)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [1]  [11250/11251]  eta: 0:00:00  lr: 0.002483  loss: 0.2664 (0.2885)  class_acc: 0.9688 (0.9542)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2301
+Epoch: [1] Total time: 0:43:35 (1.2324 s / it)
+Averaged stats: lr: 0.002483  loss: 0.2664 (0.2887)  class_acc: 0.9688 (0.9540)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:04:48  loss: 0.0853 (0.0853)  acc1: 1.0000 (1.0000)  time: 2.3119
+Test:  [124/125]  eta: 0:00:00  loss: 0.1215 (0.1743)  acc1: 0.9688 (0.9503)  time: 0.0783
+Test: Total time: 0:00:14 (1.1155 s / it)
+* Acc@1 94.75% loss 0.1770
+Accuracy of the model on the 8000 test images: 94.75%
+Max accuracy: 97.99%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [2]  [    0/11251]  eta: 8:53:07  lr: 0.002483  loss: 0.3055 (0.3055)  class_acc: 0.9062 (0.9062)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 2.8431
+Epoch: [2]  [  500/11251]  eta: 0:43:20  lr: 0.002481  loss: 0.2714 (0.2705)  class_acc: 0.9688 (0.9661)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2316
+Epoch: [2]  [ 1000/11251]  eta: 0:40:30  lr: 0.002480  loss: 0.2433 (0.2709)  class_acc: 0.9688 (0.9652)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2343
+Epoch: [2]  [ 1500/11251]  eta: 0:38:13  lr: 0.002478  loss: 0.2690 (0.2712)  class_acc: 0.9688 (0.9649)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [2]  [ 2000/11251]  eta: 0:36:08  lr: 0.002476  loss: 0.2585 (0.2709)  class_acc: 0.9688 (0.9650)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2310
+Epoch: [2]  [ 2500/11251]  eta: 0:34:06  lr: 0.002475  loss: 0.2559 (0.2705)  class_acc: 0.9688 (0.9651)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [2]  [ 3000/11251]  eta: 0:32:06  lr: 0.002473  loss: 0.2319 (0.2693)  class_acc: 1.0000 (0.9658)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2311
+Epoch: [2]  [ 3500/11251]  eta: 0:30:08  lr: 0.002471  loss: 0.2507 (0.2686)  class_acc: 0.9688 (0.9664)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [2]  [ 4000/11251]  eta: 0:28:10  lr: 0.002469  loss: 0.2529 (0.2679)  class_acc: 0.9688 (0.9669)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [2]  [ 4500/11251]  eta: 0:26:13  lr: 0.002467  loss: 0.2710 (0.2677)  class_acc: 0.9688 (0.9670)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [2]  [ 5000/11251]  eta: 0:24:15  lr: 0.002465  loss: 0.2585 (0.2671)  class_acc: 0.9688 (0.9675)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [2]  [ 5500/11251]  eta: 0:22:18  lr: 0.002462  loss: 0.2591 (0.2666)  class_acc: 0.9688 (0.9677)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [2]  [ 6000/11251]  eta: 0:20:22  lr: 0.002460  loss: 0.2446 (0.2665)  class_acc: 0.9688 (0.9677)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [2]  [ 6500/11251]  eta: 0:18:25  lr: 0.002458  loss: 0.2526 (0.2659)  class_acc: 0.9688 (0.9681)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2315
+Epoch: [2]  [ 7000/11251]  eta: 0:16:28  lr: 0.002455  loss: 0.2312 (0.2652)  class_acc: 1.0000 (0.9685)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [2]  [ 7500/11251]  eta: 0:14:32  lr: 0.002453  loss: 0.2444 (0.2648)  class_acc: 0.9688 (0.9687)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [2]  [ 8000/11251]  eta: 0:12:35  lr: 0.002450  loss: 0.2575 (0.2643)  class_acc: 0.9688 (0.9690)  min_lr: 0.0025 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [2]  [ 8500/11251]  eta: 0:10:39  lr: 0.002448  loss: 0.2531 (0.2640)  class_acc: 0.9688 (0.9692)  min_lr: 0.0024 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2312
+Epoch: [2]  [ 9000/11251]  eta: 0:08:43  lr: 0.002445  loss: 0.2401 (0.2634)  class_acc: 0.9688 (0.9695)  min_lr: 0.0024 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [2]  [ 9500/11251]  eta: 0:06:46  lr: 0.002442  loss: 0.2495 (0.2629)  class_acc: 0.9688 (0.9699)  min_lr: 0.0024 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [2]  [10000/11251]  eta: 0:04:50  lr: 0.002440  loss: 0.2472 (0.2624)  class_acc: 0.9688 (0.9702)  min_lr: 0.0024 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [2]  [10500/11251]  eta: 0:02:54  lr: 0.002437  loss: 0.2403 (0.2620)  class_acc: 1.0000 (0.9704)  min_lr: 0.0024 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [2]  [11000/11251]  eta: 0:00:58  lr: 0.002434  loss: 0.2398 (0.2615)  class_acc: 0.9688 (0.9707)  min_lr: 0.0024 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [2]  [11250/11251]  eta: 0:00:00  lr: 0.002432  loss: 0.2419 (0.2611)  class_acc: 0.9688 (0.9708)  min_lr: 0.0024 (0.0025)  weight_decay: 0.0100 (0.0100)  time: 0.2299
+Epoch: [2] Total time: 0:43:33 (1.2323 s / it)
+Averaged stats: lr: 0.002432  loss: 0.2419 (0.2608)  class_acc: 0.9688 (0.9709)  min_lr: 0.0024 (0.0025)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:04:35  loss: 0.0959 (0.0959)  acc1: 1.0000 (1.0000)  time: 2.2075
+Test:  [124/125]  eta: 0:00:00  loss: 0.0551 (0.0661)  acc1: 1.0000 (0.9968)  time: 0.0783
+Test: Total time: 0:00:13 (1.1119 s / it)
+* Acc@1 99.59% loss 0.0674
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Accuracy of the model on the 8000 test images: 99.59%
+Max accuracy: 99.59%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [3]  [    0/11251]  eta: 14:40:50  lr: 0.002432  loss: 0.2192 (0.2192)  class_acc: 1.0000 (1.0000)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 4.6974
+Epoch: [3]  [  500/11251]  eta: 0:43:10  lr: 0.002429  loss: 0.2486 (0.2474)  class_acc: 0.9688 (0.9783)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2303
+Epoch: [3]  [ 1000/11251]  eta: 0:40:23  lr: 0.002426  loss: 0.2440 (0.2507)  class_acc: 0.9688 (0.9764)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2311
+Epoch: [3]  [ 1500/11251]  eta: 0:38:09  lr: 0.002423  loss: 0.2318 (0.2497)  class_acc: 1.0000 (0.9769)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2301
+Epoch: [3]  [ 2000/11251]  eta: 0:36:04  lr: 0.002420  loss: 0.2349 (0.2496)  class_acc: 0.9688 (0.9769)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2308
+Epoch: [3]  [ 2500/11251]  eta: 0:34:04  lr: 0.002417  loss: 0.2480 (0.2492)  class_acc: 0.9688 (0.9770)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [3]  [ 3000/11251]  eta: 0:32:04  lr: 0.002413  loss: 0.2337 (0.2488)  class_acc: 1.0000 (0.9773)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [3]  [ 3500/11251]  eta: 0:30:06  lr: 0.002410  loss: 0.2337 (0.2484)  class_acc: 0.9688 (0.9775)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [3]  [ 4000/11251]  eta: 0:28:09  lr: 0.002406  loss: 0.2392 (0.2480)  class_acc: 0.9688 (0.9777)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [3]  [ 4500/11251]  eta: 0:26:11  lr: 0.002403  loss: 0.2371 (0.2476)  class_acc: 0.9688 (0.9781)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2312
+Epoch: [3]  [ 5000/11251]  eta: 0:24:14  lr: 0.002399  loss: 0.2393 (0.2478)  class_acc: 1.0000 (0.9780)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2316
+Epoch: [3]  [ 5500/11251]  eta: 0:22:18  lr: 0.002396  loss: 0.2374 (0.2475)  class_acc: 0.9688 (0.9781)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [3]  [ 6000/11251]  eta: 0:20:21  lr: 0.002392  loss: 0.2448 (0.2474)  class_acc: 1.0000 (0.9782)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2312
+Epoch: [3]  [ 6500/11251]  eta: 0:18:24  lr: 0.002388  loss: 0.2384 (0.2472)  class_acc: 0.9688 (0.9782)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2312
+Epoch: [3]  [ 7000/11251]  eta: 0:16:28  lr: 0.002384  loss: 0.2312 (0.2468)  class_acc: 1.0000 (0.9784)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [3]  [ 7500/11251]  eta: 0:14:31  lr: 0.002380  loss: 0.2296 (0.2465)  class_acc: 0.9688 (0.9787)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2313
+Epoch: [3]  [ 8000/11251]  eta: 0:12:35  lr: 0.002377  loss: 0.2343 (0.2464)  class_acc: 1.0000 (0.9787)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [3]  [ 8500/11251]  eta: 0:10:39  lr: 0.002373  loss: 0.2268 (0.2463)  class_acc: 1.0000 (0.9788)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2340
+Epoch: [3]  [ 9000/11251]  eta: 0:08:42  lr: 0.002368  loss: 0.2505 (0.2461)  class_acc: 0.9688 (0.9789)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2307
+Epoch: [3]  [ 9500/11251]  eta: 0:06:46  lr: 0.002364  loss: 0.2248 (0.2459)  class_acc: 1.0000 (0.9790)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2307
+Epoch: [3]  [10000/11251]  eta: 0:04:50  lr: 0.002360  loss: 0.2327 (0.2457)  class_acc: 1.0000 (0.9792)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2307
+Epoch: [3]  [10500/11251]  eta: 0:02:54  lr: 0.002356  loss: 0.2358 (0.2455)  class_acc: 1.0000 (0.9792)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2310
+Epoch: [3]  [11000/11251]  eta: 0:00:58  lr: 0.002352  loss: 0.2415 (0.2453)  class_acc: 0.9688 (0.9794)  min_lr: 0.0024 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2313
+Epoch: [3]  [11250/11251]  eta: 0:00:00  lr: 0.002349  loss: 0.2327 (0.2452)  class_acc: 1.0000 (0.9795)  min_lr: 0.0023 (0.0024)  weight_decay: 0.0100 (0.0100)  time: 0.2307
+Epoch: [3] Total time: 0:43:33 (1.2323 s / it)
+Averaged stats: lr: 0.002349  loss: 0.2327 (0.2449)  class_acc: 1.0000 (0.9797)  min_lr: 0.0023 (0.0024)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:06:32  loss: 0.0475 (0.0475)  acc1: 1.0000 (1.0000)  time: 3.1372
+Test:  [124/125]  eta: 0:00:00  loss: 0.0867 (0.0682)  acc1: 1.0000 (0.9982)  time: 0.0787
+Test: Total time: 0:00:14 (1.1154 s / it)
+* Acc@1 99.85% loss 0.0689
+Accuracy of the model on the 8000 test images: 99.85%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Max accuracy: 99.85%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [4]  [    0/11251]  eta: 16:27:54  lr: 0.002349  loss: 0.2890 (0.2890)  class_acc: 0.9688 (0.9688)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 5.2684
+Epoch: [4]  [  500/11251]  eta: 0:43:26  lr: 0.002345  loss: 0.2265 (0.2404)  class_acc: 1.0000 (0.9817)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [4]  [ 1000/11251]  eta: 0:40:36  lr: 0.002341  loss: 0.2293 (0.2395)  class_acc: 0.9688 (0.9824)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [4]  [ 1500/11251]  eta: 0:38:18  lr: 0.002336  loss: 0.2210 (0.2395)  class_acc: 1.0000 (0.9827)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2313
+Epoch: [4]  [ 2000/11251]  eta: 0:36:12  lr: 0.002331  loss: 0.2414 (0.2396)  class_acc: 0.9688 (0.9827)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2331
+Epoch: [4]  [ 2500/11251]  eta: 0:34:09  lr: 0.002327  loss: 0.2300 (0.2395)  class_acc: 1.0000 (0.9829)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [4]  [ 3000/11251]  eta: 0:32:09  lr: 0.002322  loss: 0.2514 (0.2397)  class_acc: 0.9688 (0.9827)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [4]  [ 3500/11251]  eta: 0:30:10  lr: 0.002317  loss: 0.2170 (0.2394)  class_acc: 1.0000 (0.9828)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [4]  [ 4000/11251]  eta: 0:28:12  lr: 0.002313  loss: 0.2262 (0.2395)  class_acc: 1.0000 (0.9828)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [4]  [ 4500/11251]  eta: 0:26:15  lr: 0.002308  loss: 0.2326 (0.2390)  class_acc: 1.0000 (0.9832)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [4]  [ 5000/11251]  eta: 0:24:17  lr: 0.002303  loss: 0.2386 (0.2389)  class_acc: 0.9688 (0.9833)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2354
+Epoch: [4]  [ 5500/11251]  eta: 0:22:20  lr: 0.002298  loss: 0.2351 (0.2392)  class_acc: 1.0000 (0.9830)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [4]  [ 6000/11251]  eta: 0:20:23  lr: 0.002293  loss: 0.2323 (0.2387)  class_acc: 1.0000 (0.9832)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2332
+Epoch: [4]  [ 6500/11251]  eta: 0:18:27  lr: 0.002288  loss: 0.2308 (0.2387)  class_acc: 0.9688 (0.9832)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2316
+Epoch: [4]  [ 7000/11251]  eta: 0:16:30  lr: 0.002283  loss: 0.2403 (0.2386)  class_acc: 0.9688 (0.9832)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [4]  [ 7500/11251]  eta: 0:14:33  lr: 0.002277  loss: 0.2233 (0.2384)  class_acc: 1.0000 (0.9832)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [4]  [ 8000/11251]  eta: 0:12:37  lr: 0.002272  loss: 0.2323 (0.2381)  class_acc: 1.0000 (0.9834)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2332
+Epoch: [4]  [ 8500/11251]  eta: 0:10:40  lr: 0.002267  loss: 0.2177 (0.2378)  class_acc: 1.0000 (0.9835)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2336
+Epoch: [4]  [ 9000/11251]  eta: 0:08:44  lr: 0.002261  loss: 0.2320 (0.2378)  class_acc: 0.9688 (0.9835)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2315
+Epoch: [4]  [ 9500/11251]  eta: 0:06:47  lr: 0.002256  loss: 0.2225 (0.2377)  class_acc: 1.0000 (0.9835)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [4]  [10000/11251]  eta: 0:04:51  lr: 0.002250  loss: 0.2292 (0.2376)  class_acc: 1.0000 (0.9836)  min_lr: 0.0023 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [4]  [10500/11251]  eta: 0:02:54  lr: 0.002245  loss: 0.2185 (0.2374)  class_acc: 1.0000 (0.9837)  min_lr: 0.0022 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [4]  [11000/11251]  eta: 0:00:58  lr: 0.002239  loss: 0.2220 (0.2374)  class_acc: 1.0000 (0.9837)  min_lr: 0.0022 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [4]  [11250/11251]  eta: 0:00:00  lr: 0.002237  loss: 0.2234 (0.2373)  class_acc: 1.0000 (0.9838)  min_lr: 0.0022 (0.0023)  weight_decay: 0.0100 (0.0100)  time: 0.2298
+Epoch: [4] Total time: 0:43:37 (1.2327 s / it)
+Averaged stats: lr: 0.002237  loss: 0.2234 (0.2372)  class_acc: 1.0000 (0.9838)  min_lr: 0.0022 (0.0023)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:04:03  loss: 0.0362 (0.0362)  acc1: 1.0000 (1.0000)  time: 1.9467
+Test:  [124/125]  eta: 0:00:00  loss: 0.0594 (0.0493)  acc1: 1.0000 (0.9988)  time: 0.0787
+Test: Total time: 0:00:13 (1.1095 s / it)
+* Acc@1 99.90% loss 0.0487
+Accuracy of the model on the 8000 test images: 99.90%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Max accuracy: 99.90%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [5]  [    0/11251]  eta: 16:33:15  lr: 0.002237  loss: 0.2538 (0.2538)  class_acc: 0.9688 (0.9688)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 5.2969
+Epoch: [5]  [  500/11251]  eta: 0:43:22  lr: 0.002231  loss: 0.2267 (0.2339)  class_acc: 1.0000 (0.9860)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [5]  [ 1000/11251]  eta: 0:40:29  lr: 0.002225  loss: 0.2163 (0.2336)  class_acc: 1.0000 (0.9859)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2310
+Epoch: [5]  [ 1500/11251]  eta: 0:38:14  lr: 0.002219  loss: 0.2183 (0.2338)  class_acc: 1.0000 (0.9854)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [5]  [ 2000/11251]  eta: 0:36:08  lr: 0.002214  loss: 0.2187 (0.2333)  class_acc: 1.0000 (0.9859)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [5]  [ 2500/11251]  eta: 0:34:07  lr: 0.002208  loss: 0.2303 (0.2336)  class_acc: 1.0000 (0.9858)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [5]  [ 3000/11251]  eta: 0:32:08  lr: 0.002202  loss: 0.2302 (0.2338)  class_acc: 1.0000 (0.9855)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2315
+Epoch: [5]  [ 3500/11251]  eta: 0:30:09  lr: 0.002196  loss: 0.2317 (0.2337)  class_acc: 1.0000 (0.9856)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [5]  [ 4000/11251]  eta: 0:28:11  lr: 0.002190  loss: 0.2213 (0.2334)  class_acc: 1.0000 (0.9858)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [5]  [ 4500/11251]  eta: 0:26:13  lr: 0.002184  loss: 0.2308 (0.2332)  class_acc: 1.0000 (0.9860)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [5]  [ 5000/11251]  eta: 0:24:16  lr: 0.002178  loss: 0.2275 (0.2330)  class_acc: 1.0000 (0.9860)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [5]  [ 5500/11251]  eta: 0:22:19  lr: 0.002171  loss: 0.2275 (0.2332)  class_acc: 1.0000 (0.9858)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [5]  [ 6000/11251]  eta: 0:20:22  lr: 0.002165  loss: 0.2360 (0.2331)  class_acc: 1.0000 (0.9858)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [5]  [ 6500/11251]  eta: 0:18:25  lr: 0.002159  loss: 0.2264 (0.2330)  class_acc: 1.0000 (0.9859)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [5]  [ 7000/11251]  eta: 0:16:29  lr: 0.002153  loss: 0.2299 (0.2329)  class_acc: 1.0000 (0.9860)  min_lr: 0.0022 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [5]  [ 7500/11251]  eta: 0:14:33  lr: 0.002146  loss: 0.2167 (0.2328)  class_acc: 1.0000 (0.9861)  min_lr: 0.0021 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2348
+Epoch: [5]  [ 8000/11251]  eta: 0:12:36  lr: 0.002140  loss: 0.2262 (0.2328)  class_acc: 1.0000 (0.9861)  min_lr: 0.0021 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [5]  [ 8500/11251]  eta: 0:10:50  lr: 0.002133  loss: 0.2266 (0.2328)  class_acc: 1.0000 (0.9861)  min_lr: 0.0021 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.3436
+Epoch: [5]  [ 9000/11251]  eta: 0:08:54  lr: 0.002127  loss: 0.2229 (0.2327)  class_acc: 1.0000 (0.9862)  min_lr: 0.0021 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2946
+Epoch: [5]  [ 9500/11251]  eta: 0:07:04  lr: 0.002120  loss: 0.2151 (0.2325)  class_acc: 1.0000 (0.9863)  min_lr: 0.0021 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2312
+Epoch: [5]  [10000/11251]  eta: 0:05:02  lr: 0.002114  loss: 0.2187 (0.2324)  class_acc: 1.0000 (0.9863)  min_lr: 0.0021 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.2310
+Epoch: [5]  [10500/11251]  eta: 0:03:02  lr: 0.002107  loss: 0.2226 (0.2324)  class_acc: 1.0000 (0.9863)  min_lr: 0.0021 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.3761
+Epoch: [5]  [11000/11251]  eta: 0:01:01  lr: 0.002100  loss: 0.2158 (0.2322)  class_acc: 1.0000 (0.9864)  min_lr: 0.0021 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.4453
+Epoch: [5]  [11250/11251]  eta: 0:00:00  lr: 0.002097  loss: 0.2177 (0.2321)  class_acc: 1.0000 (0.9865)  min_lr: 0.0021 (0.0022)  weight_decay: 0.0100 (0.0100)  time: 0.4078
+Epoch: [5] Total time: 0:46:52 (1.2499 s / it)
+Averaged stats: lr: 0.002097  loss: 0.2177 (0.2324)  class_acc: 1.0000 (0.9863)  min_lr: 0.0021 (0.0022)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:15:23  loss: 0.0583 (0.0583)  acc1: 1.0000 (1.0000)  time: 7.3893
+Test:  [124/125]  eta: 0:00:00  loss: 0.0846 (0.0732)  acc1: 1.0000 (0.9985)  time: 0.0800
+Test: Total time: 0:00:27 (1.2187 s / it)
+* Acc@1 99.91% loss 0.0723
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Accuracy of the model on the 8000 test images: 99.91%
+Max accuracy: 99.91%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [6]  [    0/11251]  eta: 16:15:31  lr: 0.002097  loss: 0.2662 (0.2662)  class_acc: 0.9375 (0.9375)  min_lr: 0.0021 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 5.2023
+Epoch: [6]  [  500/11251]  eta: 0:43:34  lr: 0.002090  loss: 0.2286 (0.2316)  class_acc: 1.0000 (0.9865)  min_lr: 0.0021 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 0.2333
+Epoch: [6]  [ 1000/11251]  eta: 0:40:35  lr: 0.002083  loss: 0.2244 (0.2322)  class_acc: 1.0000 (0.9864)  min_lr: 0.0021 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 0.2305
+Epoch: [6]  [ 1500/11251]  eta: 0:41:58  lr: 0.002076  loss: 0.2224 (0.2310)  class_acc: 1.0000 (0.9872)  min_lr: 0.0021 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 0.3554
+Epoch: [6]  [ 2000/11251]  eta: 0:43:59  lr: 0.002069  loss: 0.2182 (0.2302)  class_acc: 1.0000 (0.9874)  min_lr: 0.0021 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 0.2360
+Epoch: [6]  [ 2500/11251]  eta: 0:40:05  lr: 0.002062  loss: 0.2184 (0.2301)  class_acc: 1.0000 (0.9876)  min_lr: 0.0021 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 0.2436
+Epoch: [6]  [ 3000/11251]  eta: 0:36:56  lr: 0.002055  loss: 0.2390 (0.2303)  class_acc: 0.9688 (0.9875)  min_lr: 0.0021 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 0.2309
+Epoch: [6]  [ 3500/11251]  eta: 0:34:02  lr: 0.002048  loss: 0.2171 (0.2301)  class_acc: 1.0000 (0.9875)  min_lr: 0.0020 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [6]  [ 4000/11251]  eta: 0:33:18  lr: 0.002041  loss: 0.2265 (0.2300)  class_acc: 1.0000 (0.9876)  min_lr: 0.0020 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 0.4489
+Epoch: [6]  [ 4500/11251]  eta: 0:32:48  lr: 0.002034  loss: 0.2449 (0.2300)  class_acc: 0.9688 (0.9874)  min_lr: 0.0020 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 0.3073
+Epoch: [6]  [ 5000/11251]  eta: 0:30:09  lr: 0.002027  loss: 0.2126 (0.2298)  class_acc: 1.0000 (0.9875)  min_lr: 0.0020 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 0.2356
+Epoch: [6]  [ 5500/11251]  eta: 0:27:15  lr: 0.002020  loss: 0.2235 (0.2295)  class_acc: 1.0000 (0.9877)  min_lr: 0.0020 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 0.2344
+Epoch: [6]  [ 6000/11251]  eta: 0:24:30  lr: 0.002013  loss: 0.2235 (0.2296)  class_acc: 1.0000 (0.9877)  min_lr: 0.0020 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [6]  [ 6500/11251]  eta: 0:21:53  lr: 0.002005  loss: 0.2235 (0.2295)  class_acc: 1.0000 (0.9877)  min_lr: 0.0020 (0.0021)  weight_decay: 0.0100 (0.0100)  time: 0.2332
+Epoch: [6]  [ 7000/11251]  eta: 0:19:21  lr: 0.001998  loss: 0.2198 (0.2293)  class_acc: 1.0000 (0.9879)  min_lr: 0.0020 (0.0020)  weight_decay: 0.0100 (0.0100)  time: 0.2332
+Epoch: [6]  [ 7500/11251]  eta: 0:16:54  lr: 0.001991  loss: 0.2257 (0.2293)  class_acc: 0.9688 (0.9878)  min_lr: 0.0020 (0.0020)  weight_decay: 0.0100 (0.0100)  time: 0.2304
+Epoch: [6]  [ 8000/11251]  eta: 0:14:31  lr: 0.001983  loss: 0.2228 (0.2294)  class_acc: 1.0000 (0.9878)  min_lr: 0.0020 (0.0020)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [6]  [ 8500/11251]  eta: 0:12:11  lr: 0.001976  loss: 0.2137 (0.2293)  class_acc: 1.0000 (0.9879)  min_lr: 0.0020 (0.0020)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [6]  [ 9000/11251]  eta: 0:09:54  lr: 0.001968  loss: 0.2175 (0.2292)  class_acc: 1.0000 (0.9879)  min_lr: 0.0020 (0.0020)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [6]  [ 9500/11251]  eta: 0:07:39  lr: 0.001961  loss: 0.2218 (0.2292)  class_acc: 1.0000 (0.9878)  min_lr: 0.0020 (0.0020)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [6]  [10000/11251]  eta: 0:05:26  lr: 0.001953  loss: 0.2199 (0.2291)  class_acc: 1.0000 (0.9879)  min_lr: 0.0020 (0.0020)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [6]  [10500/11251]  eta: 0:03:14  lr: 0.001945  loss: 0.2269 (0.2290)  class_acc: 1.0000 (0.9880)  min_lr: 0.0019 (0.0020)  weight_decay: 0.0100 (0.0100)  time: 0.2338
+Epoch: [6]  [11000/11251]  eta: 0:01:04  lr: 0.001938  loss: 0.2191 (0.2289)  class_acc: 1.0000 (0.9880)  min_lr: 0.0019 (0.0020)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [6]  [11250/11251]  eta: 0:00:00  lr: 0.001934  loss: 0.2120 (0.2289)  class_acc: 1.0000 (0.9880)  min_lr: 0.0019 (0.0020)  weight_decay: 0.0100 (0.0100)  time: 0.2307
+Epoch: [6] Total time: 0:48:20 (1.2578 s / it)
+Averaged stats: lr: 0.001934  loss: 0.2120 (0.2289)  class_acc: 1.0000 (0.9879)  min_lr: 0.0019 (0.0020)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:09:01  loss: 0.0587 (0.0587)  acc1: 1.0000 (1.0000)  time: 4.3317
+Test:  [124/125]  eta: 0:00:00  loss: 0.1531 (0.1066)  acc1: 1.0000 (0.9970)  time: 0.0791
+Test: Total time: 0:00:15 (1.1256 s / it)
+* Acc@1 99.78% loss 0.1055
+Accuracy of the model on the 8000 test images: 99.78%
+Max accuracy: 99.91%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [7]  [    0/11251]  eta: 14:05:49  lr: 0.001934  loss: 0.2073 (0.2073)  class_acc: 1.0000 (1.0000)  min_lr: 0.0019 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 4.5106
+Epoch: [7]  [  500/11251]  eta: 0:43:28  lr: 0.001926  loss: 0.2187 (0.2271)  class_acc: 1.0000 (0.9892)  min_lr: 0.0019 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2351
+Epoch: [7]  [ 1000/11251]  eta: 0:40:37  lr: 0.001918  loss: 0.2197 (0.2268)  class_acc: 1.0000 (0.9895)  min_lr: 0.0019 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2336
+Epoch: [7]  [ 1500/11251]  eta: 0:38:22  lr: 0.001911  loss: 0.2236 (0.2268)  class_acc: 1.0000 (0.9894)  min_lr: 0.0019 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2340
+Epoch: [7]  [ 2000/11251]  eta: 0:36:16  lr: 0.001903  loss: 0.2238 (0.2274)  class_acc: 1.0000 (0.9891)  min_lr: 0.0019 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2334
+Epoch: [7]  [ 2500/11251]  eta: 0:34:13  lr: 0.001895  loss: 0.2226 (0.2269)  class_acc: 1.0000 (0.9893)  min_lr: 0.0019 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [7]  [ 3000/11251]  eta: 0:32:13  lr: 0.001887  loss: 0.2141 (0.2268)  class_acc: 1.0000 (0.9892)  min_lr: 0.0019 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [7]  [ 3500/11251]  eta: 0:30:13  lr: 0.001879  loss: 0.2154 (0.2266)  class_acc: 1.0000 (0.9893)  min_lr: 0.0019 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [7]  [ 4000/11251]  eta: 0:28:15  lr: 0.001871  loss: 0.2263 (0.2264)  class_acc: 1.0000 (0.9895)  min_lr: 0.0019 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [7]  [ 4500/11251]  eta: 0:26:17  lr: 0.001863  loss: 0.2256 (0.2265)  class_acc: 1.0000 (0.9894)  min_lr: 0.0019 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [7]  [ 5000/11251]  eta: 0:24:20  lr: 0.001855  loss: 0.2203 (0.2265)  class_acc: 1.0000 (0.9894)  min_lr: 0.0019 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [7]  [ 5500/11251]  eta: 0:22:23  lr: 0.001847  loss: 0.2248 (0.2264)  class_acc: 1.0000 (0.9895)  min_lr: 0.0018 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2343
+Epoch: [7]  [ 6000/11251]  eta: 0:20:26  lr: 0.001839  loss: 0.2203 (0.2263)  class_acc: 1.0000 (0.9895)  min_lr: 0.0018 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [7]  [ 6500/11251]  eta: 0:18:28  lr: 0.001831  loss: 0.2127 (0.2262)  class_acc: 1.0000 (0.9896)  min_lr: 0.0018 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [7]  [ 7000/11251]  eta: 0:16:32  lr: 0.001823  loss: 0.2162 (0.2261)  class_acc: 1.0000 (0.9895)  min_lr: 0.0018 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2341
+Epoch: [7]  [ 7500/11251]  eta: 0:14:35  lr: 0.001815  loss: 0.2133 (0.2260)  class_acc: 1.0000 (0.9896)  min_lr: 0.0018 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [7]  [ 8000/11251]  eta: 0:12:38  lr: 0.001806  loss: 0.2269 (0.2259)  class_acc: 0.9688 (0.9896)  min_lr: 0.0018 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2346
+Epoch: [7]  [ 8500/11251]  eta: 0:10:41  lr: 0.001798  loss: 0.2192 (0.2258)  class_acc: 1.0000 (0.9896)  min_lr: 0.0018 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [7]  [ 9000/11251]  eta: 0:08:44  lr: 0.001790  loss: 0.2196 (0.2259)  class_acc: 1.0000 (0.9896)  min_lr: 0.0018 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2308
+Epoch: [7]  [ 9500/11251]  eta: 0:06:48  lr: 0.001782  loss: 0.2165 (0.2259)  class_acc: 1.0000 (0.9896)  min_lr: 0.0018 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [7]  [10000/11251]  eta: 0:04:51  lr: 0.001773  loss: 0.2249 (0.2258)  class_acc: 1.0000 (0.9896)  min_lr: 0.0018 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [7]  [10500/11251]  eta: 0:02:55  lr: 0.001765  loss: 0.2137 (0.2258)  class_acc: 1.0000 (0.9896)  min_lr: 0.0018 (0.0019)  weight_decay: 0.0100 (0.0100)  time: 0.2349
+Epoch: [7]  [11000/11251]  eta: 0:00:58  lr: 0.001757  loss: 0.2136 (0.2257)  class_acc: 1.0000 (0.9897)  min_lr: 0.0018 (0.0018)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [7]  [11250/11251]  eta: 0:00:00  lr: 0.001752  loss: 0.2165 (0.2258)  class_acc: 1.0000 (0.9896)  min_lr: 0.0018 (0.0018)  weight_decay: 0.0100 (0.0100)  time: 0.2305
+Epoch: [7] Total time: 0:43:43 (1.2332 s / it)
+Averaged stats: lr: 0.001752  loss: 0.2165 (0.2258)  class_acc: 1.0000 (0.9895)  min_lr: 0.0018 (0.0018)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:07:44  loss: 0.0388 (0.0388)  acc1: 1.0000 (1.0000)  time: 3.7187
+Test:  [124/125]  eta: 0:00:00  loss: 0.0411 (0.0469)  acc1: 1.0000 (0.9938)  time: 0.0787
+Test: Total time: 0:00:15 (1.1232 s / it)
+* Acc@1 99.49% loss 0.0459
+Accuracy of the model on the 8000 test images: 99.49%
+Max accuracy: 99.91%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [8]  [    0/11251]  eta: 16:03:16  lr: 0.001752  loss: 0.2111 (0.2111)  class_acc: 1.0000 (1.0000)  min_lr: 0.0018 (0.0018)  weight_decay: 0.0100 (0.0100)  time: 5.1370
+Epoch: [8]  [  500/11251]  eta: 0:43:31  lr: 0.001744  loss: 0.2225 (0.2250)  class_acc: 1.0000 (0.9897)  min_lr: 0.0017 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2368
+Epoch: [8]  [ 1000/11251]  eta: 0:40:39  lr: 0.001736  loss: 0.2176 (0.2256)  class_acc: 1.0000 (0.9895)  min_lr: 0.0017 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2344
+Epoch: [8]  [ 1500/11251]  eta: 0:38:21  lr: 0.001727  loss: 0.2157 (0.2247)  class_acc: 1.0000 (0.9900)  min_lr: 0.0017 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2331
+Epoch: [8]  [ 2000/11251]  eta: 0:36:16  lr: 0.001719  loss: 0.2224 (0.2240)  class_acc: 1.0000 (0.9905)  min_lr: 0.0017 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [8]  [ 2500/11251]  eta: 0:34:13  lr: 0.001710  loss: 0.2100 (0.2238)  class_acc: 1.0000 (0.9906)  min_lr: 0.0017 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [8]  [ 3000/11251]  eta: 0:32:13  lr: 0.001701  loss: 0.2232 (0.2237)  class_acc: 1.0000 (0.9906)  min_lr: 0.0017 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2331
+Epoch: [8]  [ 3500/11251]  eta: 0:30:14  lr: 0.001693  loss: 0.2118 (0.2240)  class_acc: 1.0000 (0.9903)  min_lr: 0.0017 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2333
+Epoch: [8]  [ 4000/11251]  eta: 0:28:15  lr: 0.001684  loss: 0.2152 (0.2240)  class_acc: 1.0000 (0.9903)  min_lr: 0.0017 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [8]  [ 4500/11251]  eta: 0:26:17  lr: 0.001676  loss: 0.2201 (0.2241)  class_acc: 1.0000 (0.9902)  min_lr: 0.0017 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [8]  [ 5000/11251]  eta: 0:24:19  lr: 0.001667  loss: 0.2089 (0.2239)  class_acc: 1.0000 (0.9903)  min_lr: 0.0017 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [8]  [ 5500/11251]  eta: 0:22:22  lr: 0.001658  loss: 0.2146 (0.2240)  class_acc: 1.0000 (0.9902)  min_lr: 0.0017 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2312
+Epoch: [8]  [ 6000/11251]  eta: 0:20:25  lr: 0.001650  loss: 0.2238 (0.2240)  class_acc: 1.0000 (0.9903)  min_lr: 0.0016 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [8]  [ 6500/11251]  eta: 0:18:28  lr: 0.001641  loss: 0.2134 (0.2240)  class_acc: 1.0000 (0.9902)  min_lr: 0.0016 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2315
+Epoch: [8]  [ 7000/11251]  eta: 0:16:31  lr: 0.001632  loss: 0.2149 (0.2240)  class_acc: 1.0000 (0.9902)  min_lr: 0.0016 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2332
+Epoch: [8]  [ 7500/11251]  eta: 0:14:34  lr: 0.001624  loss: 0.2132 (0.2239)  class_acc: 1.0000 (0.9903)  min_lr: 0.0016 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [8]  [ 8000/11251]  eta: 0:12:38  lr: 0.001615  loss: 0.2294 (0.2237)  class_acc: 1.0000 (0.9904)  min_lr: 0.0016 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [8]  [ 8500/11251]  eta: 0:10:41  lr: 0.001606  loss: 0.2205 (0.2238)  class_acc: 1.0000 (0.9903)  min_lr: 0.0016 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2331
+Epoch: [8]  [ 9000/11251]  eta: 0:08:44  lr: 0.001597  loss: 0.2188 (0.2238)  class_acc: 1.0000 (0.9902)  min_lr: 0.0016 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [8]  [ 9500/11251]  eta: 0:06:48  lr: 0.001588  loss: 0.2138 (0.2238)  class_acc: 1.0000 (0.9903)  min_lr: 0.0016 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [8]  [10000/11251]  eta: 0:04:51  lr: 0.001579  loss: 0.2113 (0.2236)  class_acc: 1.0000 (0.9904)  min_lr: 0.0016 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [8]  [10500/11251]  eta: 0:02:55  lr: 0.001571  loss: 0.2123 (0.2235)  class_acc: 1.0000 (0.9904)  min_lr: 0.0016 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [8]  [11000/11251]  eta: 0:00:58  lr: 0.001562  loss: 0.2221 (0.2235)  class_acc: 1.0000 (0.9904)  min_lr: 0.0016 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [8]  [11250/11251]  eta: 0:00:00  lr: 0.001557  loss: 0.2132 (0.2235)  class_acc: 1.0000 (0.9904)  min_lr: 0.0016 (0.0017)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [8] Total time: 0:43:42 (1.2331 s / it)
+Averaged stats: lr: 0.001557  loss: 0.2132 (0.2233)  class_acc: 1.0000 (0.9906)  min_lr: 0.0016 (0.0017)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:09:16  loss: 0.0600 (0.0600)  acc1: 1.0000 (1.0000)  time: 4.4506
+Test:  [124/125]  eta: 0:00:00  loss: 0.0505 (0.0537)  acc1: 1.0000 (0.9995)  time: 0.0785
+Test: Total time: 0:00:15 (1.1208 s / it)
+* Acc@1 99.94% loss 0.0534
+Accuracy of the model on the 8000 test images: 99.94%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Max accuracy: 99.94%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [9]  [    0/11251]  eta: 15:47:11  lr: 0.001557  loss: 0.2041 (0.2041)  class_acc: 1.0000 (1.0000)  min_lr: 0.0016 (0.0016)  weight_decay: 0.0100 (0.0100)  time: 5.0512
+Epoch: [9]  [  500/11251]  eta: 0:43:26  lr: 0.001548  loss: 0.2168 (0.2214)  class_acc: 1.0000 (0.9915)  min_lr: 0.0015 (0.0016)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [9]  [ 1000/11251]  eta: 0:40:33  lr: 0.001539  loss: 0.2146 (0.2229)  class_acc: 1.0000 (0.9906)  min_lr: 0.0015 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [9]  [ 1500/11251]  eta: 0:38:19  lr: 0.001530  loss: 0.2140 (0.2225)  class_acc: 1.0000 (0.9908)  min_lr: 0.0015 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [9]  [ 2000/11251]  eta: 0:36:15  lr: 0.001522  loss: 0.2227 (0.2219)  class_acc: 1.0000 (0.9913)  min_lr: 0.0015 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [9]  [ 2500/11251]  eta: 0:34:12  lr: 0.001513  loss: 0.2139 (0.2217)  class_acc: 1.0000 (0.9913)  min_lr: 0.0015 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [9]  [ 3000/11251]  eta: 0:32:12  lr: 0.001504  loss: 0.2229 (0.2215)  class_acc: 1.0000 (0.9914)  min_lr: 0.0015 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [9]  [ 3500/11251]  eta: 0:30:13  lr: 0.001495  loss: 0.2184 (0.2214)  class_acc: 1.0000 (0.9916)  min_lr: 0.0015 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [9]  [ 4000/11251]  eta: 0:28:15  lr: 0.001486  loss: 0.2109 (0.2212)  class_acc: 1.0000 (0.9917)  min_lr: 0.0015 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [9]  [ 4500/11251]  eta: 0:26:17  lr: 0.001477  loss: 0.2217 (0.2211)  class_acc: 1.0000 (0.9919)  min_lr: 0.0015 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [9]  [ 5000/11251]  eta: 0:24:19  lr: 0.001467  loss: 0.2168 (0.2211)  class_acc: 1.0000 (0.9919)  min_lr: 0.0015 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [9]  [ 5500/11251]  eta: 0:22:22  lr: 0.001458  loss: 0.2152 (0.2212)  class_acc: 1.0000 (0.9918)  min_lr: 0.0015 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2316
+Epoch: [9]  [ 6000/11251]  eta: 0:20:25  lr: 0.001449  loss: 0.2127 (0.2212)  class_acc: 1.0000 (0.9918)  min_lr: 0.0014 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [9]  [ 6500/11251]  eta: 0:18:28  lr: 0.001440  loss: 0.2197 (0.2211)  class_acc: 1.0000 (0.9918)  min_lr: 0.0014 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2335
+Epoch: [9]  [ 7000/11251]  eta: 0:16:31  lr: 0.001431  loss: 0.2109 (0.2210)  class_acc: 1.0000 (0.9919)  min_lr: 0.0014 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2335
+Epoch: [9]  [ 7500/11251]  eta: 0:14:34  lr: 0.001422  loss: 0.2131 (0.2210)  class_acc: 1.0000 (0.9919)  min_lr: 0.0014 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [9]  [ 8000/11251]  eta: 0:12:38  lr: 0.001413  loss: 0.2124 (0.2209)  class_acc: 1.0000 (0.9919)  min_lr: 0.0014 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [9]  [ 8500/11251]  eta: 0:10:41  lr: 0.001404  loss: 0.2082 (0.2209)  class_acc: 1.0000 (0.9919)  min_lr: 0.0014 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2338
+Epoch: [9]  [ 9000/11251]  eta: 0:08:44  lr: 0.001395  loss: 0.2145 (0.2208)  class_acc: 1.0000 (0.9919)  min_lr: 0.0014 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [9]  [ 9500/11251]  eta: 0:06:48  lr: 0.001386  loss: 0.2102 (0.2207)  class_acc: 1.0000 (0.9919)  min_lr: 0.0014 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [9]  [10000/11251]  eta: 0:04:51  lr: 0.001377  loss: 0.2125 (0.2207)  class_acc: 1.0000 (0.9919)  min_lr: 0.0014 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [9]  [10500/11251]  eta: 0:02:55  lr: 0.001367  loss: 0.2129 (0.2207)  class_acc: 1.0000 (0.9918)  min_lr: 0.0014 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [9]  [11000/11251]  eta: 0:00:58  lr: 0.001358  loss: 0.2142 (0.2206)  class_acc: 1.0000 (0.9919)  min_lr: 0.0014 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2332
+Epoch: [9]  [11250/11251]  eta: 0:00:00  lr: 0.001354  loss: 0.2149 (0.2206)  class_acc: 1.0000 (0.9919)  min_lr: 0.0014 (0.0015)  weight_decay: 0.0100 (0.0100)  time: 0.2310
+Epoch: [9] Total time: 0:43:42 (1.2331 s / it)
+Averaged stats: lr: 0.001354  loss: 0.2149 (0.2207)  class_acc: 1.0000 (0.9918)  min_lr: 0.0014 (0.0015)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:07:49  loss: 0.0543 (0.0543)  acc1: 1.0000 (1.0000)  time: 3.7557
+Test:  [124/125]  eta: 0:00:00  loss: 0.0439 (0.0526)  acc1: 1.0000 (0.9992)  time: 0.0785
+Test: Total time: 0:00:15 (1.1237 s / it)
+* Acc@1 99.92% loss 0.0526
+Accuracy of the model on the 8000 test images: 99.92%
+Max accuracy: 99.94%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [10]  [    0/11251]  eta: 16:11:37  lr: 0.001354  loss: 0.2146 (0.2146)  class_acc: 1.0000 (1.0000)  min_lr: 0.0014 (0.0014)  weight_decay: 0.0100 (0.0100)  time: 5.1816
+Epoch: [10]  [  500/11251]  eta: 0:43:30  lr: 0.001345  loss: 0.2129 (0.2210)  class_acc: 1.0000 (0.9927)  min_lr: 0.0013 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2339
+Epoch: [10]  [ 1000/11251]  eta: 0:40:36  lr: 0.001335  loss: 0.2168 (0.2203)  class_acc: 1.0000 (0.9927)  min_lr: 0.0013 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2336
+Epoch: [10]  [ 1500/11251]  eta: 0:38:21  lr: 0.001326  loss: 0.2095 (0.2195)  class_acc: 1.0000 (0.9930)  min_lr: 0.0013 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2344
+Epoch: [10]  [ 2000/11251]  eta: 0:36:16  lr: 0.001317  loss: 0.2198 (0.2200)  class_acc: 1.0000 (0.9927)  min_lr: 0.0013 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [10]  [ 2500/11251]  eta: 0:34:14  lr: 0.001308  loss: 0.2116 (0.2199)  class_acc: 1.0000 (0.9926)  min_lr: 0.0013 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2333
+Epoch: [10]  [ 3000/11251]  eta: 0:32:13  lr: 0.001299  loss: 0.2264 (0.2198)  class_acc: 1.0000 (0.9925)  min_lr: 0.0013 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [10]  [ 3500/11251]  eta: 0:30:14  lr: 0.001290  loss: 0.2126 (0.2197)  class_acc: 1.0000 (0.9925)  min_lr: 0.0013 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [10]  [ 4000/11251]  eta: 0:28:15  lr: 0.001280  loss: 0.2132 (0.2195)  class_acc: 1.0000 (0.9926)  min_lr: 0.0013 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [10]  [ 4500/11251]  eta: 0:26:17  lr: 0.001271  loss: 0.2222 (0.2193)  class_acc: 1.0000 (0.9928)  min_lr: 0.0013 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2316
+Epoch: [10]  [ 5000/11251]  eta: 0:24:19  lr: 0.001262  loss: 0.2120 (0.2191)  class_acc: 1.0000 (0.9928)  min_lr: 0.0013 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2335
+Epoch: [10]  [ 5500/11251]  eta: 0:22:22  lr: 0.001253  loss: 0.2129 (0.2191)  class_acc: 1.0000 (0.9927)  min_lr: 0.0013 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [10]  [ 6000/11251]  eta: 0:20:25  lr: 0.001244  loss: 0.2109 (0.2190)  class_acc: 1.0000 (0.9927)  min_lr: 0.0012 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [10]  [ 6500/11251]  eta: 0:18:28  lr: 0.001234  loss: 0.2171 (0.2189)  class_acc: 1.0000 (0.9928)  min_lr: 0.0012 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [10]  [ 7000/11251]  eta: 0:16:31  lr: 0.001225  loss: 0.2103 (0.2189)  class_acc: 1.0000 (0.9929)  min_lr: 0.0012 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [10]  [ 7500/11251]  eta: 0:14:34  lr: 0.001216  loss: 0.2164 (0.2189)  class_acc: 1.0000 (0.9928)  min_lr: 0.0012 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2311
+Epoch: [10]  [ 8000/11251]  eta: 0:12:37  lr: 0.001207  loss: 0.2122 (0.2189)  class_acc: 1.0000 (0.9928)  min_lr: 0.0012 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [10]  [ 8500/11251]  eta: 0:10:41  lr: 0.001198  loss: 0.2099 (0.2188)  class_acc: 1.0000 (0.9928)  min_lr: 0.0012 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [10]  [ 9000/11251]  eta: 0:08:44  lr: 0.001189  loss: 0.2158 (0.2188)  class_acc: 1.0000 (0.9929)  min_lr: 0.0012 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [10]  [ 9500/11251]  eta: 0:06:48  lr: 0.001179  loss: 0.2102 (0.2187)  class_acc: 1.0000 (0.9929)  min_lr: 0.0012 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2334
+Epoch: [10]  [10000/11251]  eta: 0:04:51  lr: 0.001170  loss: 0.2174 (0.2187)  class_acc: 1.0000 (0.9930)  min_lr: 0.0012 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2336
+Epoch: [10]  [10500/11251]  eta: 0:02:55  lr: 0.001161  loss: 0.2115 (0.2186)  class_acc: 1.0000 (0.9930)  min_lr: 0.0012 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2349
+Epoch: [10]  [11000/11251]  eta: 0:00:58  lr: 0.001152  loss: 0.2078 (0.2185)  class_acc: 1.0000 (0.9930)  min_lr: 0.0012 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [10]  [11250/11251]  eta: 0:00:00  lr: 0.001147  loss: 0.2102 (0.2185)  class_acc: 1.0000 (0.9930)  min_lr: 0.0011 (0.0013)  weight_decay: 0.0100 (0.0100)  time: 0.2313
+Epoch: [10] Total time: 0:43:42 (1.2331 s / it)
+Averaged stats: lr: 0.001147  loss: 0.2102 (0.2186)  class_acc: 1.0000 (0.9928)  min_lr: 0.0011 (0.0013)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:07:10  loss: 0.0456 (0.0456)  acc1: 1.0000 (1.0000)  time: 3.4466
+Test:  [124/125]  eta: 0:00:00  loss: 0.0566 (0.0525)  acc1: 1.0000 (0.9992)  time: 0.0786
+Test: Total time: 0:00:15 (1.1251 s / it)
+* Acc@1 99.91% loss 0.0525
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Accuracy of the model on the 8000 test images: 99.91%
+Max accuracy: 99.94%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [11]  [    0/11251]  eta: 13:18:00  lr: 0.001147  loss: 0.2348 (0.2348)  class_acc: 0.9688 (0.9688)  min_lr: 0.0011 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 4.2557
+Epoch: [11]  [  500/11251]  eta: 0:43:25  lr: 0.001138  loss: 0.2100 (0.2148)  class_acc: 1.0000 (0.9956)  min_lr: 0.0011 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2332
+Epoch: [11]  [ 1000/11251]  eta: 0:40:35  lr: 0.001129  loss: 0.2116 (0.2166)  class_acc: 1.0000 (0.9940)  min_lr: 0.0011 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [11]  [ 1500/11251]  eta: 0:38:21  lr: 0.001120  loss: 0.2086 (0.2169)  class_acc: 1.0000 (0.9940)  min_lr: 0.0011 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [11]  [ 2000/11251]  eta: 0:36:16  lr: 0.001111  loss: 0.2193 (0.2164)  class_acc: 1.0000 (0.9942)  min_lr: 0.0011 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [11]  [ 2500/11251]  eta: 0:34:14  lr: 0.001102  loss: 0.2104 (0.2166)  class_acc: 1.0000 (0.9940)  min_lr: 0.0011 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [11]  [ 3000/11251]  eta: 0:32:14  lr: 0.001093  loss: 0.2111 (0.2169)  class_acc: 1.0000 (0.9938)  min_lr: 0.0011 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [11]  [ 3500/11251]  eta: 0:30:15  lr: 0.001083  loss: 0.2088 (0.2167)  class_acc: 1.0000 (0.9938)  min_lr: 0.0011 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [11]  [ 4000/11251]  eta: 0:28:17  lr: 0.001074  loss: 0.2085 (0.2167)  class_acc: 1.0000 (0.9939)  min_lr: 0.0011 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [11]  [ 4500/11251]  eta: 0:26:19  lr: 0.001065  loss: 0.2206 (0.2167)  class_acc: 1.0000 (0.9939)  min_lr: 0.0011 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [11]  [ 5000/11251]  eta: 0:24:21  lr: 0.001056  loss: 0.2116 (0.2166)  class_acc: 1.0000 (0.9939)  min_lr: 0.0011 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [11]  [ 5500/11251]  eta: 0:22:23  lr: 0.001047  loss: 0.2140 (0.2166)  class_acc: 1.0000 (0.9939)  min_lr: 0.0010 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [11]  [ 6000/11251]  eta: 0:20:26  lr: 0.001038  loss: 0.2077 (0.2166)  class_acc: 1.0000 (0.9939)  min_lr: 0.0010 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [11]  [ 6500/11251]  eta: 0:18:29  lr: 0.001029  loss: 0.2103 (0.2165)  class_acc: 1.0000 (0.9939)  min_lr: 0.0010 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [11]  [ 7000/11251]  eta: 0:16:32  lr: 0.001020  loss: 0.2156 (0.2166)  class_acc: 1.0000 (0.9938)  min_lr: 0.0010 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2335
+Epoch: [11]  [ 7500/11251]  eta: 0:14:35  lr: 0.001011  loss: 0.2109 (0.2166)  class_acc: 1.0000 (0.9938)  min_lr: 0.0010 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2333
+Epoch: [11]  [ 8000/11251]  eta: 0:12:38  lr: 0.001002  loss: 0.2112 (0.2166)  class_acc: 1.0000 (0.9938)  min_lr: 0.0010 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [11]  [ 8500/11251]  eta: 0:10:41  lr: 0.000993  loss: 0.2112 (0.2165)  class_acc: 1.0000 (0.9938)  min_lr: 0.0010 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [11]  [ 9000/11251]  eta: 0:08:44  lr: 0.000984  loss: 0.2124 (0.2165)  class_acc: 1.0000 (0.9938)  min_lr: 0.0010 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [11]  [ 9500/11251]  eta: 0:06:48  lr: 0.000975  loss: 0.2106 (0.2165)  class_acc: 1.0000 (0.9938)  min_lr: 0.0010 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [11]  [10000/11251]  eta: 0:04:51  lr: 0.000966  loss: 0.2104 (0.2164)  class_acc: 1.0000 (0.9938)  min_lr: 0.0010 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [11]  [10500/11251]  eta: 0:02:55  lr: 0.000957  loss: 0.2183 (0.2164)  class_acc: 1.0000 (0.9938)  min_lr: 0.0010 (0.0011)  weight_decay: 0.0100 (0.0100)  time: 0.2311
+Epoch: [11]  [11000/11251]  eta: 0:00:58  lr: 0.000948  loss: 0.2221 (0.2163)  class_acc: 1.0000 (0.9938)  min_lr: 0.0009 (0.0010)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [11]  [11250/11251]  eta: 0:00:00  lr: 0.000944  loss: 0.2145 (0.2163)  class_acc: 1.0000 (0.9939)  min_lr: 0.0009 (0.0010)  weight_decay: 0.0100 (0.0100)  time: 0.2309
+Epoch: [11] Total time: 0:43:42 (1.2331 s / it)
+Averaged stats: lr: 0.000944  loss: 0.2145 (0.2163)  class_acc: 1.0000 (0.9938)  min_lr: 0.0009 (0.0010)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:10:02  loss: 0.0488 (0.0488)  acc1: 1.0000 (1.0000)  time: 4.8167
+Test:  [124/125]  eta: 0:00:00  loss: 0.0429 (0.0471)  acc1: 1.0000 (0.9992)  time: 0.0785
+Test: Total time: 0:00:15 (1.1232 s / it)
+* Acc@1 99.96% loss 0.0466
+Accuracy of the model on the 8000 test images: 99.96%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Max accuracy: 99.96%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [12]  [    0/11251]  eta: 17:21:49  lr: 0.000944  loss: 0.2426 (0.2426)  class_acc: 0.9688 (0.9688)  min_lr: 0.0009 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 5.5559
+Epoch: [12]  [  500/11251]  eta: 0:43:37  lr: 0.000935  loss: 0.2082 (0.2154)  class_acc: 1.0000 (0.9944)  min_lr: 0.0009 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [12]  [ 1000/11251]  eta: 0:40:40  lr: 0.000926  loss: 0.2072 (0.2163)  class_acc: 1.0000 (0.9937)  min_lr: 0.0009 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2316
+Epoch: [12]  [ 1500/11251]  eta: 0:38:22  lr: 0.000917  loss: 0.2084 (0.2161)  class_acc: 1.0000 (0.9940)  min_lr: 0.0009 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [12]  [ 2000/11251]  eta: 0:36:17  lr: 0.000908  loss: 0.2069 (0.2159)  class_acc: 1.0000 (0.9940)  min_lr: 0.0009 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2313
+Epoch: [12]  [ 2500/11251]  eta: 0:34:14  lr: 0.000899  loss: 0.2069 (0.2153)  class_acc: 1.0000 (0.9942)  min_lr: 0.0009 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [12]  [ 3000/11251]  eta: 0:32:14  lr: 0.000891  loss: 0.2143 (0.2154)  class_acc: 1.0000 (0.9942)  min_lr: 0.0009 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [12]  [ 3500/11251]  eta: 0:30:15  lr: 0.000882  loss: 0.2100 (0.2154)  class_acc: 1.0000 (0.9941)  min_lr: 0.0009 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [12]  [ 4000/11251]  eta: 0:28:17  lr: 0.000873  loss: 0.2099 (0.2154)  class_acc: 1.0000 (0.9941)  min_lr: 0.0009 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [12]  [ 4500/11251]  eta: 0:26:19  lr: 0.000864  loss: 0.2091 (0.2153)  class_acc: 1.0000 (0.9942)  min_lr: 0.0009 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [12]  [ 5000/11251]  eta: 0:24:21  lr: 0.000856  loss: 0.2068 (0.2153)  class_acc: 1.0000 (0.9942)  min_lr: 0.0009 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2315
+Epoch: [12]  [ 5500/11251]  eta: 0:22:23  lr: 0.000847  loss: 0.2062 (0.2153)  class_acc: 1.0000 (0.9942)  min_lr: 0.0008 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2316
+Epoch: [12]  [ 6000/11251]  eta: 0:20:26  lr: 0.000838  loss: 0.2109 (0.2151)  class_acc: 1.0000 (0.9943)  min_lr: 0.0008 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [12]  [ 6500/11251]  eta: 0:18:29  lr: 0.000830  loss: 0.2070 (0.2150)  class_acc: 1.0000 (0.9944)  min_lr: 0.0008 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [12]  [ 7000/11251]  eta: 0:16:32  lr: 0.000821  loss: 0.2103 (0.2149)  class_acc: 1.0000 (0.9945)  min_lr: 0.0008 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [12]  [ 7500/11251]  eta: 0:14:35  lr: 0.000812  loss: 0.2084 (0.2148)  class_acc: 1.0000 (0.9945)  min_lr: 0.0008 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [12]  [ 8000/11251]  eta: 0:12:38  lr: 0.000804  loss: 0.2047 (0.2147)  class_acc: 1.0000 (0.9946)  min_lr: 0.0008 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [12]  [ 8500/11251]  eta: 0:10:41  lr: 0.000795  loss: 0.2090 (0.2147)  class_acc: 1.0000 (0.9946)  min_lr: 0.0008 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [12]  [ 9000/11251]  eta: 0:08:44  lr: 0.000787  loss: 0.2049 (0.2146)  class_acc: 1.0000 (0.9946)  min_lr: 0.0008 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [12]  [ 9500/11251]  eta: 0:06:48  lr: 0.000778  loss: 0.2076 (0.2145)  class_acc: 1.0000 (0.9947)  min_lr: 0.0008 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2331
+Epoch: [12]  [10000/11251]  eta: 0:04:51  lr: 0.000770  loss: 0.2093 (0.2144)  class_acc: 1.0000 (0.9947)  min_lr: 0.0008 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [12]  [10500/11251]  eta: 0:02:55  lr: 0.000761  loss: 0.2062 (0.2144)  class_acc: 1.0000 (0.9948)  min_lr: 0.0008 (0.0009)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [12]  [11000/11251]  eta: 0:00:58  lr: 0.000753  loss: 0.2115 (0.2144)  class_acc: 1.0000 (0.9947)  min_lr: 0.0008 (0.0008)  weight_decay: 0.0100 (0.0100)  time: 0.2333
+Epoch: [12]  [11250/11251]  eta: 0:00:00  lr: 0.000749  loss: 0.2092 (0.2143)  class_acc: 1.0000 (0.9948)  min_lr: 0.0007 (0.0008)  weight_decay: 0.0100 (0.0100)  time: 0.2305
+Epoch: [12] Total time: 0:43:44 (1.2332 s / it)
+Averaged stats: lr: 0.000749  loss: 0.2092 (0.2144)  class_acc: 1.0000 (0.9947)  min_lr: 0.0007 (0.0008)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:10:20  loss: 0.0548 (0.0548)  acc1: 1.0000 (1.0000)  time: 4.9674
+Test:  [124/125]  eta: 0:00:00  loss: 0.0503 (0.0496)  acc1: 1.0000 (0.9992)  time: 0.0786
+Test: Total time: 0:00:16 (1.1291 s / it)
+* Acc@1 99.95% loss 0.0494
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Accuracy of the model on the 8000 test images: 99.95%
+Max accuracy: 99.96%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [13]  [    0/11251]  eta: 16:29:32  lr: 0.000749  loss: 0.2022 (0.2022)  class_acc: 1.0000 (1.0000)  min_lr: 0.0007 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 5.2770
+Epoch: [13]  [  500/11251]  eta: 0:43:38  lr: 0.000740  loss: 0.2073 (0.2127)  class_acc: 1.0000 (0.9958)  min_lr: 0.0007 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2338
+Epoch: [13]  [ 1000/11251]  eta: 0:40:42  lr: 0.000732  loss: 0.2134 (0.2133)  class_acc: 1.0000 (0.9951)  min_lr: 0.0007 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [13]  [ 1500/11251]  eta: 0:38:26  lr: 0.000723  loss: 0.2065 (0.2135)  class_acc: 1.0000 (0.9952)  min_lr: 0.0007 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2334
+Epoch: [13]  [ 2000/11251]  eta: 0:36:19  lr: 0.000715  loss: 0.2094 (0.2134)  class_acc: 1.0000 (0.9953)  min_lr: 0.0007 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [13]  [ 2500/11251]  eta: 0:34:15  lr: 0.000707  loss: 0.2096 (0.2133)  class_acc: 1.0000 (0.9954)  min_lr: 0.0007 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [13]  [ 3000/11251]  eta: 0:32:15  lr: 0.000699  loss: 0.2096 (0.2132)  class_acc: 1.0000 (0.9954)  min_lr: 0.0007 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2340
+Epoch: [13]  [ 3500/11251]  eta: 0:30:16  lr: 0.000690  loss: 0.2057 (0.2131)  class_acc: 1.0000 (0.9954)  min_lr: 0.0007 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2343
+Epoch: [13]  [ 4000/11251]  eta: 0:28:17  lr: 0.000682  loss: 0.2101 (0.2130)  class_acc: 1.0000 (0.9955)  min_lr: 0.0007 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [13]  [ 4500/11251]  eta: 0:26:19  lr: 0.000674  loss: 0.2110 (0.2131)  class_acc: 1.0000 (0.9954)  min_lr: 0.0007 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [13]  [ 5000/11251]  eta: 0:24:21  lr: 0.000666  loss: 0.2073 (0.2130)  class_acc: 1.0000 (0.9954)  min_lr: 0.0007 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [13]  [ 5500/11251]  eta: 0:22:23  lr: 0.000658  loss: 0.2052 (0.2129)  class_acc: 1.0000 (0.9954)  min_lr: 0.0007 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [13]  [ 6000/11251]  eta: 0:20:26  lr: 0.000650  loss: 0.2119 (0.2129)  class_acc: 1.0000 (0.9954)  min_lr: 0.0006 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2309
+Epoch: [13]  [ 6500/11251]  eta: 0:18:29  lr: 0.000642  loss: 0.2067 (0.2129)  class_acc: 1.0000 (0.9953)  min_lr: 0.0006 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [13]  [ 7000/11251]  eta: 0:16:32  lr: 0.000634  loss: 0.2094 (0.2129)  class_acc: 1.0000 (0.9953)  min_lr: 0.0006 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [13]  [ 7500/11251]  eta: 0:14:35  lr: 0.000626  loss: 0.2050 (0.2128)  class_acc: 1.0000 (0.9954)  min_lr: 0.0006 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [13]  [ 8000/11251]  eta: 0:12:38  lr: 0.000618  loss: 0.2073 (0.2128)  class_acc: 1.0000 (0.9954)  min_lr: 0.0006 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [13]  [ 8500/11251]  eta: 0:10:41  lr: 0.000610  loss: 0.2084 (0.2127)  class_acc: 1.0000 (0.9954)  min_lr: 0.0006 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [13]  [ 9000/11251]  eta: 0:08:44  lr: 0.000602  loss: 0.2067 (0.2127)  class_acc: 1.0000 (0.9954)  min_lr: 0.0006 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2331
+Epoch: [13]  [ 9500/11251]  eta: 0:06:48  lr: 0.000594  loss: 0.2077 (0.2127)  class_acc: 1.0000 (0.9954)  min_lr: 0.0006 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [13]  [10000/11251]  eta: 0:04:51  lr: 0.000586  loss: 0.2063 (0.2126)  class_acc: 1.0000 (0.9954)  min_lr: 0.0006 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [13]  [10500/11251]  eta: 0:02:55  lr: 0.000579  loss: 0.2047 (0.2126)  class_acc: 1.0000 (0.9954)  min_lr: 0.0006 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [13]  [11000/11251]  eta: 0:00:58  lr: 0.000571  loss: 0.2077 (0.2125)  class_acc: 1.0000 (0.9955)  min_lr: 0.0006 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [13]  [11250/11251]  eta: 0:00:00  lr: 0.000567  loss: 0.2066 (0.2125)  class_acc: 1.0000 (0.9955)  min_lr: 0.0006 (0.0007)  weight_decay: 0.0100 (0.0100)  time: 0.2309
+Epoch: [13] Total time: 0:43:42 (1.2331 s / it)
+Averaged stats: lr: 0.000567  loss: 0.2066 (0.2124)  class_acc: 1.0000 (0.9955)  min_lr: 0.0006 (0.0007)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:07:10  loss: 0.0446 (0.0446)  acc1: 1.0000 (1.0000)  time: 3.4403
+Test:  [124/125]  eta: 0:00:00  loss: 0.0622 (0.0538)  acc1: 1.0000 (0.9990)  time: 0.0789
+Test: Total time: 0:00:15 (1.1233 s / it)
+* Acc@1 99.95% loss 0.0532
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Accuracy of the model on the 8000 test images: 99.95%
+Max accuracy: 99.96%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [14]  [    0/11251]  eta: 12:57:53  lr: 0.000567  loss: 0.2053 (0.2053)  class_acc: 1.0000 (1.0000)  min_lr: 0.0006 (0.0006)  weight_decay: 0.0100 (0.0100)  time: 4.1484
+Epoch: [14]  [  500/11251]  eta: 0:43:29  lr: 0.000559  loss: 0.2058 (0.2113)  class_acc: 1.0000 (0.9959)  min_lr: 0.0006 (0.0006)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [14]  [ 1000/11251]  eta: 0:40:36  lr: 0.000552  loss: 0.2074 (0.2114)  class_acc: 1.0000 (0.9959)  min_lr: 0.0006 (0.0006)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [14]  [ 1500/11251]  eta: 0:38:22  lr: 0.000544  loss: 0.2078 (0.2117)  class_acc: 1.0000 (0.9957)  min_lr: 0.0005 (0.0006)  weight_decay: 0.0100 (0.0100)  time: 0.2315
+Epoch: [14]  [ 2000/11251]  eta: 0:36:16  lr: 0.000537  loss: 0.2069 (0.2114)  class_acc: 1.0000 (0.9959)  min_lr: 0.0005 (0.0006)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [14]  [ 2500/11251]  eta: 0:34:14  lr: 0.000529  loss: 0.2050 (0.2116)  class_acc: 1.0000 (0.9958)  min_lr: 0.0005 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [14]  [ 3000/11251]  eta: 0:32:14  lr: 0.000522  loss: 0.2067 (0.2114)  class_acc: 1.0000 (0.9959)  min_lr: 0.0005 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [14]  [ 3500/11251]  eta: 0:30:14  lr: 0.000514  loss: 0.2072 (0.2113)  class_acc: 1.0000 (0.9959)  min_lr: 0.0005 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [14]  [ 4000/11251]  eta: 0:28:16  lr: 0.000507  loss: 0.2084 (0.2113)  class_acc: 1.0000 (0.9960)  min_lr: 0.0005 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [14]  [ 4500/11251]  eta: 0:26:17  lr: 0.000499  loss: 0.2043 (0.2113)  class_acc: 1.0000 (0.9960)  min_lr: 0.0005 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2335
+Epoch: [14]  [ 5000/11251]  eta: 0:24:20  lr: 0.000492  loss: 0.2048 (0.2112)  class_acc: 1.0000 (0.9961)  min_lr: 0.0005 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [14]  [ 5500/11251]  eta: 0:22:22  lr: 0.000485  loss: 0.2060 (0.2111)  class_acc: 1.0000 (0.9961)  min_lr: 0.0005 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [14]  [ 6000/11251]  eta: 0:20:25  lr: 0.000478  loss: 0.2059 (0.2110)  class_acc: 1.0000 (0.9961)  min_lr: 0.0005 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [14]  [ 6500/11251]  eta: 0:18:28  lr: 0.000470  loss: 0.2070 (0.2110)  class_acc: 1.0000 (0.9961)  min_lr: 0.0005 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [14]  [ 7000/11251]  eta: 0:16:31  lr: 0.000463  loss: 0.2060 (0.2110)  class_acc: 1.0000 (0.9961)  min_lr: 0.0005 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [14]  [ 7500/11251]  eta: 0:14:34  lr: 0.000456  loss: 0.2047 (0.2109)  class_acc: 1.0000 (0.9962)  min_lr: 0.0005 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [14]  [ 8000/11251]  eta: 0:12:38  lr: 0.000449  loss: 0.2041 (0.2109)  class_acc: 1.0000 (0.9962)  min_lr: 0.0004 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2316
+Epoch: [14]  [ 8500/11251]  eta: 0:10:41  lr: 0.000442  loss: 0.2065 (0.2108)  class_acc: 1.0000 (0.9962)  min_lr: 0.0004 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2316
+Epoch: [14]  [ 9000/11251]  eta: 0:08:44  lr: 0.000435  loss: 0.2058 (0.2109)  class_acc: 1.0000 (0.9962)  min_lr: 0.0004 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2334
+Epoch: [14]  [ 9500/11251]  eta: 0:06:48  lr: 0.000428  loss: 0.2056 (0.2108)  class_acc: 1.0000 (0.9962)  min_lr: 0.0004 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [14]  [10000/11251]  eta: 0:04:51  lr: 0.000421  loss: 0.2069 (0.2108)  class_acc: 1.0000 (0.9962)  min_lr: 0.0004 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [14]  [10500/11251]  eta: 0:02:54  lr: 0.000414  loss: 0.2057 (0.2107)  class_acc: 1.0000 (0.9963)  min_lr: 0.0004 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [14]  [11000/11251]  eta: 0:00:58  lr: 0.000408  loss: 0.2043 (0.2107)  class_acc: 1.0000 (0.9963)  min_lr: 0.0004 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [14]  [11250/11251]  eta: 0:00:00  lr: 0.000404  loss: 0.2048 (0.2107)  class_acc: 1.0000 (0.9963)  min_lr: 0.0004 (0.0005)  weight_decay: 0.0100 (0.0100)  time: 0.2310
+Epoch: [14] Total time: 0:43:41 (1.2330 s / it)
+Averaged stats: lr: 0.000404  loss: 0.2048 (0.2106)  class_acc: 1.0000 (0.9963)  min_lr: 0.0004 (0.0005)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:10:03  loss: 0.0566 (0.0566)  acc1: 1.0000 (1.0000)  time: 4.8243
+Test:  [124/125]  eta: 0:00:00  loss: 0.0473 (0.0508)  acc1: 1.0000 (1.0000)  time: 0.0785
+Test: Total time: 0:00:16 (1.1283 s / it)
+* Acc@1 100.00% loss 0.0506
+Accuracy of the model on the 8000 test images: 100.00%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Max accuracy: 100.00%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [15]  [    0/11251]  eta: 16:07:28  lr: 0.000404  loss: 0.2010 (0.2010)  class_acc: 1.0000 (1.0000)  min_lr: 0.0004 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 5.1594
+Epoch: [15]  [  500/11251]  eta: 0:43:26  lr: 0.000398  loss: 0.2060 (0.2101)  class_acc: 1.0000 (0.9965)  min_lr: 0.0004 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [15]  [ 1000/11251]  eta: 0:40:34  lr: 0.000391  loss: 0.2058 (0.2098)  class_acc: 1.0000 (0.9967)  min_lr: 0.0004 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [15]  [ 1500/11251]  eta: 0:38:20  lr: 0.000384  loss: 0.2080 (0.2097)  class_acc: 1.0000 (0.9967)  min_lr: 0.0004 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2331
+Epoch: [15]  [ 2000/11251]  eta: 0:36:15  lr: 0.000378  loss: 0.2091 (0.2097)  class_acc: 1.0000 (0.9966)  min_lr: 0.0004 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2352
+Epoch: [15]  [ 2500/11251]  eta: 0:34:13  lr: 0.000371  loss: 0.2060 (0.2096)  class_acc: 1.0000 (0.9966)  min_lr: 0.0004 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [15]  [ 3000/11251]  eta: 0:32:12  lr: 0.000365  loss: 0.2048 (0.2096)  class_acc: 1.0000 (0.9966)  min_lr: 0.0004 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [15]  [ 3500/11251]  eta: 0:30:13  lr: 0.000358  loss: 0.2053 (0.2095)  class_acc: 1.0000 (0.9966)  min_lr: 0.0004 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [15]  [ 4000/11251]  eta: 0:28:15  lr: 0.000352  loss: 0.2044 (0.2094)  class_acc: 1.0000 (0.9967)  min_lr: 0.0004 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2331
+Epoch: [15]  [ 4500/11251]  eta: 0:26:17  lr: 0.000345  loss: 0.2026 (0.2094)  class_acc: 1.0000 (0.9968)  min_lr: 0.0003 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2315
+Epoch: [15]  [ 5000/11251]  eta: 0:24:19  lr: 0.000339  loss: 0.2041 (0.2093)  class_acc: 1.0000 (0.9968)  min_lr: 0.0003 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2333
+Epoch: [15]  [ 5500/11251]  eta: 0:22:22  lr: 0.000333  loss: 0.2081 (0.2093)  class_acc: 1.0000 (0.9969)  min_lr: 0.0003 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [15]  [ 6000/11251]  eta: 0:20:25  lr: 0.000327  loss: 0.2059 (0.2092)  class_acc: 1.0000 (0.9969)  min_lr: 0.0003 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [15]  [ 6500/11251]  eta: 0:18:28  lr: 0.000320  loss: 0.2051 (0.2092)  class_acc: 1.0000 (0.9969)  min_lr: 0.0003 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [15]  [ 7000/11251]  eta: 0:16:31  lr: 0.000314  loss: 0.2019 (0.2091)  class_acc: 1.0000 (0.9969)  min_lr: 0.0003 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2331
+Epoch: [15]  [ 7500/11251]  eta: 0:14:34  lr: 0.000308  loss: 0.2058 (0.2091)  class_acc: 1.0000 (0.9969)  min_lr: 0.0003 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [15]  [ 8000/11251]  eta: 0:12:37  lr: 0.000302  loss: 0.2083 (0.2091)  class_acc: 1.0000 (0.9969)  min_lr: 0.0003 (0.0004)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [15]  [ 8500/11251]  eta: 0:10:41  lr: 0.000296  loss: 0.2043 (0.2091)  class_acc: 1.0000 (0.9969)  min_lr: 0.0003 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [15]  [ 9000/11251]  eta: 0:08:44  lr: 0.000290  loss: 0.2072 (0.2091)  class_acc: 1.0000 (0.9969)  min_lr: 0.0003 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2315
+Epoch: [15]  [ 9500/11251]  eta: 0:06:47  lr: 0.000285  loss: 0.2053 (0.2090)  class_acc: 1.0000 (0.9970)  min_lr: 0.0003 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [15]  [10000/11251]  eta: 0:04:51  lr: 0.000279  loss: 0.2037 (0.2090)  class_acc: 1.0000 (0.9970)  min_lr: 0.0003 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2336
+Epoch: [15]  [10500/11251]  eta: 0:02:54  lr: 0.000273  loss: 0.2056 (0.2090)  class_acc: 1.0000 (0.9970)  min_lr: 0.0003 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [15]  [11000/11251]  eta: 0:00:58  lr: 0.000267  loss: 0.2022 (0.2090)  class_acc: 1.0000 (0.9970)  min_lr: 0.0003 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2316
+Epoch: [15]  [11250/11251]  eta: 0:00:00  lr: 0.000264  loss: 0.2039 (0.2089)  class_acc: 1.0000 (0.9970)  min_lr: 0.0003 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2313
+Epoch: [15] Total time: 0:43:40 (1.2329 s / it)
+Averaged stats: lr: 0.000264  loss: 0.2039 (0.2090)  class_acc: 1.0000 (0.9970)  min_lr: 0.0003 (0.0003)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:09:08  loss: 0.0532 (0.0532)  acc1: 1.0000 (1.0000)  time: 4.3879
+Test:  [124/125]  eta: 0:00:00  loss: 0.0476 (0.0525)  acc1: 1.0000 (0.9990)  time: 0.0786
+Test: Total time: 0:00:15 (1.1248 s / it)
+* Acc@1 99.92% loss 0.0519
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Accuracy of the model on the 8000 test images: 99.92%
+Max accuracy: 100.00%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [16]  [    0/11251]  eta: 10:08:58  lr: 0.000264  loss: 0.2020 (0.2020)  class_acc: 1.0000 (1.0000)  min_lr: 0.0003 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 3.2476
+Epoch: [16]  [  500/11251]  eta: 0:43:33  lr: 0.000259  loss: 0.2042 (0.2082)  class_acc: 1.0000 (0.9974)  min_lr: 0.0003 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2334
+Epoch: [16]  [ 1000/11251]  eta: 0:40:38  lr: 0.000253  loss: 0.2056 (0.2084)  class_acc: 1.0000 (0.9972)  min_lr: 0.0003 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [16]  [ 1500/11251]  eta: 0:38:24  lr: 0.000248  loss: 0.2065 (0.2081)  class_acc: 1.0000 (0.9973)  min_lr: 0.0002 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2337
+Epoch: [16]  [ 2000/11251]  eta: 0:36:17  lr: 0.000242  loss: 0.2032 (0.2080)  class_acc: 1.0000 (0.9972)  min_lr: 0.0002 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [16]  [ 2500/11251]  eta: 0:34:15  lr: 0.000237  loss: 0.2042 (0.2079)  class_acc: 1.0000 (0.9974)  min_lr: 0.0002 (0.0003)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [16]  [ 3000/11251]  eta: 0:32:15  lr: 0.000232  loss: 0.2047 (0.2079)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [16]  [ 3500/11251]  eta: 0:30:15  lr: 0.000226  loss: 0.2045 (0.2078)  class_acc: 1.0000 (0.9976)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2316
+Epoch: [16]  [ 4000/11251]  eta: 0:28:16  lr: 0.000221  loss: 0.2060 (0.2078)  class_acc: 1.0000 (0.9976)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [16]  [ 4500/11251]  eta: 0:26:18  lr: 0.000216  loss: 0.2049 (0.2078)  class_acc: 1.0000 (0.9976)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [16]  [ 5000/11251]  eta: 0:24:21  lr: 0.000211  loss: 0.2073 (0.2078)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2337
+Epoch: [16]  [ 5500/11251]  eta: 0:22:23  lr: 0.000206  loss: 0.2020 (0.2078)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [16]  [ 6000/11251]  eta: 0:20:26  lr: 0.000201  loss: 0.2036 (0.2078)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [16]  [ 6500/11251]  eta: 0:18:28  lr: 0.000196  loss: 0.2046 (0.2077)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2315
+Epoch: [16]  [ 7000/11251]  eta: 0:16:31  lr: 0.000191  loss: 0.2029 (0.2078)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [16]  [ 7500/11251]  eta: 0:14:34  lr: 0.000186  loss: 0.2043 (0.2078)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [16]  [ 8000/11251]  eta: 0:12:38  lr: 0.000181  loss: 0.2027 (0.2077)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [16]  [ 8500/11251]  eta: 0:10:41  lr: 0.000177  loss: 0.2020 (0.2077)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [16]  [ 9000/11251]  eta: 0:08:45  lr: 0.000172  loss: 0.2041 (0.2077)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2306
+Epoch: [16]  [ 9500/11251]  eta: 0:06:48  lr: 0.000167  loss: 0.2029 (0.2077)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [16]  [10000/11251]  eta: 0:04:51  lr: 0.000163  loss: 0.2060 (0.2076)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [16]  [10500/11251]  eta: 0:02:55  lr: 0.000158  loss: 0.2036 (0.2076)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [16]  [11000/11251]  eta: 0:00:58  lr: 0.000154  loss: 0.2025 (0.2076)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [16]  [11250/11251]  eta: 0:00:00  lr: 0.000152  loss: 0.2032 (0.2076)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 0.2306
+Epoch: [16] Total time: 0:43:42 (1.2331 s / it)
+Averaged stats: lr: 0.000152  loss: 0.2032 (0.2077)  class_acc: 1.0000 (0.9975)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:10:19  loss: 0.0508 (0.0508)  acc1: 1.0000 (1.0000)  time: 4.9544
+Test:  [124/125]  eta: 0:00:00  loss: 0.0493 (0.0505)  acc1: 1.0000 (0.9992)  time: 0.0785
+Test: Total time: 0:00:15 (1.1269 s / it)
+* Acc@1 99.96% loss 0.0501
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Accuracy of the model on the 8000 test images: 99.96%
+Max accuracy: 100.00%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [17]  [    0/11251]  eta: 15:33:16  lr: 0.000152  loss: 0.2049 (0.2049)  class_acc: 1.0000 (1.0000)  min_lr: 0.0002 (0.0002)  weight_decay: 0.0100 (0.0100)  time: 4.9770
+Epoch: [17]  [  500/11251]  eta: 0:43:37  lr: 0.000147  loss: 0.2041 (0.2066)  class_acc: 1.0000 (0.9982)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2334
+Epoch: [17]  [ 1000/11251]  eta: 0:40:39  lr: 0.000143  loss: 0.2030 (0.2070)  class_acc: 1.0000 (0.9982)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [17]  [ 1500/11251]  eta: 0:38:24  lr: 0.000139  loss: 0.2030 (0.2069)  class_acc: 1.0000 (0.9981)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [17]  [ 2000/11251]  eta: 0:36:17  lr: 0.000135  loss: 0.2034 (0.2067)  class_acc: 1.0000 (0.9981)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [17]  [ 2500/11251]  eta: 0:34:16  lr: 0.000130  loss: 0.2051 (0.2067)  class_acc: 1.0000 (0.9980)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [17]  [ 3000/11251]  eta: 0:32:16  lr: 0.000126  loss: 0.2024 (0.2067)  class_acc: 1.0000 (0.9981)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [17]  [ 3500/11251]  eta: 0:30:16  lr: 0.000122  loss: 0.2030 (0.2066)  class_acc: 1.0000 (0.9981)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [17]  [ 4000/11251]  eta: 0:28:17  lr: 0.000119  loss: 0.2037 (0.2066)  class_acc: 1.0000 (0.9981)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [17]  [ 4500/11251]  eta: 0:26:19  lr: 0.000115  loss: 0.2021 (0.2066)  class_acc: 1.0000 (0.9981)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [17]  [ 5000/11251]  eta: 0:24:21  lr: 0.000111  loss: 0.2039 (0.2067)  class_acc: 1.0000 (0.9980)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [17]  [ 5500/11251]  eta: 0:22:23  lr: 0.000107  loss: 0.2022 (0.2067)  class_acc: 1.0000 (0.9980)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2331
+Epoch: [17]  [ 6000/11251]  eta: 0:20:26  lr: 0.000103  loss: 0.2025 (0.2067)  class_acc: 1.0000 (0.9980)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [17]  [ 6500/11251]  eta: 0:18:29  lr: 0.000100  loss: 0.2044 (0.2067)  class_acc: 1.0000 (0.9980)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [17]  [ 7000/11251]  eta: 0:16:32  lr: 0.000096  loss: 0.2077 (0.2067)  class_acc: 1.0000 (0.9980)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [17]  [ 7500/11251]  eta: 0:14:35  lr: 0.000093  loss: 0.2020 (0.2067)  class_acc: 1.0000 (0.9979)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [17]  [ 8000/11251]  eta: 0:12:38  lr: 0.000089  loss: 0.2030 (0.2067)  class_acc: 1.0000 (0.9979)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2334
+Epoch: [17]  [ 8500/11251]  eta: 0:10:41  lr: 0.000086  loss: 0.2031 (0.2067)  class_acc: 1.0000 (0.9979)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [17]  [ 9000/11251]  eta: 0:08:44  lr: 0.000083  loss: 0.2038 (0.2067)  class_acc: 1.0000 (0.9979)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [17]  [ 9500/11251]  eta: 0:06:48  lr: 0.000080  loss: 0.2029 (0.2066)  class_acc: 1.0000 (0.9979)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [17]  [10000/11251]  eta: 0:04:51  lr: 0.000076  loss: 0.2028 (0.2066)  class_acc: 1.0000 (0.9979)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [17]  [10500/11251]  eta: 0:02:55  lr: 0.000073  loss: 0.2026 (0.2066)  class_acc: 1.0000 (0.9979)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2341
+Epoch: [17]  [11000/11251]  eta: 0:00:58  lr: 0.000070  loss: 0.2025 (0.2066)  class_acc: 1.0000 (0.9979)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [17]  [11250/11251]  eta: 0:00:00  lr: 0.000069  loss: 0.2032 (0.2066)  class_acc: 1.0000 (0.9979)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2309
+Epoch: [17] Total time: 0:43:42 (1.2331 s / it)
+Averaged stats: lr: 0.000069  loss: 0.2032 (0.2066)  class_acc: 1.0000 (0.9980)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:10:10  loss: 0.0541 (0.0541)  acc1: 1.0000 (1.0000)  time: 4.8876
+Test:  [124/125]  eta: 0:00:00  loss: 0.0473 (0.0496)  acc1: 1.0000 (0.9990)  time: 0.0790
+Test: Total time: 0:00:15 (1.1248 s / it)
+* Acc@1 99.94% loss 0.0491
+Accuracy of the model on the 8000 test images: 99.94%
+Max accuracy: 100.00%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [18]  [    0/11251]  eta: 12:34:07  lr: 0.000069  loss: 0.2023 (0.2023)  class_acc: 1.0000 (1.0000)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 4.0216
+Epoch: [18]  [  500/11251]  eta: 0:43:43  lr: 0.000066  loss: 0.2042 (0.2053)  class_acc: 1.0000 (0.9986)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [18]  [ 1000/11251]  eta: 0:40:42  lr: 0.000063  loss: 0.2024 (0.2055)  class_acc: 1.0000 (0.9984)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [18]  [ 1500/11251]  eta: 0:38:25  lr: 0.000060  loss: 0.2025 (0.2057)  class_acc: 1.0000 (0.9984)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [18]  [ 2000/11251]  eta: 0:36:19  lr: 0.000057  loss: 0.2026 (0.2059)  class_acc: 1.0000 (0.9983)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2340
+Epoch: [18]  [ 2500/11251]  eta: 0:34:16  lr: 0.000055  loss: 0.2024 (0.2060)  class_acc: 1.0000 (0.9982)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2341
+Epoch: [18]  [ 3000/11251]  eta: 0:32:16  lr: 0.000052  loss: 0.2044 (0.2059)  class_acc: 1.0000 (0.9982)  min_lr: 0.0001 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2341
+Epoch: [18]  [ 3500/11251]  eta: 0:30:16  lr: 0.000049  loss: 0.2028 (0.2059)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [18]  [ 4000/11251]  eta: 0:28:17  lr: 0.000047  loss: 0.2028 (0.2059)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2309
+Epoch: [18]  [ 4500/11251]  eta: 0:26:18  lr: 0.000044  loss: 0.2031 (0.2059)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [18]  [ 5000/11251]  eta: 0:24:20  lr: 0.000042  loss: 0.2027 (0.2059)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [18]  [ 5500/11251]  eta: 0:22:23  lr: 0.000040  loss: 0.2021 (0.2059)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2310
+Epoch: [18]  [ 6000/11251]  eta: 0:20:25  lr: 0.000038  loss: 0.2037 (0.2059)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2338
+Epoch: [18]  [ 6500/11251]  eta: 0:18:28  lr: 0.000035  loss: 0.2034 (0.2059)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0001)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [18]  [ 7000/11251]  eta: 0:16:31  lr: 0.000033  loss: 0.2031 (0.2059)  class_acc: 1.0000 (0.9982)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [18]  [ 7500/11251]  eta: 0:14:34  lr: 0.000031  loss: 0.2032 (0.2059)  class_acc: 1.0000 (0.9982)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2318
+Epoch: [18]  [ 8000/11251]  eta: 0:12:38  lr: 0.000029  loss: 0.2021 (0.2059)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2333
+Epoch: [18]  [ 8500/11251]  eta: 0:10:41  lr: 0.000027  loss: 0.2028 (0.2059)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2321
+Epoch: [18]  [ 9000/11251]  eta: 0:08:44  lr: 0.000026  loss: 0.2017 (0.2058)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [18]  [ 9500/11251]  eta: 0:06:48  lr: 0.000024  loss: 0.2034 (0.2058)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [18]  [10000/11251]  eta: 0:04:51  lr: 0.000022  loss: 0.2026 (0.2058)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [18]  [10500/11251]  eta: 0:02:55  lr: 0.000020  loss: 0.2023 (0.2058)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [18]  [11000/11251]  eta: 0:00:58  lr: 0.000019  loss: 0.2023 (0.2058)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [18]  [11250/11251]  eta: 0:00:00  lr: 0.000018  loss: 0.2023 (0.2058)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2302
+Epoch: [18] Total time: 0:43:42 (1.2331 s / it)
+Averaged stats: lr: 0.000018  loss: 0.2023 (0.2059)  class_acc: 1.0000 (0.9982)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:07:13  loss: 0.0493 (0.0493)  acc1: 1.0000 (1.0000)  time: 3.4675
+Test:  [124/125]  eta: 0:00:00  loss: 0.0488 (0.0505)  acc1: 1.0000 (0.9992)  time: 0.0788
+Test: Total time: 0:00:15 (1.1218 s / it)
+* Acc@1 99.95% loss 0.0501
+Accuracy of the model on the 8000 test images: 99.95%
+Max accuracy: 100.00%
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/home/yiruolei/anaconda3/envs/SAFE/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 8, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Epoch: [19]  [    0/11251]  eta: 18:02:51  lr: 0.000018  loss: 0.2044 (0.2044)  class_acc: 1.0000 (1.0000)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 5.7747
+Epoch: [19]  [  500/11251]  eta: 0:43:39  lr: 0.000017  loss: 0.2028 (0.2054)  class_acc: 1.0000 (0.9986)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2333
+Epoch: [19]  [ 1000/11251]  eta: 0:40:40  lr: 0.000015  loss: 0.2036 (0.2058)  class_acc: 1.0000 (0.9985)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2312
+Epoch: [19]  [ 1500/11251]  eta: 0:38:24  lr: 0.000014  loss: 0.2025 (0.2059)  class_acc: 1.0000 (0.9984)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2329
+Epoch: [19]  [ 2000/11251]  eta: 0:36:18  lr: 0.000013  loss: 0.2036 (0.2059)  class_acc: 1.0000 (0.9984)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [19]  [ 2500/11251]  eta: 0:34:16  lr: 0.000011  loss: 0.2021 (0.2059)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [19]  [ 3000/11251]  eta: 0:32:16  lr: 0.000010  loss: 0.2028 (0.2058)  class_acc: 1.0000 (0.9982)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2326
+Epoch: [19]  [ 3500/11251]  eta: 0:30:16  lr: 0.000009  loss: 0.2022 (0.2058)  class_acc: 1.0000 (0.9982)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2332
+Epoch: [19]  [ 4000/11251]  eta: 0:28:17  lr: 0.000008  loss: 0.2056 (0.2057)  class_acc: 1.0000 (0.9982)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [19]  [ 4500/11251]  eta: 0:26:19  lr: 0.000007  loss: 0.2019 (0.2057)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2322
+Epoch: [19]  [ 5000/11251]  eta: 0:24:21  lr: 0.000006  loss: 0.2030 (0.2057)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2327
+Epoch: [19]  [ 5500/11251]  eta: 0:22:23  lr: 0.000005  loss: 0.2020 (0.2057)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [19]  [ 6000/11251]  eta: 0:20:26  lr: 0.000005  loss: 0.2063 (0.2058)  class_acc: 1.0000 (0.9982)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2323
+Epoch: [19]  [ 6500/11251]  eta: 0:18:29  lr: 0.000004  loss: 0.2025 (0.2057)  class_acc: 1.0000 (0.9982)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2328
+Epoch: [19]  [ 7000/11251]  eta: 0:16:31  lr: 0.000003  loss: 0.2029 (0.2057)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2324
+Epoch: [19]  [ 7500/11251]  eta: 0:14:35  lr: 0.000003  loss: 0.2037 (0.2057)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2319
+Epoch: [19]  [ 8000/11251]  eta: 0:12:38  lr: 0.000002  loss: 0.2016 (0.2057)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2313
+Epoch: [19]  [ 8500/11251]  eta: 0:10:41  lr: 0.000002  loss: 0.2022 (0.2057)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2332
+Epoch: [19]  [ 9000/11251]  eta: 0:08:44  lr: 0.000002  loss: 0.2021 (0.2057)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2325
+Epoch: [19]  [ 9500/11251]  eta: 0:06:48  lr: 0.000001  loss: 0.2021 (0.2056)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2330
+Epoch: [19]  [10000/11251]  eta: 0:04:51  lr: 0.000001  loss: 0.2023 (0.2056)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2314
+Epoch: [19]  [10500/11251]  eta: 0:02:55  lr: 0.000001  loss: 0.2016 (0.2057)  class_acc: 1.0000 (0.9982)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2317
+Epoch: [19]  [11000/11251]  eta: 0:00:58  lr: 0.000001  loss: 0.2040 (0.2057)  class_acc: 1.0000 (0.9982)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2320
+Epoch: [19]  [11250/11251]  eta: 0:00:00  lr: 0.000001  loss: 0.2018 (0.2057)  class_acc: 1.0000 (0.9982)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)  time: 0.2307
+Epoch: [19] Total time: 0:43:41 (1.2330 s / it)
+Averaged stats: lr: 0.000001  loss: 0.2018 (0.2057)  class_acc: 1.0000 (0.9983)  min_lr: 0.0000 (0.0000)  weight_decay: 0.0100 (0.0100)
+Test:  [  0/125]  eta: 0:06:51  loss: 0.0504 (0.0504)  acc1: 1.0000 (1.0000)  time: 3.2900
+Test:  [124/125]  eta: 0:00:00  loss: 0.0490 (0.0505)  acc1: 1.0000 (0.9992)  time: 0.0786
+Test: Total time: 0:00:15 (1.1234 s / it)
+* Acc@1 99.96% loss 0.0499
+Accuracy of the model on the 8000 test images: 99.96%
+Max accuracy: 100.00%
+Training time 14:46:45

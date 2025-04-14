@@ -179,7 +179,7 @@ class TrainDataset(Dataset):
 
     def __init__(self, is_train, args):#*初始的时候会把所有路径整理出来.而不是图象,这也是一种方法,为了在getitem的时候速度比较快.
         
-        self.is_train =is_train#*zhi'sh
+        self.is_train =is_train#*?只是为了在分块的时候思考用不用，可以不要，然后卸载tranform中但还没想好
 
         TRANSFORM = Get_Transforms(args)#!甚至这个是创新点
         self.transform = TRANSFORM[0] if is_train else TRANSFORM[1]
@@ -261,11 +261,14 @@ class TrainDataset(Dataset):
 
         #*先重新拼接一下(其实最好是放在transform中,但是目前没放进去)
         #*这里设置的大小也比原本的大,反正会裁
-        sampler = ImageSampler(image, target_size=(512, 512), min_patch_size=(8, 8),transforms=self.transform)#*把transform挪到里面去.
+        
+        sampler = ImageSampler(image, target_size=(512, 512), min_patch_size=(8, 8))#*把transform挪到里面去.
         image = sampler.stitch_patches(num_patches=128)#*这个超参可以删除??或者修改为动态的?
-        if index == 0 :
-            image.save("output.jpg")
-            print('sampling-jpg_to_test')
+        
+        image = self.transform(image)#输出的大小要是固定大小才可以，如果上面的处理删除了，在transform中尺寸久不对了
+        # if index == 0 :
+        #     image.save("output.jpg")
+        #     print('sampling-jpg_to_test')
         image = transforms.ToTensor()(image)
         
         return image, torch.tensor(int(targets))

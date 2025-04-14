@@ -21,7 +21,7 @@ class ImageSampler:
             max_patch_size (tuple): 每个采样块的最大大小（宽度，高度）。
         """
         self.image = image
-        self.transforms = transforms
+        # self.transforms = transforms
         self.target_width, self.target_height = target_size
         self.min_patch_width, self.min_patch_height = min_patch_size
         self.patches = []
@@ -71,7 +71,7 @@ class ImageSampler:
         for _ in range(num_patches):
             patch, patch_width, patch_height = self.sample_patch()
 
-            patch_trans = self.transforms(patch)
+            # patch = self.transforms(patch)
 
             # 计算放置图像块的位置
             if self.current_x + patch_width > self.target_width + 50:
@@ -82,7 +82,7 @@ class ImageSampler:
                 self.current_y = 0
 
             # 将图像块粘贴到拼接图像上
-            stitched_image.paste(patch_trans, (self.current_x, self.current_y))
+            stitched_image.paste(patch, (self.current_x, self.current_y))
 
             # 更新当前拼接位置
             self.current_x += patch_width
