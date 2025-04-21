@@ -3,7 +3,8 @@
 eval "$(conda shell.bash hook)"
 conda activate SAFE 
 
-
+#如果要指定一个或者某几个的话
+# export CUDA_VISIBLE_DEVICES=1
 
 GPU_NUM=2
 WORLD_SIZE=1
@@ -20,17 +21,20 @@ DISTRIBUTED_ARGS="
 "
 
 MODEL="SAFE"
-# RESUME_PATH="./checkpoint"
-RESUME_PATH="/home/data/yrlbp/ALLWEIGHT/SAFE/results/每个分小块都设置trans/20250329_112755/"
+RESUME_PATH="./checkpoint"
+# RESUME_PATH="/home/data/yrlbp/ALLWEIGHT/SAFE/results/每个分小块都设置trans/20250329_112755/"
+# RESUME_PATH="/home/yiruolei/project/AIGCdetector/SAFE/results/每个分小块都设置trans/20250329_112755/"
 
 eval_datasets=(
     # "data/datasets/test1_ForenSynths/test" \
     # "data/datasets/test2_Self-Synthesis/test" \
+    # "/home/yiruolei/ALLDATASET/AIGCDetect/CNNSpot/val"
     # "data/datasets/test3_Ojha/test" \
     # "/home/yiruolei/ALLDATASET/GenImage" \
-    "/home/yiruolei/ALLDATASET/Chameleon" 
+    "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test" 
 
 )
+
 for eval_dataset in "${eval_datasets[@]}"
 do
     PYTHONWARNINGS="ignore" python -m torch.distributed.run $DISTRIBUTED_ARGS main_finetune.py \
