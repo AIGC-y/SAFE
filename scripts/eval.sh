@@ -21,14 +21,14 @@ DISTRIBUTED_ARGS="
 
 MODEL="SAFE"
 # RESUME_PATH="./checkpoint"
-RESUME_PATH="/home/yiruolei/project/SAFE/results/仅设置trans和resnet/20250326_113217"
+RESUME_PATH="/home/data/yrlbp/ALLWEIGHT/SAFE/results/每个分小块都设置trans/20250329_112755/"
 
 eval_datasets=(
     # "data/datasets/test1_ForenSynths/test" \
     # "data/datasets/test2_Self-Synthesis/test" \
     # "data/datasets/test3_Ojha/test" \
-    "/home/yiruolei/ALLDATASET/GenImage" \
-    # "/home/yiruolei/ALLDATASET/Chameleon" 
+    # "/home/yiruolei/ALLDATASET/GenImage" \
+    "/home/yiruolei/ALLDATASET/Chameleon" 
 
 )
 for eval_dataset in "${eval_datasets[@]}"
