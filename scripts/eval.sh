@@ -48,6 +48,6 @@ do
         --resume $RESUME_PATH/checkpoint-best.pth \
         --eval True
 done
-
+#?lijl
 #batchsize 256
 #checkpoint-best.pth或者last
