@@ -21,9 +21,9 @@ DISTRIBUTED_ARGS="
 "
 
 MODEL="SAFE"
-RESUME_PATH="./checkpoint"
+# RESUME_PATH="./checkpoint"
 # RESUME_PATH="/home/data/yrlbp/ALLWEIGHT/SAFE/results/每个分小块都设置trans/20250329_112755/"
-# RESUME_PATH="/home/yiruolei/project/AIGCdetector/SAFE/results/每个分小块都设置trans/20250329_112755/"
+RESUME_PATH="/home/yiruolei/project/AIGCdetector/SAFE/results/每个分小块都设置trans/20250329_112755/"
 
 eval_datasets=(
     # "data/datasets/test1_ForenSynths/test" \

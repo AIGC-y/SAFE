@@ -15,93 +15,12 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 from torchvision.transforms import functional as F
 from torchvision.transforms import InterpolationMode
+from data.patchtrans import *
 
 from PIL import Image
 import random
 
-from data.patchingtest import ImageSampler
-
 ImageFile.LOAD_TRUNCATED_IMAGES = True
-
-
-class RandomJPEG():
-    def __init__(self, quality=95, interval=1, p=0.1):
-        if isinstance(quality, tuple):
-            self.quality = [i for i in range(quality[0], quality[1]) if i % interval == 0]
-        else:
-            self.quality = quality
-        self.p = p
-
-    def __call__(self, img):
-        if random.random() < self.p:
-            if isinstance(self.quality, list):
-                quality = random.choice(self.quality)
-            else:
-                quality = self.quality
-            buffer = io.BytesIO()
-            img.save(buffer, format='JPEG', quality=quality)
-            buffer.seek(0)
-            img = Image.open(buffer)
-        return img
-
-
-class RandomGaussianBlur():
-    def __init__(self, kernel_size, sigma=(0.1, 2.0), p=1.0):
-        self.blur = transforms.GaussianBlur(kernel_size=kernel_size, sigma=sigma)
-        self.p = p
-
-    def __call__(self, img):
-        if random.random() < self.p:
-            return self.blur(img)
-        return img
-
-class RandomMask(object):
-    def __init__(self, ratio=0.5, patch_size=16, p=0.5):
-        """
-        Args:
-            ratio (float or tuple of float): If float, the ratio of the image to be masked.
-                                             If tuple of float, random sample ratio between the two values.
-            patch_size (int): the size of the mask (d*d).
-        """
-        if isinstance(ratio, float):
-            self.fixed_ratio = True
-            self.ratio = (ratio, ratio)
-        elif isinstance(ratio, tuple) and len(ratio) == 2 and all(isinstance(r, float) for r in ratio):
-            self.fixed_ratio = False
-            self.ratio = ratio
-        else:
-            raise ValueError("Ratio must be a float or a tuple of two floats.")
-
-        self.patch_size = patch_size
-        self.p = p
-
-    def __call__(self, tensor):
-
-        if random.random() > self.p: return tensor
-
-        _, h, w = tensor.shape
-        mask = torch.ones((h, w), dtype=torch.float32)
-
-        if self.fixed_ratio:
-            ratio = self.ratio[0]
-        else:
-            ratio = random.uniform(self.ratio[0], self.ratio[1])
-
-        # Calculate the number of masks needed
-        num_masks = int((h * w * ratio) / (self.patch_size ** 2))
-
-        # Generate non-overlapping random positions
-        selected_positions = set()
-        while len(selected_positions) < num_masks:
-            top = random.randint(0, (h // self.patch_size) - 1) * self.patch_size
-            left = random.randint(0, (w // self.patch_size) - 1) * self.patch_size
-            selected_positions.add((top, left))
-
-        for (top, left) in selected_positions:
-            mask[top:top+self.patch_size, left:left+self.patch_size] = 0
-
-        return tensor * mask.expand_as(tensor)
-
 
 
 def Get_Transforms(args):
@@ -144,7 +63,7 @@ def Get_Transforms(args):
             ],
         },
         'ori': {
-            'train': [],
+            'train': [ImageSampler((512, 512), (8, 8), 128),],
             'eval': [],
         },
     }
@@ -262,9 +181,6 @@ class TrainDataset(Dataset):
         #*先重新拼接一下(其实最好是放在transform中,但是目前没放进去)
         #*这里设置的大小也比原本的大,反正会裁
         
-        sampler = ImageSampler(image, target_size=(512, 512), min_patch_size=(8, 8))#*把transform挪到里面去.
-        image = sampler.stitch_patches(num_patches=128)#*这个超参可以删除??或者修改为动态的?
-        
         image = self.transform(image)#输出的大小要是固定大小才可以，如果上面的处理删除了，在transform中尺寸久不对了
         # if index == 0 :
         #     image.save("output.jpg")
@@ -275,12 +191,5 @@ class TrainDataset(Dataset):
 
 
 if __name__ == "__main__":
-    image = Image.open("/home/yiruolei/ALLDATASET/Chameleon/test/0_real/0a4dcb15-6fe3-4a28-9821-ad8da7823f15.jpg").convert('RGB')
-    TRANSFORM = Get_Transforms(arg)#!甚至这个是创新点
-    transform = TRANSFORM[0]
-    sampler = ImageSampler(image, target_size=(512, 512), min_patch_size=(16, 16),transforms=transform)
-    stitched_image = sampler.stitch_patches(num_patches=128)
-    stitched_image.save("output.jpg")
-    transform_to_tensor = transforms.ToTensor()
-    a = transform_to_tensor(stitched_image)
+#这里测试不同的代码
     # print(a)
