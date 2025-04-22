@@ -20,11 +20,11 @@ DISTRIBUTED_ARGS="
     --master_port $MASTER_PORT
 "
 
-MODEL="SAFE"
+
 # RESUME_PATH="./checkpoint"
 # RESUME_PATH="/home/data/yrlbp/ALLWEIGHT/SAFE/results/每个分小块都设置trans/20250329_112755/"
-RESUME_PATH="/home/yiruolei/project/AIGCdetector/SAFE/results/每个分小块都设置trans/20250329_112755/"
-
+RESUME_PATH="/home/yiruolei/ALLOUT/SAFE-results/每个分小块都设置trans/20250329_112755/"
+current_time=$(date +"%Y%m%d_%H%M%S")
 eval_datasets=(
     # "data/datasets/test1_ForenSynths/test" \
     # "data/datasets/test2_Self-Synthesis/test" \
@@ -40,11 +40,10 @@ do
     PYTHONWARNINGS="ignore" python -m torch.distributed.run $DISTRIBUTED_ARGS main_finetune.py \
         --input_size 256 \
         --transform_mode 'ori' \
-        --model $MODEL \
         --eval_data_path $eval_dataset \
         --batch_size 32 \
         --num_workers 16 \
-        --output_dir $RESUME_PATH/eval \
+        --output_dir $RESUME_PATH/eval/$current_time \
         --resume $RESUME_PATH/checkpoint-best.pth \
         --eval True
 done

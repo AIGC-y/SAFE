@@ -43,8 +43,8 @@ def get_args_parser():
                         help='gradient accumulation steps')
 
     # Model parameters
-    parser.add_argument('--model', default='resnet50', type=str, metavar='MODEL',
-                        help='model architecture')
+    # parser.add_argument('--model', default='resnet50', type=str, metavar='MODEL',
+                        # help='model architecture')
     parser.add_argument('--input_size', default=256, type=int,
                         help='image input size')
     parser.add_argument('--layer_decay_type', type=str, choices=['single', 'group'], default='single',
