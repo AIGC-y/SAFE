@@ -1,0 +1,23 @@
+./checkpoint/checkpoint-best.pth model testing on...
+testset,accuracy,avg precision
+airplane,100.0,100.0
+bicycle,99.75,100.0
+bird,99.5,99.99751243781094
+boat,100.0,100.0
+bottle,100.0,100.0
+bus,100.0,100.0
+car,99.75,100.0
+cat,100.0,100.0
+chair,100.0,100.0
+cow,100.0,100.0
+diningtable,100.0,100.0
+dog,100.0,100.0
+horse,99.75,100.0
+motorbike,98.75,99.982422598137
+person,100.0,100.0
+pottedplant,99.5,100.0
+sheep,100.0,100.0
+sofa,100.0,100.0
+train,98.5,99.99751243781094
+tvmonitor,100.0,100.0
+mean,99.775,99.99887237368793
