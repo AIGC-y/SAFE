@@ -63,8 +63,10 @@ def Get_Transforms(args):
             ],
         },
         'ori': {
-            'train': [ImageSampler((512, 512), (8, 8), 128),],
-            'eval': [],
+            'train': [ImageSampler((512, 512), (8, 8), 128),
+                      ],
+            'eval': [ImageSampler((512, 512), (8, 8), 128),
+                     ],
         },
     }
 
@@ -96,6 +98,10 @@ def Get_Transforms(args):
 
 class TrainDataset(Dataset):
 
+    """文件结构-索引列表化,然后对列表进行图象取出\n
+    采用walk结构对所有下层子文件都整理为双列表\n
+        但是为什么固态和机械的处理时间相同呢? 
+    """
     def __init__(self, is_train, args):#*初始的时候会把所有路径整理出来.而不是图象,这也是一种方法,为了在getitem的时候速度比较快.
         
         self.is_train =is_train#*?只是为了在分块的时候思考用不用，可以不要，然后卸载tranform中但还没想好
@@ -190,6 +196,5 @@ class TrainDataset(Dataset):
         return image, torch.tensor(int(targets))
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 #这里测试不同的代码
-    # print(a)

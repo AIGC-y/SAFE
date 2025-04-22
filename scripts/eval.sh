@@ -31,7 +31,7 @@ eval_datasets=(
     # "/home/yiruolei/ALLDATASET/AIGCDetect/CNNSpot/val"
     # "data/datasets/test3_Ojha/test" \
     # "/home/yiruolei/ALLDATASET/GenImage" \
-    "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test" 
+    "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/" 
 
 )
 
