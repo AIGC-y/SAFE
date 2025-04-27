@@ -15,6 +15,7 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 from torchvision.transforms import functional as F
 from torchvision.transforms import InterpolationMode
+from data.patchtrans import apply_dct
 from data.patchtrans import *
 
 from PIL import Image
@@ -77,7 +78,7 @@ def Get_Transforms(args):
         transforms.RandomHorizontalFlip(p=0.5),
         transforms.RandomRotation(180),
         transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5),
-        # transforms.ToTensor(),#*因为要先贴图片才可以
+        transforms.ToTensor(),#*因为要先贴图片才可以
         # RandomMask(ratio=(0.00, 0.75), patch_size=16, p=0.5),#*就单纯的随机掩码就行啊
     ])
 
@@ -95,6 +96,13 @@ def Get_Transforms(args):
 
     return transforms.Compose(transform_train), transforms.Compose(transform_eval)
 
+transform2 = transforms.Compose([
+            transforms.RandomCrop([128, 128], pad_if_needed=True),
+            transforms.RandomHorizontalFlip(p=0.5),
+            transforms.RandomRotation(180),
+            transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5),
+            transforms.ToTensor(),
+    ])
 
 class TrainDataset(Dataset):
 
@@ -107,7 +115,7 @@ class TrainDataset(Dataset):
         self.is_train =is_train#*?只是为了在分块的时候思考用不用，可以不要，然后卸载tranform中但还没想好
 
         TRANSFORM = Get_Transforms(args)#!甚至这个是创新点
-        self.transform = TRANSFORM[0] if is_train else TRANSFORM[1]
+        self.transform1 = TRANSFORM[0] if is_train else TRANSFORM[1]
         root = args.data_path if is_train else args.eval_data_path #*是大路径的的不同,因为在ai检测中使用不同数据集来使用,而不测试训练数据集的效果
 
         dataset_list = root.replace(' ', '').split(',')
@@ -184,16 +192,26 @@ class TrainDataset(Dataset):
             print(f'image error: {image_path}')
             return self.__getitem__(random.randint(0, len(self.data_list) - 1))
 
-        #*先重新拼接一下(其实最好是放在transform中,但是目前没放进去)
-        #*这里设置的大小也比原本的大,反正会裁
-        
-        image = self.transform(image)#输出的大小要是固定大小才可以，如果上面的处理删除了，在transform中尺寸久不对了
+        # try:#*没想好应该在patchin前还是后
+        #     x_minmin, x_maxmax, x_minmin1, x_maxmax1 = self.dct(image)
+        # except:
+        #     print(f'image error: {image_path}, c, h, w: {image.shape}')
+        #     return self.__getitem__(random.randint(0, len(self.data_list) - 1))
+
+        image_patch = self.transform1(image)#输出的大小要是固定大小才可以，如果上面的处理删除了，在transform中尺寸久不对了
+        image_ori = transform2(image)
+        #todo *对特征进行频谱还是图象频谱,反正得对图象patch然后在分类不同特征.
+        #* 潜在DF模型的思路有借鉴意义吗??这个是生成图象,痕迹被消失了.感觉其实一般了这样.?
+        ###* DCT是可逆变换.是不是平移不变变换呢????可以不可以换层还不知道,学习一下别人怎么写的这个也可以产生一个大点...也是拼接原理::这个结构本身是如何.而任务需要这样的吗???
+        lowfreq, highfreq = apply_dct(image)
+        #todo *分离后使用频谱还是图象也不一定.可以设置四个支路来让整体结构在球面上跟完善?
         # if index == 0 :
         #     image.save("output.jpg")
         #     print('sampling-jpg_to_test')
-        image = transforms.ToTensor()(image)
+        # image = transforms.ToTensor()(image)
+  
         
-        return image, torch.tensor(int(targets))
+        return (image_patch, image_ori, lowfreq, highfreq), torch.tensor(int(targets))
 
 
 # if __name__ == "__main__":

@@ -52,10 +52,17 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
         if use_amp:
             with torch.cuda.amp.autocast():
                 output = model(samples)
-                loss = criterion(output, targets)
+                # loss = criterion(output, targets)
         else: # full precision
             output = model(samples)
-            loss = criterion(output, targets)
+            ##!这里的对比损失还没修改.可以用度量损失来拉近关系和对比结构
+            #*对比损失是否都放在一个球面上还没想好
+            loss0 = criterion[0](output[0], targets)
+            loss_feq = (torch.fft.rfft(output[0], dim=1) - torch.fft.rfft(targets, dim=1)).abs().mean() 
+            # loss1 = criterion[1](output[1], -output[2]).mean() + criterion[1](output[3], -output[4]).mean()
+            # loss2 = criterion[1](output[1], output[3]).mean() + criterion[1](output[2], output[4]).mean()#*这都是简单的使用方式,不一定好用.要多试一试.
+            loss = loss0 +  loss_feq 
+            #  + loss1 + loss2
 
         loss_value = loss.item()
 
@@ -152,8 +159,9 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
             output = model(images) #[bs, num_cls]
             if isinstance(output, dict):
                 output = output['logits']
-            
-            loss = criterion(output, target)
+            #*loss
+            loss1 = 
+            # loss = criterion(output, target)
         
         if index == 0:
             predictions = output

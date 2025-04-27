@@ -6,6 +6,10 @@ import torch
 from torchvision import transforms
 from torchvision.transforms import InterpolationMode
 from torchvision.transforms import functional as F
+
+import cv2
+from scipy.fftpack import dct, idct
+
 import io, os, pdb
 
 ##############################transform ###########################################
@@ -98,8 +102,6 @@ class ImageSampler:
         初始化ImageSampler。
 
         参数：
-            image_path (str): 输入图像的路径。
-            num_patches(int): 要采样并拼接的图像块数量。
             target_size (tuple): 目标拼接图像的大小（宽度，高度）。
             min_patch_size (tuple): 每个采样块的最小大小（宽度，高度）。
             max_patch_size (tuple): 每个采样块的最大大小（宽度，高度）。
@@ -181,6 +183,32 @@ class ImageSampler:
     def __call__(self, image: Image.Image):
         """为了能当成transform结构的函数来使用"""
         return self.stitch_patches(image)
+
+
+def apply_dct(image):
+    """
+    对图像进行 DCT 变换并分离低频和高频信息
+    """
+    # 转换为灰度图像#**只用灰度图象吗?色彩不是也很重要吗?
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # 对图像进行 DCT 变换
+    dct_transformed = dct(dct(gray.T, norm='ortho').T, norm='ortho')
+    
+    # 分离低频和高频信息
+    h, w = dct_transformed.shape
+    low_freq = np.zeros_like(dct_transformed)
+    high_freq = np.zeros_like(dct_transformed)
+    
+    # 低频区域 (保留左上角 1/4 的系数)#?具体要多少不一定
+    low_freq[:h//2, :w//2] = dct_transformed[:h//2, :w//2]
+    # 高频区域 (其余部分)numpy
+    high_freq = dct_transformed - low_freq
+    
+    # 将 numpy 数组转换为 PyTorch 张量
+    high_freq = torch.from_numpy(high_freq)
+    low_freq = torch.from_numpy(low_freq)
+    return low_freq, high_freq
 
 ####################################################################################
 ##################transformcompose##############################

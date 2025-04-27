@@ -18,6 +18,7 @@ from timm.utils import ModelEma
 from optim_factory import create_optimizer, LayerDecayValueAssigner
 
 from models.resnet import resnet50
+from models.DSEX import DSEX
 from data.datasets import TrainDataset
 from engine_finetune import train_one_epoch, evaluate
 
@@ -253,6 +254,7 @@ def main(args):
     # Init Model
     #!这里先改一下,之后在改回来
     model = resnet50(num_classes=2)
+    model = DSEX(input_size=args.input_size)
     # if args.model == 'SAFE':
     #     model = resnet50(num_classes=2)
     # else:
@@ -330,8 +332,12 @@ def main(args):
     elif args.smoothing > 0.:
         criterion = LabelSmoothingCrossEntropy(smoothing=args.smoothing)
     else:
-        criterion = torch.nn.CrossEntropyLoss()
-    
+        # criterion = torch.nn.CrossEntropyLoss()
+        criterion = {
+            "class":torch.nn.CrossEntropyLoss(),
+            "contrast":torchnn.CosineSimilarity(dim=-1),
+            "frquency":torch.nn.CrossEntropyLoss(),
+        }
     print("criterion = %s" % str(criterion))
 
     utils.auto_load_model(
