@@ -1,5 +1,7 @@
 
-GPU_NUM=2
+export CUDA_VISIBLE_DEVICES=1
+
+GPU_NUM=1
 WORLD_SIZE=1
 RANK=0
 MASTER_ADDR=localhost
@@ -14,10 +16,11 @@ DISTRIBUTED_ARGS="
 "
 
 train_datasets=(
-    "/home/yiruolei/ALLDATASET/CNNSpot/progan_train" \
+    
+    "/home/yiruolei/ALLDATASET/AIGCDetect/CNNSpot/train"\
 )
 eval_datasets=(
-    "/home/yiruolei/ALLDATASET/CNNSpot/progan_val" \
+    "/home/yiruolei/ALLDATASET/AIGCDetect/CNNSpot/val" \
 )
 #"/home/yiruolei/ALLDATASET/GenImage" \
 info="每个分小块都设置trans"
@@ -43,7 +46,7 @@ do
             --weight_decay 0.01 \
             --warmup_epochs 1 \
             --epochs 20 \
-            --num_workers 16 \
+            --num_workers 8 \
             --output_dir $OUTPUT_PATH \
         2>&1 | tee -a $OUTPUT_PATH/log_train.txt 
 
@@ -51,3 +54,5 @@ do
 done
 
 #--transform_mode 'crop' \
+#--batch_size 32 \
+#num_workers 16 \

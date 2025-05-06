@@ -4,9 +4,9 @@ eval "$(conda shell.bash hook)"
 conda activate SAFE 
 
 #如果要指定一个或者某几个的话
-# export CUDA_VISIBLE_DEVICES=1
+export CUDA_VISIBLE_DEVICES=1
 
-GPU_NUM=2
+GPU_NUM=1
 WORLD_SIZE=1
 RANK=0
 MASTER_ADDR=localhost

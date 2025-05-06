@@ -8,7 +8,8 @@ from torchvision.transforms import InterpolationMode
 from torchvision.transforms import functional as F
 
 import cv2
-from scipy.fftpack import dct, idct
+# from scipy.fftpack import dct, idct
+import matplotlib.pyplot as plt
 
 import io, os, pdb
 
@@ -185,16 +186,52 @@ class ImageSampler:
         return self.stitch_patches(image)
 
 
-def apply_dct(image):
+def apply_dct(image: Image.Image):
     """
+    image: PIL.image.image
     对图像进行 DCT 变换并分离低频和高频信息
     """
     # 转换为灰度图像#**只用灰度图象吗?色彩不是也很重要吗?
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    image = image.convert('L')#?灰度图是加权通道获得的,不够好.
+    transform = transforms.ToTensor()
+    image_tensor = transform(image).unsqueeze(0)
+    # r_channel, g_channel, b_channel = image_tensor[:, 0, :, :], image_tensor[:, 1, :, :], image_tensor[:, 2, :, :]
+
+    def dct(image: torch.Tensor):
+        # 对图像进行 DCT 变换
+        f = torch.fft.fft2(image_tensor)
+        fshift = torch.fft.fftshift(f) #中心化操作?貌似不一定,这里后续需要分离不同频带.
+
+        #复数无法可视化,所以一般可视化需要分解两个
+        #分离不同幅度和相位
+        magnitude = 20 * torch.log(torch.abs(fshift) + 1e-10)#有增强和避免log(0)
+        phase= torch.angle(fshift)
+        return magnitude, phase
     
-    # 对图像进行 DCT 变换
-    dct_transformed = dct(dct(gray.T, norm='ortho').T, norm='ortho')
-    
+    def ishow(spectrum):
+        # 转换为可显示的格式
+        spectrum = spectrum.squeeze().cpu()
+
+        # 显示原始图片和频谱图
+        plt.figure(figsize=(10, 5))
+
+        plt.subplot(121)
+        plt.imshow(image, cmap='gray')
+        plt.title('Original Image')
+        plt.axis('off')
+
+        plt.subplot(122)
+        plt.imshow(spectrum, cmap='gray')
+        plt.title(' Spectrum')
+        plt.axis('off')
+
+        plt.show()
+        spectrum = spectrum.numpy()
+        cv2.imwrite('spectrum_r.jpg', spectrum)
+
+    # 计算 DCT 变换
+    freq_mag,freq_phase = dct(image_tensor)
+
     # 分离低频和高频信息
     h, w = dct_transformed.shape
     low_freq = np.zeros_like(dct_transformed)

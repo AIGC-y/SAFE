@@ -254,7 +254,7 @@ def main(args):
     # Init Model
     #!这里先改一下,之后在改回来
     model = resnet50(num_classes=2)
-    model = DSEX(input_size=args.input_size)
+    # model = DSEX(input_size=args.input_size)
     # if args.model == 'SAFE':
     #     model = resnet50(num_classes=2)
     # else:
@@ -335,7 +335,7 @@ def main(args):
         # criterion = torch.nn.CrossEntropyLoss()
         criterion = {
             "class":torch.nn.CrossEntropyLoss(),
-            "contrast":torchnn.CosineSimilarity(dim=-1),
+            "contrast":torch.nn.CosineSimilarity(dim=-1),
             "frquency":torch.nn.CrossEntropyLoss(),
         }
     print("criterion = %s" % str(criterion))
@@ -349,8 +349,9 @@ def main(args):
         model.eval(); print(f"Eval only mode")
         
         ROOT = args.eval_data_path
-        VAL_DICT = {
+        VAL_DICT = {#*如果有很多子类,每个子类都是一个数据集就要这个结构
             "data/datasets/test1_ForenSynths/test": ['progan', 'stylegan', 'stylegan2', 'biggan', 'cyclegan', 'stargan', 'gaugan', 'deepfake'],
+
             "/home/yiruolei/ALLDATASET/GenImage": ['Midjourney', 'stable_diffusion_v_1_4', 'stable_diffusion_v_1_5', 'ADM', 'glide', 'wukong', 'VQDM', 'BigGAN'],
         }
         try:

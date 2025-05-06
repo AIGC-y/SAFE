@@ -11,10 +11,10 @@ class DSEX(nn.Module):
         super(DSEX, self).__init__()
         #伪影用resnet,其他用其他表征吗?这个可以慢慢式,先把整体结构写出来.
         #用四个还是三个也没想好
-        self.resnet1 = resnet50(class_num=512)
-        self.resnet2 = resnet50(class_num=512)
-        self.resnet3 = resnet50(class_num=512)
-        self.resnet4 = resnet50(class_num=512)
+        self.resnet1 = resnet50(num_classes=512)
+        self.resnet2 = resnet50(num_classes=512)
+        self.resnet3 = resnet50(num_classes=512)
+        self.resnet4 = resnet50(num_classes=512)
         self.fc = nn.Linear(2048, 2)
         self.re = nn.Linear(input_size, 2)
 

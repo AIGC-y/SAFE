@@ -37,7 +37,10 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
     use_amp = args.use_amp
     optimizer.zero_grad()
 
-    for data_iter_step, (samples, targets) in enumerate(metric_logger.log_every(data_loader, print_freq=500, header=header)):
+    for data_iter_step, batch in enumerate(metric_logger.log_every(data_loader, print_freq=500, header=header)):
+
+        samples = batch[0][1]
+        targets = batch[-1]
 
         # we use a per iteration (instead of per epoch) lr scheduler
         if data_iter_step % update_freq == 0:
@@ -57,13 +60,13 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
             output = model(samples)
             ##!这里的对比损失还没修改.可以用度量损失来拉近关系和对比结构
             #*对比损失是否都放在一个球面上还没想好
-            loss0 = criterion[0](output[0], targets)
-            loss_feq = (torch.fft.rfft(output[0], dim=1) - torch.fft.rfft(targets, dim=1)).abs().mean() #因为不希望对差异敏感,所以用mae,可以后期改成smooth之类的
-            # loss1 = criterion[1](output[1], -output[2]).mean() + criterion[1](output[3], -output[4]).mean()
+            # loss0 = criterion[0](output[0], targets)
+            # loss_feq = (torch.fft.rfft(output[0], dim=1) - torch.fft.rfft(targets, dim=1)).abs().mean() #因为不希望对差异敏感,所以用mae,可以后期改成smooth之类的
+            # # loss1 = criterion[1](output[1], -output[2]).mean() + criterion[1](output[3], -output[4]).mean()
             # loss2 = criterion[1](output[1], output[3]).mean() + criterion[1](output[2], output[4]).mean()#*这都是简单的使用方式,不一定好用.要多试一试.
-            loss = loss0 +  loss_feq 
+            # loss = loss0 +  loss_feq 
             #  + loss1 + loss2
-
+            loss = criterion(output, targets)
         loss_value = loss.item()
 
         if not math.isfinite(loss_value):
@@ -142,7 +145,7 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
 
     for index, batch in enumerate(metric_logger.log_every(data_loader, 500, header)):
         # print("数据:",batch[0].shape,batch[0])
-        images = batch[0]
+        images = batch[0][1]
         target = batch[-1]
 
         images = images.to(device, non_blocking=True)
@@ -160,8 +163,12 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
             if isinstance(output, dict):
                 output = output['logits']
             #*loss
-            loss1 = 
-            # loss = criterion(output, target)
+            # loss0 = criterion[0](output[0], target)
+            # loss_feq = (torch.fft.rfft(output[0], dim=1) - torch.fft.rfft(target, dim=1)).abs().mean() #因为不希望对差异敏感,所以用mae,可以后期改成smooth之类的
+            # loss1 = criterion[1](output[1], -output[2]).mean() + criterion[1](output[3], -output[4]).mean()
+            # loss2 = criterion[1](output[1], output[3]).mean() + criterion[1](output[2], output[4]).mean()#*这都是简单的使用方式,不一定好用.要多试一试.
+            # loss = loss0 +  loss_feq 
+            loss = criterion(output, target)
         
         if index == 0:
             predictions = output

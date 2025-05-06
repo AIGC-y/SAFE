@@ -124,6 +124,8 @@ class TrainDataset(Dataset):
 
         if num_datasets == 1:#只有一个列表
             real_list, fake_list = self.get_real_and_fake_lists(dataset_list[0],is_train)
+            # print(f"真实列表: {real_list}, 伪影列表: {fake_list}")
+            print(f"真实列表: {len(real_list)}, 伪影列表: {len(fake_list)}")
             if is_train and args.num_train is not None:
                 self.data_list = real_list[:args.num_train//2] + fake_list[:args.num_train//2]
             else:
@@ -188,6 +190,7 @@ class TrainDataset(Dataset):
         image_path, targets = sample['image_path'], sample['label']
         try:
             image = Image.open(image_path).convert('RGB')
+            # print(f'open image: {image_path}')
         except:
             print(f'image error: {image_path}')
             return self.__getitem__(random.randint(0, len(self.data_list) - 1))
@@ -203,7 +206,7 @@ class TrainDataset(Dataset):
         #todo *对特征进行频谱还是图象频谱,反正得对图象patch然后在分类不同特征.
         #* 潜在DF模型的思路有借鉴意义吗??这个是生成图象,痕迹被消失了.感觉其实一般了这样.?
         ###* DCT是可逆变换.是不是平移不变变换呢????可以不可以换层还不知道,学习一下别人怎么写的这个也可以产生一个大点...也是拼接原理::这个结构本身是如何.而任务需要这样的吗???
-        lowfreq, highfreq = apply_dct(image)
+        lowfreq, highfreq = apply_dct(image_ori)
         #todo *分离后使用频谱还是图象也不一定.可以设置四个支路来让整体结构在球面上跟完善?
         # if index == 0 :
         #     image.save("output.jpg")
@@ -212,6 +215,7 @@ class TrainDataset(Dataset):
   
         
         return (image_patch, image_ori, lowfreq, highfreq), torch.tensor(int(targets))
+        # return image_ori, torch.tensor(int(targets))
 
 
 # if __name__ == "__main__":
