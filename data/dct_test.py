@@ -34,10 +34,10 @@ class DCTtrans():
         # 灰度图象
         weights = torch.tensor([0.299, 0.587, 0.114]).view(1, 3, 1, 1)
         self.gray_tensor = (image_tensor_rgb * weights).sum(dim=1, keepdim=True)  # 形状: [B, 1, H, W]
-        print(self.gray_tensor)
+        print(self.gray_tensor.shape)
         # rgb各通道分离
-        # self.r_channel, self.g_channel, self.b_channel = image_tensor[:, 0, :, :], image_tensor[:, 1, :, :], image_tensor[:, 2, :, :]
-
+        self.r_channel, self.g_channel, self.b_channel = image_tensor_rgb[:, 0, :, :].unsqueeze(1), image_tensor_rgb[:, 1, :, :].unsqueeze(1), image_tensor_rgb[:, 2, :, :].unsqueeze(1)
+        print(self.r_channel.shape)
         
     def dct(self,image: torch.Tensor) :#*还真是,必须把self写出来,即便没用
         # 对图像进行 DCT 变换
@@ -58,21 +58,23 @@ class DCTtrans():
         return img_back
     
     def filter_type(self,fshift: torch.Tensor,type: str = 'circular'):
-        """type: 'circular' or 'gaussian'"""
+        """type: 'circular' or 'gaussian'
+        只用带宽,相位这里没管
+        """
           # 创建低通滤波器（理想圆形滤波器）
         crow, ccol = self.rows // 2, self.cols // 2  # 中心点
         mask_low = torch.zeros((self.rows, self.cols), dtype=torch.float32)
-        y, x = torch.meshgrid(torch.arange(self.rows), torch.arange(self.cols), indexing='ij')#用于生成网格序号,这样生成的
+        y, x = torch.meshgrid(torch.arange(self.rows), torch.arange(self.cols), indexing='ij')#用于生成网格序号,x,y都是网格结构,然后数值是利用写行和列的数值(相当于那个序号)
 
         if type == 'circular': 
             radius = 30  # 低通滤波器半径（可调整）,这是高低通的比例
             dist = torch.sqrt((x - ccol)**2 + (y - crow)**2)#生成点到中心点的距离
-            mask_low[dist <= radius] = 1.0  # 中心区域设为1
+            mask_low[dist <= radius] = 1.0  # 中心区域设为1(掩码保留位)
             mask_low = mask_low.unsqueeze(0).unsqueeze(0)  # 形状: [1, 1, H, W]
         elif type == 'gaussian':
-            # 创建高斯低通滤波器
+            # 创建高斯低通滤波器,#?减少振铃效应?
             sigma = 30  # 高斯核标准差（可调整）
-            mask_low = torch.exp(-((x - ccol)**2 + (y - crow)**2) / (2 * sigma**2))
+            mask_low = torch.exp(-((x - ccol)**2 + (y - crow)**2) / (2 * sigma**2))#(因为接近1而保留,更灵活?但是需要这个吗?)
             mask_low = mask_low / mask_low.max()  # 归一化
             mask_low = mask_low.unsqueeze(0).unsqueeze(0)  # 形状: [1, 1, H, W]
         # 创建高通滤波器（1 - 低通滤波器）
@@ -106,7 +108,7 @@ class DCTtrans():
         spectrum = spectrum.numpy()
         cv2.imwrite('spectrum_r.jpg', spectrum)
 
-    def save_images(self,low_freq, high_freq, gray_image, output_dir):
+    def save_images(self,low_freq, high_freq, ori_image, output_dir):
         """
         保存低频、高频和灰度图像为图像文件。
         Args:
@@ -121,22 +123,32 @@ class DCTtrans():
         # 转换为 PIL.Image 格式并保存
         low_freq_image = Image.fromarray((low_freq.numpy() *255).astype('uint8'))
         high_freq_image = Image.fromarray((high_freq.numpy() *255).astype('uint8'))
-        gray_image = Image.fromarray((gray_image.numpy() * 255).astype('uint8'))
+        ori_image = Image.fromarray((ori_image.numpy() * 255).astype('uint8'))
         #?另一种处理方式,采用绝对的正则化,还不太一样
         #low_freq = (low_freq - low_freq.min()) / (low_freq.max() - low_freq.min()) * 255
         #high_freq = (high_freq - high_freq.min()) / (high_freq.max() - high_freq.min()) * 255
 
         low_freq_image.save(os.path.join(output_dir, "low_freq.jpg"))
         high_freq_image.save(os.path.join(output_dir, "high_freq.jpg"))
-        gray_image.save(os.path.join(output_dir, "gray_image.jpg"))
+        ori_image.save(os.path.join(output_dir, "gray_image.jpg"))
 
-    def apply_dct(self):
+    def apply_dct(self, channel: str = 'gray'):
         """
         image: PIL.image.image
         对图像进行 DCT 变换并分离低频和高频信息
         """
         # 计算 DCT 变换
-        fshift, freq_mag,freq_phase = self.dct(self.gray_tensor)
+        if channel == 'gray':
+            image_channel = self.gray_tensor
+        elif channel == 'r':
+            image_channel = self.r_channel
+        elif channel == 'g':
+            image_channel = self.g_channel
+        elif channel == 'b':
+            image_channel = self.b_channel
+        else:
+            raise ValueError("Invalid channel. Choose 'gray', 'rgb', 'r', 'g', or 'b'")
+        fshift, freq_mag,freq_phase = self.dct(image_channel)
         
         ##分离不同频带
         # todo 1.分离频谱和相位谱;2.分离多种频带并且动态设置差异频谱.
@@ -151,7 +163,7 @@ class DCTtrans():
         high_freq = high_freq.squeeze().cpu()
         gray_image = self.gray_tensor.squeeze().cpu()
 
-        self.save_images(low_freq, high_freq, gray_image, "results/image3")  # 保存图像
+        self.save_images(low_freq, high_freq, image_channel, f"results/image3/{channel}")  # 保存图像
         
     
     def __call__(self):
@@ -164,4 +176,8 @@ if __name__ == "__main__":
     image_path = "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/0_real/1c4b521d-428d-4c91-bb17-2c1246ed94af.jpg"  # 替换为你的图像路径
     image = Image.open(image_path).convert('RGB')
     dct_transformer = DCTtrans(image)
-    dct_transformer.apply_dct()
+    dct_transformer.apply_dct(channel='gray')
+    # dct_transformer.apply_dct(channel='r')
+    # dct_transformer.apply_dct(channel='g')
+    # dct_transformer.apply_dct(channel='b')
+
