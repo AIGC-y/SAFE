@@ -23,8 +23,11 @@ DISTRIBUTED_ARGS="
 
 # RESUME_PATH="./checkpoint"
 # RESUME_PATH="/home/data/yrlbp/ALLWEIGHT/SAFE/results/每个分小块都设置trans/20250329_112755/"
-RESUME_PATH="/home/yiruolei/ALLOUT/SAFE-results/每个分小块都设置trans/20250329_112755/"
+RESUME_PATH="/home/yiruolei/project/AIGCdetector/SAFE/results/patch&highfreq三支路/backbone后cat/1-lowfreq/20250512_152846"
 current_time=$(date +"%Y%m%d_%H%M%S")
+output_dir=$RESUME_PATH/eval/$current_time
+mkdir -p $output_dir
+
 eval_datasets=(
     # "data/datasets/test1_ForenSynths/test" \
     # "data/datasets/test2_Self-Synthesis/test" \
@@ -41,11 +44,13 @@ do
         --input_size 256 \
         --transform_mode 'ori' \
         --eval_data_path $eval_dataset \
-        --batch_size 32 \
+        --batch_size 32  \
         --num_workers 16 \
-        --output_dir $RESUME_PATH/eval/$current_time \
+        --output_dir $output_dir \
         --resume $RESUME_PATH/checkpoint-best.pth \
-        --eval True
+        --eval True\
+        2>&1 | tee -a  $output_dir/log_test.txt 
+
 done
 #?lijl
 #batchsize 256

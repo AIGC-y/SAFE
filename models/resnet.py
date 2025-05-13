@@ -8,6 +8,8 @@ from torchvision import transforms
 from typing import Any, cast, Dict, List, Optional, Union
 import numpy as np
 
+from data.datasets import save_feature
+
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152']
 
@@ -112,7 +114,7 @@ class ResNet(nn.Module):
         assert self.unfoldSize > 1
         assert -1 < self.unfoldIndex and self.unfoldIndex < self.unfoldSize*self.unfoldSize
         self.inplanes = 64
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=2, padding=1, bias=False)
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=2, padding=1, bias=False)#修改了inchannel
         self.bn1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
@@ -216,19 +218,26 @@ class ResNet(nn.Module):
 
 
     def forward(self, x):
-
         x = 1 * self._preprocess_dwt(x)
-
+        # print("shape",x.shape)
+        #*这导致训练时间翻了一倍
         x = self.conv1(x)
         x = self.bn1(x)
-        x = self.relu(x)
+        x = self.relu(x) #[32, 64, 128, 128]
+        # print('0',x.shape)
         x = self.maxpool(x)
 
-        x = self.layer1(x)
-        x = self.layer2(x)
+        x = self.layer1(x)#[32, 256, 64, 64]
+        # print('1',x.shape)
+        x = self.layer2(x)#[32, 512, 32, 32]
+        # print('2',x.shape)
+        x = self.avgpool(x) #[32,512,1,1]
+        
+        # print('visual',x.shape)
+        # for i in x :
+        #     save_feature(i,'results/image')
 
-        x = self.avgpool(x)
-        x = x.view(x.size(0), -1)
+        x = x.view(x.size(0), -1)#展平为[B,N]结构
         x = self.fc1(x)
 
         return x

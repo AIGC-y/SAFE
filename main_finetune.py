@@ -216,6 +216,8 @@ def main(args):
             dataset_val = None
         else:
             dataset_val = TrainDataset(is_train=False, args=args)
+        
+        # print('datasampel:',dataset_train[0] , dataset_val[0])
 
         if args.dist_eval:
             if len(dataset_val) % num_tasks != 0:
@@ -253,8 +255,8 @@ def main(args):
 
     # Init Model
     #!这里先改一下,之后在改回来
-    model = resnet50(num_classes=2)
-    # model = DSEX(input_size=args.input_size)
+    # model = resnet50(num_classes=2)
+    model = DSEX(input_size=args.input_size)
     # if args.model == 'SAFE':
     #     model = resnet50(num_classes=2)
     # else:
@@ -330,14 +332,19 @@ def main(args):
         # smoothing is handled with mixup label transform
         criterion = SoftTargetCrossEntropy()
     elif args.smoothing > 0.:
-        criterion = LabelSmoothingCrossEntropy(smoothing=args.smoothing)
-    else:
-        # criterion = torch.nn.CrossEntropyLoss()
+        # criterion = LabelSmoothingCrossEntropy(smoothing=args.smoothing)
         criterion = {
-            "class":torch.nn.CrossEntropyLoss(),
+            "class":LabelSmoothingCrossEntropy(smoothing=args.smoothing),
             "contrast":torch.nn.CosineSimilarity(dim=-1),
             "frquency":torch.nn.CrossEntropyLoss(),
         }
+    else:
+        criterion = torch.nn.CrossEntropyLoss()
+        # criterion = {
+        #     "class":torch.nn.CrossEntropyLoss(),
+        #     "contrast":torch.nn.CosineSimilarity(dim=-1),
+        #     "frquency":torch.nn.CrossEntropyLoss(),
+        # }
     print("criterion = %s" % str(criterion))
 
     utils.auto_load_model(
@@ -366,6 +373,7 @@ def main(args):
             
             args.eval_data_path = os.path.join(ROOT, val)
             dataset_val = TrainDataset(is_train=False, args=args)
+            # print("dataset_val = %s" % str(dataset_val[0][0][0].shape,))
 
             if args.dist_eval:
                 if len(dataset_val) % num_tasks != 0:#这个数所有的数据块来分

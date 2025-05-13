@@ -22,6 +22,11 @@ from sklearn.metrics import (
     accuracy_score
 )
 
+from data.vis_cam import visual
+
+
+
+
 
 def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
                     data_loader: Iterable, optimizer: torch.optim.Optimizer,
@@ -39,14 +44,17 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
 
     for data_iter_step, batch in enumerate(metric_logger.log_every(data_loader, print_freq=500, header=header)):
 
-        samples = batch[0][1]
+        samples = batch[0]
         targets = batch[-1]
+
+        
 
         # we use a per iteration (instead of per epoch) lr scheduler
         if data_iter_step % update_freq == 0:
             adjust_learning_rate(optimizer, data_iter_step / len(data_loader) + epoch, args)
 
-        samples = samples.to(device, non_blocking=True)
+        for ind, _ in enumerate(samples):
+            samples[ind] = samples[ind].to(device, non_blocking=True)
         targets = targets.to(device, non_blocking=True)
 
         if mixup_fn is not None:
@@ -57,17 +65,27 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
                 output = model(samples)
                 # loss = criterion(output, targets)
         else: # full precision
-            output = model(samples)
+            output = model(samples)[0]
             ##!这里的对比损失还没修改.可以用度量损失来拉近关系和对比结构
             #*对比损失是否都放在一个球面上还没想好
-            # loss0 = criterion[0](output[0], targets)
-            # loss_feq = (torch.fft.rfft(output[0], dim=1) - torch.fft.rfft(targets, dim=1)).abs().mean() #因为不希望对差异敏感,所以用mae,可以后期改成smooth之类的
+            
+            alph = 0.2
+            loss0 = criterion['class'](output, targets)
+            # loss1 = criterion[0](output[1], targets)
+            # loss2 = criterion[0](output[2], targets)
+            #下面这个就是一维数据.所以直接fft就可以了
+            # print("output[0]:",output[0].shape,"targets:",targets.shape)
+            #?这个不能用,看看是否能改成其他部分来使用?
+            loss_feq = (torch.fft.rfft(output, dim=1) - torch.fft.rfft(targets.unsqueeze(1), dim=1)).abs().mean() #因为不希望对差异敏感,所以用mae,可以后期改成smooth之类的
             # # loss1 = criterion[1](output[1], -output[2]).mean() + criterion[1](output[3], -output[4]).mean()
             # loss2 = criterion[1](output[1], output[3]).mean() + criterion[1](output[2], output[4]).mean()#*这都是简单的使用方式,不一定好用.要多试一试.
-            # loss = loss0 +  loss_feq 
+            
+            loss = (1 - alph) * loss0 + alph * loss_feq 
             #  + loss1 + loss2
-            loss = criterion(output, targets)
+            # loss = criterion(output, targets)
         loss_value = loss.item()
+
+        
 
         if not math.isfinite(loss_value):
             print("Loss is {}, stopping training".format(loss_value))
@@ -135,21 +153,26 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
 
 @torch.no_grad()
 def evaluate(data_loader, model, device, val=None, use_amp=False):
-    criterion = torch.nn.CrossEntropyLoss()
+    print("开始测试")
+    criterion = torch.nn.CrossEntropyLoss()#?这里为啥不用smooth
 
     metric_logger = utils.MetricLogger(delimiter="  ")
     header = 'Test:'
 
     # switch to evaluation mode
     model.eval()
-
     for index, batch in enumerate(metric_logger.log_every(data_loader, 500, header)):
         # print("数据:",batch[0].shape,batch[0])
-        images = batch[0][1]
+        images = batch[0]
         target = batch[-1]
 
-        images = images.to(device, non_blocking=True)
+        for ind, _ in enumerate(images):
+            images[ind] = images[ind].to(device, non_blocking=True)
+        # images = images.to(device, non_blocking=True)
         target = target.to(device, non_blocking=True)
+
+        if index ==1:
+            visual(model,images,images[-1], target, use_cuda=True)
 
         # compute output
         if use_amp:
@@ -159,16 +182,24 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
                     output = output['logits']
                 loss = criterion(output, target)
         else:
-            output = model(images) #[bs, num_cls]
+            output = model(images)[0] #[bs, num_cls]
             if isinstance(output, dict):
                 output = output['logits']
-            #*loss
-            # loss0 = criterion[0](output[0], target)
-            # loss_feq = (torch.fft.rfft(output[0], dim=1) - torch.fft.rfft(target, dim=1)).abs().mean() #因为不希望对差异敏感,所以用mae,可以后期改成smooth之类的
-            # loss1 = criterion[1](output[1], -output[2]).mean() + criterion[1](output[3], -output[4]).mean()
+
+            #*loss,好像只是简单记录一下而已.反正没用,所以不需要完全一致??
+            alph = 0.2
+            
+            loss0 = criterion(output, target)
+            # loss1 = criterion[0](output[1], target)
+            # loss2 = criterion[0](output[2], target)
+            loss_feq = (torch.fft.rfft(output, dim=1) - torch.fft.rfft(target.unsqueeze(1), dim=1)).abs().mean() #因为不希望对差异敏感,所以用mae,可以后期改成smooth之类的
+            # # loss1 = criterion[1](output[1], -output[2]).mean() + criterion[1](output[3], -output[4]).mean()
             # loss2 = criterion[1](output[1], output[3]).mean() + criterion[1](output[2], output[4]).mean()#*这都是简单的使用方式,不一定好用.要多试一试.
-            # loss = loss0 +  loss_feq 
-            loss = criterion(output, target)
+            
+            loss = (1 - alph) * loss0 + alph * loss_feq 
+
+            
+            # loss = criterion(output[0], target)
         
         if index == 0:
             predictions = output
@@ -181,7 +212,7 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
 
         acc1, _ = [acc / 100 for acc in accuracy(output, target, topk=(1, 2))]
 
-        batch_size = images.shape[0]
+        batch_size = images[0].shape[0]
         metric_logger.update(loss=loss.item())
         metric_logger.meters['acc1'].update(acc1.item(), n=batch_size)
     # gather the stats from all processes
@@ -205,3 +236,5 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
     ap = average_precision_score(y_true, y_pred)
 
     return {k: meter.global_avg for k, meter in metric_logger.meters.items()}, acc, ap
+
+# def cam():

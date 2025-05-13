@@ -1,3 +1,6 @@
+#!/bin/bash
+eval "$(conda shell.bash hook)"
+conda activate SAFE 
 
 export CUDA_VISIBLE_DEVICES=1
 
@@ -23,7 +26,7 @@ eval_datasets=(
     "/home/yiruolei/ALLDATASET/AIGCDetect/CNNSpot/val" \
 )
 #"/home/yiruolei/ALLDATASET/GenImage" \
-info="每个分小块都设置trans"
+info="patch&highfreq三支路/backbone后cat/1-lowfreq+{mask一般掩码}"
 #这里都是有logging信息的所以不需要自己nohup了
 
 for train_dataset in "${train_datasets[@]}" 
@@ -41,11 +44,11 @@ do
             --data_path "$train_dataset" \
             --eval_data_path "$eval_dataset" \
             --save_ckpt_freq 1 \
-            --batch_size 32 \
+            --batch_size 64 \
             --blr 1e-2 \
             --weight_decay 0.01 \
             --warmup_epochs 1 \
-            --epochs 20 \
+            --epochs 15 \
             --num_workers 8 \
             --output_dir $OUTPUT_PATH \
         2>&1 | tee -a $OUTPUT_PATH/log_train.txt 

@@ -17,9 +17,11 @@ from torchvision.transforms import functional as F
 from torchvision.transforms import InterpolationMode
 from data.patchtrans import apply_dct
 from data.patchtrans import *
+from data.dct_test import DCTtrans
 
 from PIL import Image
 import random
+import time as TI
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -64,9 +66,9 @@ def Get_Transforms(args):
             ],
         },
         'ori': {
-            'train': [ImageSampler((512, 512), (8, 8), 128),
+            'train': [ImageSampler((size, size), (4, 4), 64),
                       ],
-            'eval': [ImageSampler((512, 512), (8, 8), 128),
+            'eval': [ImageSampler((size, size), (4, 4), 64),
                      ],
         },
     }
@@ -79,10 +81,10 @@ def Get_Transforms(args):
         transforms.RandomRotation(180),
         transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5),
         transforms.ToTensor(),#*因为要先贴图片才可以
-        # RandomMask(ratio=(0.00, 0.75), patch_size=16, p=0.5),#*就单纯的随机掩码就行啊
+        RandomMask(ratio=(0.00, 0.75), patch_size=16, p=0.5),#*就单纯的随机掩码就行啊
     ])
 
-    # transform_eval.append(transforms.ToTensor())#*也是最后再加这个
+    transform_eval.append(transforms.ToTensor())#*也是最后再加这个
     # endregion
 
     # region [Perturbatiocns in Testing]
@@ -94,15 +96,23 @@ def Get_Transforms(args):
         transform_eval.append(RandomMask(ratio=args.mask_ratio, patch_size=args.mask_patch_size, p=1.0))
     # endregion
 
-    return transforms.Compose(transform_train), transforms.Compose(transform_eval)
-
-transform2 = transforms.Compose([
-            transforms.RandomCrop([128, 128], pad_if_needed=True),
+    ### *补充
+    transform2 = transforms.Compose([
+            transforms.RandomCrop([size, size], pad_if_needed=True),
             transforms.RandomHorizontalFlip(p=0.5),
             transforms.RandomRotation(180),
             transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5),
             transforms.ToTensor(),
+            RandomMask(ratio=(0.00, 0.75), patch_size=16, p=0.5),#*就单纯的随机掩码就行啊
     ])
+    transform3 = transforms.Compose([
+            transforms.RandomCrop([size, size], pad_if_needed=True),
+            transforms.ToTensor(),
+    ])            
+
+
+    return transforms.Compose(transform_train), transforms.Compose(transform_eval),transform2, transform3
+
 
 class TrainDataset(Dataset):
 
@@ -116,16 +126,17 @@ class TrainDataset(Dataset):
 
         TRANSFORM = Get_Transforms(args)#!甚至这个是创新点
         self.transform1 = TRANSFORM[0] if is_train else TRANSFORM[1]
+        self.transform2 = TRANSFORM[2] if is_train else TRANSFORM[3]
         root = args.data_path if is_train else args.eval_data_path #*是大路径的的不同,因为在ai检测中使用不同数据集来使用,而不测试训练数据集的效果
 
         dataset_list = root.replace(' ', '').split(',')
-        print(f"数据集列表: {dataset_list}")
+        # print(f"数据集列表: {dataset_list}")
         num_datasets = len(dataset_list)
 
         if num_datasets == 1:#只有一个列表
             real_list, fake_list = self.get_real_and_fake_lists(dataset_list[0],is_train)
             # print(f"真实列表: {real_list}, 伪影列表: {fake_list}")
-            print(f"真实列表: {len(real_list)}, 伪影列表: {len(fake_list)}")
+            # print(f"真实列表: {len(real_list)}, 伪影列表: {len(fake_list)}")
             if is_train and args.num_train is not None:
                 self.data_list = real_list[:args.num_train//2] + fake_list[:args.num_train//2]
             else:
@@ -177,7 +188,6 @@ class TrainDataset(Dataset):
                         fake_list.extend([{"image_path": image_path, "label" : 1} for image_path in self.get_image_paths(fake_dir_path)])
                 continue
         return real_list, fake_list
-    
             
 
     def __len__(self):
@@ -190,32 +200,58 @@ class TrainDataset(Dataset):
         image_path, targets = sample['image_path'], sample['label']
         try:
             image = Image.open(image_path).convert('RGB')
-            # print(f'open image: {image_path}')
+            # print(f'open image: {image_path}',image)
         except:
             print(f'image error: {image_path}')
             return self.__getitem__(random.randint(0, len(self.data_list) - 1))
 
-        # try:#*没想好应该在patchin前还是后
-        #     x_minmin, x_maxmax, x_minmin1, x_maxmax1 = self.dct(image)
-        # except:
-        #     print(f'image error: {image_path}, c, h, w: {image.shape}')
-        #     return self.__getitem__(random.randint(0, len(self.data_list) - 1))
 
-        image_patch = self.transform1(image)#输出的大小要是固定大小才可以，如果上面的处理删除了，在transform中尺寸久不对了
-        image_ori = transform2(image)
+        image_patch = self.transform1(image)#输出的大小要是固定大小才可以，如果上面的处理删除了，在transform中尺寸久不对了 #[C,H,W]
+        #?patch用什么大小也不一定
+        image_ori = self.transform2(image)
         #todo *对特征进行频谱还是图象频谱,反正得对图象patch然后在分类不同特征.
         #* 潜在DF模型的思路有借鉴意义吗??这个是生成图象,痕迹被消失了.感觉其实一般了这样.?
         ###* DCT是可逆变换.是不是平移不变变换呢????可以不可以换层还不知道,学习一下别人怎么写的这个也可以产生一个大点...也是拼接原理::这个结构本身是如何.而任务需要这样的吗???
-        lowfreq, highfreq = apply_dct(image_ori)
-        #todo *分离后使用频谱还是图象也不一定.可以设置四个支路来让整体结构在球面上跟完善?
-        # if index == 0 :
-        #     image.save("output.jpg")
-        #     print('sampling-jpg_to_test')
-        # image = transforms.ToTensor()(image)
-  
+        # print('image.shape',image)
+        dct_transformer = DCTtrans(image_ori)
+        lowfreq, highfreq= dct_transformer.apply_dct(channel='rgb')
+        # dct_transformer.apply_dct(channel='r')
+        # dct_transformer.apply_dct(channel='g')
+        # dct_transformer.apply_dct(channel='b')
+        #*!这个操作和频域减法不同的
+        # print('type',type(image_ori),type(highfreq))
+        a = image_ori - lowfreq
+        #branch3
+        lowfreq2, highfreq2= DCTtrans(image_patch).apply_dct(channel='rgb')
         
-        return (image_patch, image_ori, lowfreq, highfreq), torch.tensor(int(targets))
+        # print('image_patch',image_patch.shape,"highfreq:",highfreq2.shape,"highfreq:",highfreq.shape,)
+
+        b = image_patch - lowfreq2
+
+        #*先尝试只用这三个数据看看
+        return (image_patch, a, b,image), torch.tensor(int(targets))
         # return image_ori, torch.tensor(int(targets))
+
+
+def save_feature(feature, output_dir):
+    """
+    保存一个数据为图像文件。batch数据就需要遍历batch
+    Args:
+        feature:tensor张量要先cpu化
+        output_dir: 保存路径
+""" 
+    # 确保输出目录存在
+    os.makedirs(output_dir, exist_ok=True)
+    time = TI.time()
+    x = feature.squeeze().cpu()  # 形状: [H, W]
+
+    # 转换为 PIL.Image 格式并保存
+    image = Image.fromarray((x.numpy() *255).astype('uint8'))
+    
+    #?另一种处理方式,采用绝对的正则化,还不太一样
+    #image = (x - x.min()) / (x.max() - x.min()) * 255
+
+    image.save(os.path.join(output_dir, f"{time}.jpg"))
 
 
 # if __name__ == "__main__":
