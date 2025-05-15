@@ -23,11 +23,13 @@ DISTRIBUTED_ARGS="
 
 # RESUME_PATH="./checkpoint"
 # RESUME_PATH="/home/data/yrlbp/ALLWEIGHT/SAFE/results/每个分小块都设置trans/20250329_112755/"
-RESUME_PATH="/home/yiruolei/project/AIGCdetector/SAFE/results/patch&highfreq三支路/backbone后cat/1-lowfreq/20250512_152846"
+RESUME_PATH="/home/yiruolei/project/AIGCdetector/SAFE/results/patch&highfreq三支路/backbone后cat/1-lowfreq+{mask一般掩码}/20250513_211614"
 current_time=$(date +"%Y%m%d_%H%M%S")
 output_dir=$RESUME_PATH/eval/$current_time
 mkdir -p $output_dir
 
+
+## 只有单纯测试的时候才看每个子目录的情况
 eval_datasets=(
     # "data/datasets/test1_ForenSynths/test" \
     # "data/datasets/test2_Self-Synthesis/test" \
@@ -41,11 +43,11 @@ eval_datasets=(
 for eval_dataset in "${eval_datasets[@]}"
 do
     PYTHONWARNINGS="ignore" python -m torch.distributed.run $DISTRIBUTED_ARGS main_finetune.py \
-        --input_size 256 \
+        --input_size 224 \
         --transform_mode 'ori' \
         --eval_data_path $eval_dataset \
-        --batch_size 32  \
-        --num_workers 16 \
+        --batch_size 16  \
+        --num_workers 8 \
         --output_dir $output_dir \
         --resume $RESUME_PATH/checkpoint-best.pth \
         --eval True\
@@ -53,5 +55,6 @@ do
 
 done
 #?lijl
+#inputsize 256改成224?会不会太少了,为了和vit相关
 #batchsize 256
 #checkpoint-best.pth或者last

@@ -123,6 +123,8 @@ class DCTtrans():
         """
         channel: 'r','g','b','rgb','gray'
         对图像进行 DCT 变换并分离低频和高频信息
+        很好,基本维度都是图象的维度,这是最好可视化的.
+        其次都需要恢复到原始图象上,或者利用降维看可视化.
         """
         def eachc(C):
             fshift, freq_mag,freq_phase = self.dct(C)
@@ -130,14 +132,17 @@ class DCTtrans():
             ##分离不同频带
             # todo 1.分离频谱和相位谱;2.分离多种频带并且动态设置差异频谱.
             fshift_low, fshift_high = self.filter_type(fshift,type='gaussian')  # 低通和高通滤波器
+            # print('fshift_low.shape',fshift_low.shape,'fshift_high.shape',fshift_high.shape)
+            # self.save_images(fshift_low, fshift_high, C, f"results/image3/{channel}")  # 保存图像
+            # return fshift_low, fshift_high
 
             # 计算逆 DCT 变换
             low_freq = self.idct(fshift_low)
             high_freq = self.idct(fshift_high)
             # print('low_freq.shape',low_freq.shape,'high_freq.shape',high_freq.shape)
 
-            # self.save_images(low_freq, high_freq, image_channel, f"results/image4/{channel}")  # 保存图像
-    
+            # self.save_images(low_freq, high_freq, C, f"results/image4/{channel}")  # 保存图像
+    # 
             return low_freq, high_freq
     
         # 计算 DCT 变换
@@ -170,8 +175,10 @@ class DCTtrans():
 if __name__ == "__main__":
     # 测试代码
     # image_path = "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/0_real/1c4b521d-428d-4c91-bb17-2c1246ed94af.jpg"  # 真实人脸
+    image_path = '/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/0_real/0a5c98c5-1ecb-45b2-8c4f-4e1478eacfa9.jpg'
+
     # image_path = "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/1_fake/4db7bcee-07d3-4329-aea3-57d1dbc1c098.jpg"  # 假人脸
-    image_path = "/home/yiruolei/ALLDATASET/AIGCDetect/CNNSpot/train/person/1_fake/00056.png"  # 
+    # image_path = "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/1_fake/0a6c3851-a11c-4d6d-b1f3-59ead005a642.jpg"  # 
     image = Image.open(image_path).convert('RGB')
     dct_transformer = DCTtrans(image)
     dct_transformer.apply_dct(channel='gray')

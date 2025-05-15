@@ -7,6 +7,7 @@
 
 import os, pdb
 import math
+import numpy as np
 from typing import Iterable, Optional
 
 import torch
@@ -22,7 +23,7 @@ from sklearn.metrics import (
     accuracy_score
 )
 
-from data.vis_cam import visual
+# from data.vis_cam import visual
 
 
 
@@ -46,9 +47,7 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
 
         samples = batch[0]
         targets = batch[-1]
-
         
-
         # we use a per iteration (instead of per epoch) lr scheduler
         if data_iter_step % update_freq == 0:
             adjust_learning_rate(optimizer, data_iter_step / len(data_loader) + epoch, args)
@@ -153,7 +152,7 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
 
 @torch.no_grad()
 def evaluate(data_loader, model, device, val=None, use_amp=False):
-    print("开始测试")
+    # print("开始测试")
     criterion = torch.nn.CrossEntropyLoss()#?这里为啥不用smooth
 
     metric_logger = utils.MetricLogger(delimiter="  ")
@@ -161,18 +160,23 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
 
     # switch to evaluation mode
     model.eval()
+    a = []
+    b = []
     for index, batch in enumerate(metric_logger.log_every(data_loader, 500, header)):
         # print("数据:",batch[0].shape,batch[0])
         images = batch[0]
         target = batch[-1]
+       
+        # a.extend(images[3].numpy().tolist())
+        # b.extend(target.numpy().tolist())
 
         for ind, _ in enumerate(images):
             images[ind] = images[ind].to(device, non_blocking=True)
         # images = images.to(device, non_blocking=True)
         target = target.to(device, non_blocking=True)
 
-        if index ==1:
-            visual(model,images,images[-1], target, use_cuda=True)
+        # if index ==1:
+        #     visual(model,images,images[-1], target, use_cuda=True)
 
         # compute output
         if use_amp:
@@ -182,7 +186,8 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
                     output = output['logits']
                 loss = criterion(output, target)
         else:
-            output = model(images)[0] #[bs, num_cls]
+            # output,cat,bran1,bran2 = model(images) #[bs, num_cls]
+            output,cat,bran1,bran2,bran3 = model(images)
             if isinstance(output, dict):
                 output = output['logits']
 
@@ -200,25 +205,64 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
 
             
             # loss = criterion(output[0], target)
-        
+ 
         if index == 0:
             predictions = output
             labels = target
+            # catall = cat
+            # branall = bran1 
+            # bran2all =bran2
+            # bran3all =bran3
+            
         else:
             predictions = torch.cat((predictions, output), 0)
+            # catall = torch.cat((catall, cat), 0)
+            # branall = torch.cat((branall, bran1), 0)
+            # bran2all = torch.cat((bran2all, bran2), 0)
+            # bran3all = torch.cat((bran3all, bran3), 0)
             labels = torch.cat((labels, target), 0)
 
         torch.cuda.synchronize()
-
+        #*分别计算不同类别
+        # acc1_per_class = [acc1,acc1]
+        # for cls in [0, 1]:
+        #     cls_mask = (target == cls)
+        #     if cls_mask.sum() > 0:
+        #         acc1_cls, _ = [acc / 100 for acc in accuracy(output[cls_mask], target[cls_mask], topk=(1, 2))]
+        #         acc1_per_class[cls] = acc1_cls.item()
+        #     else:
+        #         acc1_per_class[cls] = None
+        #*这里修改,不如只取正或者负来训练
         acc1, _ = [acc / 100 for acc in accuracy(output, target, topk=(1, 2))]
 
+        # acc1_per_class = [acc1,acc1]
+# 
         batch_size = images[0].shape[0]
         metric_logger.update(loss=loss.item())
+        # metric_logger.meters['acc1_label0'].update( acc1_per_class[0].item(), n=batch_size)
+        # metric_logger.meters['acc1_label1'].update(acc1_per_class[1].item(), n=batch_size)
         metric_logger.meters['acc1'].update(acc1.item(), n=batch_size)
+
+    #循环结束#?为啥这个内存没爆炸哦,但是之前就爆炸了?果然还是放在显存好?
+    # c = catall.detach().cpu().numpy()
+    # d = branall.detach().cpu().numpy()
+    # e = bran2all.detach().cpu().numpy()
+    # f = bran3all.detach().cpu().numpy()
+    # b = labels.detach().cpu().numpy() 
+    # np.save('results/datasave/1.npy', (b,c,d,e))
+    # np.save('visual/datasave/b1.npy', b)
+    # np.save('visual/datasave/c1.npy', c)
+    # np.save('visual/datasave/d1.npy', d)
+    # np.save('visual/datasave/e1.npy', e)
+    # np.save('visual/datasave/f1.npy', f)
+    # print("数据保存完毕")
+    # np.save('results/datasave/1.npy', a)
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
     print('* Acc@1 {top1.global_avg:.2%} loss {losses.global_avg:.4f}'
           .format(top1=metric_logger.acc1, losses=metric_logger.loss))
+    # print('* Acc@label0 {label0.global_avg:.2%}  Acc@label1 {label1.global_avg:.2%}  loss {losses.global_avg:.4f}'
+    #       .format(label0=metric_logger.acc1_label0, label1=metric_logger.acc1_label1, losses=metric_logger.loss))
 
     output_ddp = [torch.zeros_like(predictions) for _ in range(utils.get_world_size())]
     dist.all_gather(output_ddp, predictions)
@@ -236,5 +280,59 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
     ap = average_precision_score(y_true, y_pred)
 
     return {k: meter.global_avg for k, meter in metric_logger.meters.items()}, acc, ap
+
+
+@torch.no_grad()
+def visual_evaluate(data_loader, model, device, val=None, use_amp=False):
+    # print("开始测试")
+    criterion = torch.nn.CrossEntropyLoss()#?这里为啥不用smooth
+
+    metric_logger = utils.MetricLogger(delimiter="  ")
+    header = 'Test:'
+
+    # switch to evaluation mode
+    model.eval()
+    a = []
+    b = []
+    for index, batch in enumerate(metric_logger.log_every(data_loader, 500, header)):
+        # print("数据:",batch[0].shape,batch[0])
+        images = batch[0]
+        target = batch[-1]
+        for ind, _ in enumerate(images):
+            images[ind] = images[ind].to(device, non_blocking=True)
+        target = target.to(device, non_blocking=True)
+
+        # output,cat,bran1,bran2 = model(images) #[bs, num_cls]
+        output,cat,bran1,bran2,bran3 = model(images)
+        if index == 0:
+            predictions = output
+            labels = target
+            # catall = cat
+            # branall = bran1 
+            # bran2all =bran2
+            bran3all =bran3
+        else:
+            predictions = torch.cat((predictions, output), 0)
+            # catall = torch.cat((catall, cat), 0)
+            # branall = torch.cat((branall, bran1), 0)
+            # bran2all = torch.cat((bran2all, bran2), 0)
+            bran3all = torch.cat((bran3all, bran3), 0)
+            labels = torch.cat((labels, target), 0)
+
+        torch.cuda.synchronize()
+    
+    #循环结束#?为啥这个内存没爆炸哦,但是之前就爆炸了?果然还是放在显存好?
+    # c = catall.detach().cpu().numpy()
+    # d = branall.detach().cpu().numpy()
+    # e = bran2all.detach().cpu().numpy()
+    f = bran3all.detach().cpu().numpy()
+    # b = labels.detach().cpu().numpy() 
+    # np.save('results/datasave/1.npy', (b,c,d,e))
+    # np.save('visual/datasave/b1.npy', b)
+    # np.save('visual/datasave/c1.npy', c)
+    # np.save('visual/datasave/d1.npy', d)
+    # np.save('visual/datasave/e1.npy', e)
+    np.save('visual/datasave/f1.npy', f)
+    print("数据保存完毕")
 
 # def cam():

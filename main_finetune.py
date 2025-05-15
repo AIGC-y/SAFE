@@ -116,6 +116,8 @@ def get_args_parser():
     # Dataset parameters
     parser.add_argument('--num_train', default=10000000000, type=int,
                         help="Number of training images, incluing real and fake")
+    parser.add_argument('--ratio_train', default=1, type=float,
+                        help="ratio of training images, including real and fake,剩余用来val或者测试.如果设置为none,则全部使用..这个逻辑其实目前有bug但可以用")#?
     parser.add_argument('--data_path', default='', type=str,
                         help='dataset path')
     parser.add_argument('--nb_classes', default=2, type=int,
@@ -206,16 +208,19 @@ def main(args):
     if not args.eval:
 
         dataset_train = TrainDataset(is_train=True, args=args)
+        # print("dataset_train = %s" % str(dataset_train))
+    
         sampler_train = torch.utils.data.DistributedSampler(
             dataset_train, num_replicas=num_tasks, rank=global_rank, shuffle=True,
         )
-        print("Sampler_train = %s" % str(sampler_train))
+        
 
         if args.disable_eval:
             args.dist_eval = False
             dataset_val = None
         else:
             dataset_val = TrainDataset(is_train=False, args=args)
+            # print("dataset_val = %s" % str(dataset_val))
         
         # print('datasampel:',dataset_train[0] , dataset_val[0])
 
@@ -256,7 +261,8 @@ def main(args):
     # Init Model
     #!这里先改一下,之后在改回来
     # model = resnet50(num_classes=2)
-    model = DSEX(input_size=args.input_size)
+    model = DSEX()
+    # print('打印',model.clipvit)
     # if args.model == 'SAFE':
     #     model = resnet50(num_classes=2)
     # else:
@@ -373,6 +379,18 @@ def main(args):
             
             args.eval_data_path = os.path.join(ROOT, val)
             dataset_val = TrainDataset(is_train=False, args=args)
+            
+            # a = []
+            # for i in dataset_val:
+            #     a.append(i)
+            #     # if len(a) == 999999:
+            #     #     break
+            #     if len(a) % 100 ==0:
+            #         print('数据加载中')
+            # a = np.array(a)
+            # np.save(f'datasave_{args.eval_data_path}.npy', a)
+            # print('数据保存成功')
+
             # print("dataset_val = %s" % str(dataset_val[0][0][0].shape,))
 
             if args.dist_eval:

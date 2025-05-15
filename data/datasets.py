@@ -135,12 +135,23 @@ class TrainDataset(Dataset):
 
         if num_datasets == 1:#只有一个列表
             real_list, fake_list = self.get_real_and_fake_lists(dataset_list[0],is_train)
-            # print(f"真实列表: {real_list}, 伪影列表: {fake_list}")
+            # print(f"真实列表: {real_list}, 伪影列表: {fake_list}") 
             # print(f"真实列表: {len(real_list)}, 伪影列表: {len(fake_list)}")
-            if is_train and args.num_train is not None:
-                self.data_list = real_list[:args.num_train//2] + fake_list[:args.num_train//2]
+            if args.ratio_train is not None:
+                real_index = int(args.ratio_train*len(real_list))
+                fake_index = int(args.ratio_train*len(fake_list))
+                # print(f"real_index: {real_index}, fake_index: {fake_index}")
+                if is_train:
+                    self.data_list = real_list[:real_index-1] + fake_list[:fake_index-1]
+                else:
+                    self.data_list = real_list[real_index:] + fake_list[fake_index:]#*这个是测试的时候使用的_list):]
+                print(f"数据长度: {len(self.data_list)}")
             else:
-                self.data_list = real_list + fake_list #*明显分界
+                # if args.eval:
+                #      self.data_list = fake_list #*现在测试就用假的
+                # else:
+                #     self.data_list = real_list + fake_list
+               self.data_list = real_list + fake_list
         else:
             assert args.num_train is not None
             self.data_list = []
@@ -160,7 +171,7 @@ class TrainDataset(Dataset):
     def get_real_and_fake_lists(self, folder_path,is_train):
         real_list, fake_list = [], []
         for root, dirs, files in sorted(os.walk(folder_path, followlinks=True)):#*因为最后会回到大文件夹中,这个结构下是不存在两个列表的.
-            if is_train and  "train" in root:#训练集
+            if is_train :#训练集,就是给什么就用什么,子目录全用了.
                 for dir_name in sorted(dirs):
                     if dir_name == "0_real":
                         real_dir_path = os.path.join(root, dir_name)
@@ -229,7 +240,7 @@ class TrainDataset(Dataset):
         b = image_patch - lowfreq2
 
         #*先尝试只用这三个数据看看
-        return (image_patch, a, b,image), torch.tensor(int(targets))
+        return (image_patch, a, b,image_ori), torch.tensor(int(targets))
         # return image_ori, torch.tensor(int(targets))
 
 
@@ -256,3 +267,4 @@ def save_feature(feature, output_dir):
 
 # if __name__ == "__main__":
 #这里测试不同的代码
+ 
