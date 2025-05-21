@@ -12,16 +12,20 @@ class DSEX(nn.Module):
         super(DSEX, self).__init__()
         #伪影用resnet,其他用其他表征吗?这个可以慢慢式,先把整体结构写出来.
         #用四个还是三个也没想好
+        self.resnet = resnet50(num_classes=512)
+        # self.resnet1 = resnet50(num_classes=256)
+        # self.resnet2 = resnet50(num_classes=256)
+        # self.resnet3 = resnet50(num_classes=256)
+        self.mlp1 = nn.Linear(768, 768)
+        self.fc3 = nn.Linear(256, 2)
+
         self.clipvit = CLIPModel.from_pretrained("/home/yiruolei/ALLMODEL/openai/clip-vit-large-patch14").vision_model
         for param in self.clipvit.parameters():
             param.requires_grad = False
-
-        self.mlp1 = nn.Linear(1024, 512)
-        self.mlp2 = nn.Linear(1024, 512)
-        self.fc = nn.Linear(512*2, 2)
-        self.fc1 = nn.Linear(512,2)
+        self.mlp2 = nn.Linear(1024, 768)
+        # self.resnet4 = resnet50(num_classes=512)
+        self.fc = nn.Linear(768*2, 2)
         self.fc2 = nn.Linear(768, 2)
-        self.fc3 = nn.Linear(256, 2)
         # self.re = nn.Linear(input_size, 2)
 
     # def reweight(self,refactor,x,y):#这个结构能否根据refactor来增加比例呢?
@@ -44,13 +48,9 @@ class DSEX(nn.Module):
         # # x_res = torch.cat((x1, x2, x3), dim=1) #[B,256*3]
         # x_res = self.mlp1(x_res) #[B,768]
 
-        x_llm1 = self.clipvit(x3).pooler_output #[B,1024] #*vit的图象embeding方式开始也是他妈conv?
-        x_llm1 = self.mlp1(x_llm1)
-        a_x = self.fc1(x_llm1)
-        # x_llm2 = self.clipvit(x2).pooler_output #[B,1024] #*vit的图象embeding方式开始也是他妈conv?
-        # x_llm2 = self.mlp2(x_llm2)
-        # a_x = torch.cat((x_llm1, x_llm2), dim=1)
-        # a_x = self.fc(a_x)
+        x_llm = self.clipvit(x_c).pooler_output #[B,1024] #*vit的图象embeding方式开始也是他妈conv?
+        x_llm = self.mlp2(x_llm)
+        a_x = self.fc2(x_llm)
 
         # print(x4.shape)
 

@@ -102,22 +102,20 @@ class DCTtrans():
     """ 
         # 确保输出目录存在
         os.makedirs(output_dir, exist_ok=True)
+        def process(x,output_dir,info):
+            x = x.squeeze().cpu().numpy()  # 取模保留实数,虚数删去 # 形状: [H, W]
+            # x = (x - x.min()) / (x.max() - x.min()) * 255 # 归一化??
+            img = Image.fromarray((x * 255).astype('uint8'))
+            img.save(os.path.join(output_dir, f"{info}.jpg"))
+            # print('save_done',)
+            return x
 
-        low_freq = low_freq.squeeze().cpu()  # 形状: [H, W]
-        high_freq = high_freq.squeeze().cpu()
-        ori_image = ori_image.squeeze().cpu()
+        process(low_freq,output_dir, "low_freq")
+        process(high_freq,output_dir, "high_freq")
+        process(ori_image,output_dir, "ori_channel")
+        print('save_done')
 
-        # 转换为 PIL.Image 格式并保存
-        low_freq_image = Image.fromarray((low_freq.numpy() *255).astype('uint8'))
-        high_freq_image = Image.fromarray((high_freq.numpy() *255).astype('uint8'))
-        ori_image = Image.fromarray((ori_image.numpy() * 255).astype('uint8'))
-        #?另一种处理方式,采用绝对的正则化,还不太一样
-        #low_freq = (low_freq - low_freq.min()) / (low_freq.max() - low_freq.min()) * 255
-        #high_freq = (high_freq - high_freq.min()) / (high_freq.max() - high_freq.min()) * 255
-
-        low_freq_image.save(os.path.join(output_dir, "low_freq.jpg"))
-        high_freq_image.save(os.path.join(output_dir, "high_freq.jpg"))
-        ori_image.save(os.path.join(output_dir, "ori_channel.jpg"))
+        
 
     def apply_dct(self,channel: str = 'gray'):
         """
@@ -128,7 +126,7 @@ class DCTtrans():
         """
         def eachc(C):
             fshift, freq_mag,freq_phase = self.dct(C)
-            
+            # self.save_images(fshift, freq_mag,freq_phase, f"results/image0/{channel}")  # 保存图像
             ##分离不同频带
             # todo 1.分离频谱和相位谱;2.分离多种频带并且动态设置差异频谱.
             fshift_low, fshift_high = self.filter_type(fshift,type='gaussian')  # 低通和高通滤波器
@@ -141,7 +139,7 @@ class DCTtrans():
             high_freq = self.idct(fshift_high)
             # print('low_freq.shape',low_freq.shape,'high_freq.shape',high_freq.shape)
 
-            # self.save_images(low_freq, high_freq, C, f"results/image4/{channel}")  # 保存图像
+            # self.save_images(low_freq, high_freq, C, f"results/image6/{channel}")  # 保存图像
     # 
             return low_freq, high_freq
     
@@ -175,9 +173,9 @@ class DCTtrans():
 if __name__ == "__main__":
     # 测试代码
     # image_path = "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/0_real/1c4b521d-428d-4c91-bb17-2c1246ed94af.jpg"  # 真实人脸
-    image_path = '/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/0_real/0a5c98c5-1ecb-45b2-8c4f-4e1478eacfa9.jpg'
+    # image_path = '/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/0_real/0a5c98c5-1ecb-45b2-8c4f-4e1478eacfa9.jpg'
 
-    # image_path = "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/1_fake/4db7bcee-07d3-4329-aea3-57d1dbc1c098.jpg"  # 假人脸
+    image_path = "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/1_fake/4db7bcee-07d3-4329-aea3-57d1dbc1c098.jpg"  # 假人脸
     # image_path = "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/1_fake/0a6c3851-a11c-4d6d-b1f3-59ead005a642.jpg"  # 
     image = Image.open(image_path).convert('RGB')
     dct_transformer = DCTtrans(image)

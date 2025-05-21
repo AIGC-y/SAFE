@@ -453,13 +453,43 @@ def get_grad_norm_(parameters, norm_type: float = 2.0) -> torch.Tensor:
     return total_norm
 
 
+# 打印可训练参数
+# def print_trainable_params(model: torch.nn.Module) -> None:
+#     trainable_params, all_param = 0, 0
+#     for param in model.parameters():
+#         num_params = param.numel()
+#         # if using DS Zero 3 and the weights are initialized empty
+#         if num_params == 0 and hasattr(param, "ds_numel"):
+#             num_params = param.ds_numel
+#         all_param += num_params
+#         if param.requires_grad:
+#             trainable_params += num_params
+#     print("trainable params: {:d} || all params: {:d} || trainable%: {:.4f}".format(
+#         trainable_params, all_param, 100 * trainable_params / all_param))
+
+def print_trainable_states(model: torch.nn.Module) -> None:
+    trainable_params, all_param = 0, 0
+    for param in model.parameters():
+        num_params = param.numel()
+        # if using DS Zero 3 and the weights are initialized empty
+        if num_params == 0 and hasattr(param, "ds_numel"):
+            num_params = param.ds_numel
+        all_param += num_params
+        if param.requires_grad:
+            trainable_params += num_params
+    print("trainable params: {:d} || all params: {:d} || trainable%: {:.4f}".format(
+        trainable_params, all_param, 100 * trainable_params / all_param))
+    return 
+
+
 def save_model(args, epoch, model, model_without_ddp, optimizer, loss_scaler, model_ema=None):
     output_dir = Path(args.output_dir)
     epoch_name = str(epoch)
     checkpoint_paths = [output_dir / ('checkpoint-%s.pth' % epoch_name)]
+    trainable_params = {k: v for k, v in model_without_ddp.named_parameters() if v.requires_grad}
     for checkpoint_path in checkpoint_paths:
         to_save = {
-            'model': model_without_ddp.state_dict(),
+            'model': trainable_params,
             'optimizer': optimizer.state_dict(),
             'epoch': epoch,
             'scaler': loss_scaler.state_dict(),
@@ -498,8 +528,8 @@ def auto_load_model(args, model, model_without_ddp, optimizer, loss_scaler, mode
                 args.resume, map_location='cpu', check_hash=True)
         else:
             checkpoint = torch.load(args.resume, map_location='cpu')
-
-        model_without_ddp.load_state_dict(checkpoint['model'])
+        print("resumeparameter_key %s" %  list(checkpoint['model'].keys()))
+        model_without_ddp.load_state_dict(checkpoint['model'], strict=False)
         print("Resume checkpoint %s" % args.resume)
         if 'optimizer' in checkpoint and 'epoch' in checkpoint:
             optimizer.load_state_dict(checkpoint['optimizer'])

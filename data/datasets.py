@@ -137,7 +137,7 @@ class TrainDataset(Dataset):
             real_list, fake_list = self.get_real_and_fake_lists(dataset_list[0],is_train)
             # print(f"真实列表: {real_list}, 伪影列表: {fake_list}") 
             # print(f"真实列表: {len(real_list)}, 伪影列表: {len(fake_list)}")
-            if args.ratio_train is not None:
+            if args.ratio_train < 1:
                 real_index = int(args.ratio_train*len(real_list))
                 fake_index = int(args.ratio_train*len(fake_list))
                 # print(f"real_index: {real_index}, fake_index: {fake_index}")
@@ -231,13 +231,16 @@ class TrainDataset(Dataset):
         # dct_transformer.apply_dct(channel='b')
         #*!这个操作和频域减法不同的
         # print('type',type(image_ori),type(highfreq))
-        a = image_ori - lowfreq
+        # a = image_ori - lowfreq
+        a = lowfreq
+        # a = highfreq
         #branch3
-        lowfreq2, highfreq2= DCTtrans(image_patch).apply_dct(channel='rgb')
+        lowfreq2, highfreq2= DCTtrans(image_patch).apply_dct(channel='rgb') #[C,H,W]都是图片结构的
         
         # print('image_patch',image_patch.shape,"highfreq:",highfreq2.shape,"highfreq:",highfreq.shape,)
-
-        b = image_patch - lowfreq2
+        # b = image_patch - lowfreq2
+        # b = highfreq2
+        b = lowfreq2
 
         #*先尝试只用这三个数据看看
         return (image_patch, a, b,image_ori), torch.tensor(int(targets))

@@ -262,11 +262,7 @@ def main(args):
     #!这里先改一下,之后在改回来
     # model = resnet50(num_classes=2)
     model = DSEX()
-    # print('打印',model.clipvit)
-    # if args.model == 'SAFE':
-    #     model = resnet50(num_classes=2)
-    # else:
-    #     model = timm.create_model(args.model, pretrained=args.pretrained, num_classes=2)
+
     model.to(device)
 
     mixup_fn = None
@@ -327,7 +323,8 @@ def main(args):
     if args.distributed:
         model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu], find_unused_parameters=True)
         model_without_ddp = model.module
-
+    # trainable_params = {k: v for k, v in model_without_ddp.named_parameters() if v.requires_grad}
+    # print("保存参数都有什么",trainable_params.keys())
     optimizer = create_optimizer(
         args, model_without_ddp, skip_list=None,
         get_num_layer=assigner.get_layer_id if assigner is not None else None, 

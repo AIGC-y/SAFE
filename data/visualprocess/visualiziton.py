@@ -8,6 +8,7 @@ from sklearn import decomposition
 
 from sklearn.datasets import load_iris,load_digits
 
+# 1. 
 
 ###不同可视化方式######
 def visualize(x1,y1,info=None,size = 20):

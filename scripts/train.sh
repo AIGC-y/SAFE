@@ -29,7 +29,9 @@ eval_datasets=(
 )
 ratio_data=0.8
 #"/home/yiruolei/ALLDATASET/GenImage" \
-info="patch&highfreq三支路/backbone后cat/1-lowfreq+{mask一般掩码}_chameleon训练测试"
+info="/chameleon训练测试/单vit测试/真high-freq测试(没有使用1-结构)"
+
+#****先把low的也尝试了，然后换resnet
 #这里都是有logging信息的所以不需要自己nohup了
 
 for train_dataset in "${train_datasets[@]}" 
@@ -46,12 +48,12 @@ do
             --transform_mode 'ori' \
             --data_path "$train_dataset" \
             --eval_data_path "$eval_dataset" \
-            --save_ckpt_freq 5 \
+            --save_ckpt_freq 1 \
             --batch_size 64 \
             --blr 1e-2 \
             --weight_decay 0.01 \
             --warmup_epochs 1 \
-            --epochs 15 \
+            --epochs 10 \
             --num_workers 8 \
             --output_dir $OUTPUT_PATH \
             --ratio_train $ratio_data \
@@ -60,6 +62,8 @@ do
     done
 done
 
+#        --ratio_train $ratio_data \
+#--resume '/home/yiruolei/project/AIGCdetector/SAFE/results/chameleon训练测试/newblock/aa/20250516_171344/checkpoint-10.pth' \
 #inputsize 256改成224?会不会太少了,为了和vit相关
 #--transform_mode 'crop' \
 #--batch_size 32 \
