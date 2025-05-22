@@ -17,6 +17,7 @@ from torchvision.transforms import functional as F
 from torchvision.transforms import InterpolationMode
 from data.patchtrans import apply_dct
 from data.patchtrans import *
+from data.patchtrans import process_patches
 from data.dct_test import DCTtrans
 
 from PIL import Image
@@ -27,7 +28,9 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 def Get_Transforms(args):
-
+    """
+    这里的所有操作都是可以对image也可以对tensor结构的，所有
+    """
     size = args.input_size
     #*
     TRANSFORM_DICT = {
@@ -65,14 +68,24 @@ def Get_Transforms(args):
             'eval': [
             ],
         },
-        'ori': {
-            'train': [ImageSampler((size, size), (4, 4), 64),
+        # 'ori': {
+        #     'train': [transforms.ToTensor(),
+        #         FastPatchStitchTransform((size, size), (4, 4), 64),
+        #               ],
+        #     'eval': [transforms.ToTensor(),
+        #         FastPatchStitchTransform((size, size), (4, 4), 64),
+        #              ],
+        # },
+         'ori': {
+            'train': [ImageSampler((size, size), (16, 16), 200),
                       ],
-            'eval': [ImageSampler((size, size), (4, 4), 64),
+            'eval': [ImageSampler((size, size), (16, 16), 200),
+                # transforms.RandomCrop([size, size], pad_if_needed=True),#没有必要去拼了
                      ],
         },
     }
-
+##transforms.RandomCrop、RandomHorizontalFlip、RandomRotation、ColorJitter 这些操作对 PIL.Image 做通常比对 tensor 做更快、更省内存（因为 PIL 是 C 实现，且只处理 uint8）。
+#如果你把 ToTensor() 放前面，后续所有操作都在 float32 的 tensor 上进行，内存占用更大，部分操作速度反而变慢。
     # region [Augmentations]
     transform_train, transform_eval = TRANSFORM_DICT[args.transform_mode]['train'], TRANSFORM_DICT[args.transform_mode]['eval']
 
@@ -81,7 +94,7 @@ def Get_Transforms(args):
         transforms.RandomRotation(180),
         transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5),
         transforms.ToTensor(),#*因为要先贴图片才可以
-        RandomMask(ratio=(0.00, 0.75), patch_size=16, p=0.5),#*就单纯的随机掩码就行啊
+        # RandomMask(ratio=(0.00, 0.75), patch_size=16, p=0.5),#*就单纯的随机掩码就行啊
     ])
 
     transform_eval.append(transforms.ToTensor())#*也是最后再加这个
@@ -209,42 +222,51 @@ class TrainDataset(Dataset):
         
         sample = self.data_list[index]
         image_path, targets = sample['image_path'], sample['label']
+        # if self.is_train:##使用标签融合不行
+        #     add = self.data_list[random.randint(0, len(self.data_list) - 1)]
+        #     addimg_path, addtargets = add['image_path'], add['label']
+            
+        #     replaceratio=random.random()
+        #     targets = (1-replaceratio) * targets + replaceratio * addtargets
+        #     image = process_patches(image_path, addimg_path,replace_ratio= replaceratio)
+        # else:
+        #     try:
+        #         image = Image.open(image_path).convert('RGB')
+        #         # print(f'open image: {image_path}',image)
+        #     except:
+        #         print(f'image error: {image_path}')
+        #         return self.__getitem__(random.randint(0, len(self.data_list) - 1))
         try:
-            image = Image.open(image_path).convert('RGB')
-            # print(f'open image: {image_path}',image)
+                image = Image.open(image_path).convert('RGB')
+                # print(f'open image: {image_path}',image)
         except:
-            print(f'image error: {image_path}')
-            return self.__getitem__(random.randint(0, len(self.data_list) - 1))
-
+                print(f'image error: {image_path}')
+                return self.__getitem__(random.randint(0, len(self.data_list) - 1))
 
         image_patch = self.transform1(image)#输出的大小要是固定大小才可以，如果上面的处理删除了，在transform中尺寸久不对了 #[C,H,W]
-        #?patch用什么大小也不一定
-        image_ori = self.transform2(image)
+        # image_ori = self.transform2(image)
+        image_ori = 0
         #todo *对特征进行频谱还是图象频谱,反正得对图象patch然后在分类不同特征.
         #* 潜在DF模型的思路有借鉴意义吗??这个是生成图象,痕迹被消失了.感觉其实一般了这样.?
         ###* DCT是可逆变换.是不是平移不变变换呢????可以不可以换层还不知道,学习一下别人怎么写的这个也可以产生一个大点...也是拼接原理::这个结构本身是如何.而任务需要这样的吗???
         # print('image.shape',image)
-        dct_transformer = DCTtrans(image_ori)
-        lowfreq, highfreq= dct_transformer.apply_dct(channel='rgb')
-        # dct_transformer.apply_dct(channel='r')
-        # dct_transformer.apply_dct(channel='g')
-        # dct_transformer.apply_dct(channel='b')
-        #*!这个操作和频域减法不同的
+        # dct_transformer = DCTtrans(image_ori)
+        # lowfreq, highfreq= dct_transformer.apply_dct(channel='rgb')
         # print('type',type(image_ori),type(highfreq))
         # a = image_ori - lowfreq
-        a = lowfreq
+        # a = lowfreq
         # a = highfreq
-        #branch3
+        a= 0
         lowfreq2, highfreq2= DCTtrans(image_patch).apply_dct(channel='rgb') #[C,H,W]都是图片结构的
-        
-        # print('image_patch',image_patch.shape,"highfreq:",highfreq2.shape,"highfreq:",highfreq.shape,)
-        # b = image_patch - lowfreq2
-        # b = highfreq2
+        # # print('image_patch',image_patch.shape,"highfreq:",highfreq2.shape,"highfreq:",highfreq.shape,)
+        # # b = image_patch - lowfreq2
+        # # b = highfreq2
         b = lowfreq2
+        # b=0
 
         #*先尝试只用这三个数据看看
         return (image_patch, a, b,image_ori), torch.tensor(int(targets))
-        # return image_ori, torch.tensor(int(targets))
+        # return image_patch, torch.tensor(int(targets))
 
 
 def save_feature(feature, output_dir):

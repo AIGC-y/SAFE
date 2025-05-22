@@ -29,7 +29,7 @@ eval_datasets=(
 )
 ratio_data=0.8
 #"/home/yiruolei/ALLDATASET/GenImage" \
-info="/chameleon训练测试/单vit测试/真high-freq测试(没有使用1-结构)"
+info="chameleon训练测试/safe测试/patchmix+crop_piexl"
 
 #****先把low的也尝试了，然后换resnet
 #这里都是有logging信息的所以不需要自己nohup了
@@ -44,16 +44,16 @@ do
         mkdir -p $OUTPUT_PATH
 
         python -m torch.distributed.run $DISTRIBUTED_ARGS main_finetune.py \
-            --input_size 224 \
-            --transform_mode 'ori' \
+            --input_size 256 \
+            --transform_mode 'crop' \
             --data_path "$train_dataset" \
             --eval_data_path "$eval_dataset" \
-            --save_ckpt_freq 1 \
+            --save_ckpt_freq 2 \
             --batch_size 64 \
             --blr 1e-2 \
             --weight_decay 0.01 \
             --warmup_epochs 1 \
-            --epochs 10 \
+            --epochs 25 \
             --num_workers 8 \
             --output_dir $OUTPUT_PATH \
             --ratio_train $ratio_data \

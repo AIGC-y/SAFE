@@ -23,7 +23,7 @@ DISTRIBUTED_ARGS="
 
 # RESUME_PATH="./checkpoint"
 # RESUME_PATH="/home/data/yrlbp/ALLWEIGHT/SAFE/results/每个分小块都设置trans/20250329_112755/"
-RESUME_PATH="/home/yiruolei/project/AIGCdetector/SAFE/results/chameleon训练测试/newblock/aa/crosstraining/测试完全像素在progan训练效果/20250519_232845"
+RESUME_PATH="/home/yiruolei/project/AIGCdetector/SAFE/results/Asoftmax分类/bi-resnet(pixel)/20250522_094015"
 current_time=$(date +"%Y%m%d_%H%M%S")
 output_dir=$RESUME_PATH/eval/$current_time
 mkdir -p $output_dir
@@ -49,7 +49,7 @@ do
         --batch_size 16  \
         --num_workers 8 \
         --output_dir $output_dir \
-        --resume $RESUME_PATH/checkpoint-last.pth \
+        --resume $RESUME_PATH/checkpoint-best.pth \
         --eval True\
         2>&1 | tee -a  $output_dir/log_test.txt 
 

@@ -15,6 +15,7 @@ import torch.distributed as dist
 from timm.data import Mixup
 from timm.utils import accuracy, ModelEma
 
+# from data.patchtrans import batch_patch_shuffle_with_label
 import utils
 from utils import adjust_learning_rate
 from scipy.special import softmax
@@ -64,27 +65,27 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
                 output = model(samples)
                 # loss = criterion(output, targets)
         else: # full precision
-            output = model(samples)[0]
+            output = model(samples[0])
+            # output = model(samples,targets)[3]
             ##!这里的对比损失还没修改.可以用度量损失来拉近关系和对比结构
             #*对比损失是否都放在一个球面上还没想好
             
-            alph = 0.2
-            loss0 = criterion['class'](output, targets)
+            # alph = 0.2
+            # loss0 = criterion['class'](output, targets)
             # loss1 = criterion[0](output[1], targets)
             # loss2 = criterion[0](output[2], targets)
             #下面这个就是一维数据.所以直接fft就可以了
             # print("output[0]:",output[0].shape,"targets:",targets.shape)
             #?这个不能用,看看是否能改成其他部分来使用?
-            loss_feq = (torch.fft.rfft(output, dim=1) - torch.fft.rfft(targets.unsqueeze(1), dim=1)).abs().mean() #因为不希望对差异敏感,所以用mae,可以后期改成smooth之类的
+            # loss_feq = (torch.fft.rfft(output, dim=1) - torch.fft.rfft(targets.unsqueeze(1), dim=1)).abs().mean() #因为不希望对差异敏感,所以用mae,可以后期改成smooth之类的
             # # loss1 = criterion[1](output[1], -output[2]).mean() + criterion[1](output[3], -output[4]).mean()
             # loss2 = criterion[1](output[1], output[3]).mean() + criterion[1](output[2], output[4]).mean()#*这都是简单的使用方式,不一定好用.要多试一试.
             
-            loss = (1 - alph) * loss0 + alph * loss_feq 
+            # loss = (1 - alph) * loss0 + alph * loss_feq 
             #  + loss1 + loss2
-            # loss = criterion(output, targets)
+            loss = criterion['class'](output, targets)
         loss_value = loss.item()
 
-        
 
         if not math.isfinite(loss_value):
             print("Loss is {}, stopping training".format(loss_value))
@@ -175,6 +176,7 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
         # images = images.to(device, non_blocking=True)
         target = target.to(device, non_blocking=True)
 
+        # batch_imgs, batch_labels = batch_patch_shuffle_with_label(batch_imgs, batch_labels, target_size=(256, 256), min_patch_size=(32, 32), max_patch_size=(128, 128), num_patches=8):
         # if index ==1:
         #     visual(model,images,images[-1], target, use_cuda=True)
 
@@ -186,41 +188,34 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
                     output = output['logits']
                 loss = criterion(output, target)
         else:
-            # output,cat,bran1,bran2 = model(images) #[bs, num_cls]
-            output,cat,bran1,bran2,bran3 = model(images)
+            # output,bran1= model(images,target) #[bs, num_cls]
+            output= model(images[0]) #[bs, num_cls]
+            # output,bran1,bran2,bran3,bran4 = model(images,target)
             if isinstance(output, dict):
                 output = output['logits']
 
             #*loss,好像只是简单记录一下而已.反正没用,所以不需要完全一致??
-            alph = 0.2
-            
-            loss0 = criterion(output, target)
+            # alph = 0.2
+            # loss0 = criterion(output, target)#会自动对二分类归一化,一个也就自动归一化,反正就是先softmax得到概率
             # loss1 = criterion[0](output[1], target)
             # loss2 = criterion[0](output[2], target)
-            loss_feq = (torch.fft.rfft(output, dim=1) - torch.fft.rfft(target.unsqueeze(1), dim=1)).abs().mean() #因为不希望对差异敏感,所以用mae,可以后期改成smooth之类的
+            # loss_feq = (torch.fft.rfft(output, dim=1) - torch.fft.rfft(target.unsqueeze(1), dim=1)).abs().mean() #因为不希望对差异敏感,所以用mae,可以后期改成smooth之类的
             # # loss1 = criterion[1](output[1], -output[2]).mean() + criterion[1](output[3], -output[4]).mean()
             # loss2 = criterion[1](output[1], output[3]).mean() + criterion[1](output[2], output[4]).mean()#*这都是简单的使用方式,不一定好用.要多试一试.
             
-            loss = (1 - alph) * loss0 + alph * loss_feq 
-
-            
-            # loss = criterion(output[0], target)
+            # loss = (1 - alph) * loss0 + alph * loss_feq 
+            loss = criterion(output, target)
  
         if index == 0:
             predictions = output
             labels = target
-            # catall = cat
-            # branall = bran1 
-            # bran2all =bran2
-            # bran3all =bran3
+            # B1 = bran1 
+          
             
         else:
             predictions = torch.cat((predictions, output), 0)
-            # catall = torch.cat((catall, cat), 0)
-            # branall = torch.cat((branall, bran1), 0)
-            # bran2all = torch.cat((bran2all, bran2), 0)
-            # bran3all = torch.cat((bran3all, bran3), 0)
             labels = torch.cat((labels, target), 0)
+            # B1 = torch.cat((B1, bran1), 0)
 
         torch.cuda.synchronize()
         #*分别计算不同类别
@@ -244,19 +239,13 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
         metric_logger.meters['acc1'].update(acc1.item(), n=batch_size)
 
     #循环结束#?为啥这个内存没爆炸哦,但是之前就爆炸了?果然还是放在显存好?
-    # c = catall.detach().cpu().numpy()
-    # d = branall.detach().cpu().numpy()
-    # e = bran2all.detach().cpu().numpy()
-    # f = bran3all.detach().cpu().numpy()
-    # b = labels.detach().cpu().numpy() 
-    # np.save('results/datasave/1.npy', (b,c,d,e))
-    # np.save('visual/datasave/b1.npy', b)
-    # np.save('visual/datasave/c1.npy', c)
-    # np.save('visual/datasave/d1.npy', d)
-    # np.save('visual/datasave/e1.npy', e)
-    # np.save('visual/datasave/f1.npy', f)
+    # B = B1.detach().cpu().numpy()
+    # lab = labels.detach().cpu().numpy()
+    # info = "feat_双resnet_softmax"
+    # np.save(f'results/visual/datasave/B_{info}.npy', B)
+    # np.save(f'results/visual/datasave/label_{info}.npy', lab)
     # print("数据保存完毕")
-    # np.save('results/datasave/1.npy', a)
+
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
     print('* Acc@1 {top1.global_avg:.2%} loss {losses.global_avg:.4f}'

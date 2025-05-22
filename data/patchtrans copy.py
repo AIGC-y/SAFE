@@ -1,5 +1,4 @@
 """transforms 数据增强方式"""
-import time
 import numpy as np
 from PIL import Image
 import random
@@ -191,120 +190,6 @@ class ImageSampler:
         """为了能当成transform结构的函数来使用"""
         return self.stitch_patches(image)
 
-
-
-
-def process_patches(image1_path, image2_path, patch_size=64, replace_ratio=0.3):
-    """
-    将图片A分割为固定大小的patch，以指定比例替换为图片B的patch，随机重组为新图片。
-    性能：PIL 的 crop 和 paste 是 Python 级别的调用，每次操作涉及对象创建和内存拷贝，效率低于 numpy 的向量化数组操作。
-批量处理：PIL 无法像 numpy 那样一次性处理多个patch，需逐个循环，增加开销。
-    参数:
-        image1_path: 图片A的路径
-        image2_path: 图片B的路径
-        patch_size: 固定patch大小（正方形，宽高相等）
-        replace_ratio: 用图片B替换的patch比例
-    返回:
-        reconstructed: 重组后的图片 (numpy数组, shape=(height, width, 3), dtype=uint8)
-        labels: 每个patch的标签数组 (shape=(num_patches, 5), [y, x, h, w, label])
-                label=0 (来自图片A), 1 (来自图片B)
-    """
-    # 加载图片
-    image1 = np.array(Image.open(image1_path).convert('RGB'), dtype=np.uint8)
-    image2 = np.array(Image.open(image2_path).convert('RGB'), dtype=np.uint8)
-    # image1 = Image.open(image1_path).convert('RGB')
-    # image2 = Image.open(image2_path).convert('RGB')
-    # height, width = image1.size
-    height, width, channels = image1.shape
-    
-
-    # 计算patch网格
-    h_patches = (height + patch_size - 1) // patch_size  # 向上取整
-    w_patches = (width + patch_size - 1) // patch_size
-    patches = []
-    
-    # 分割图片A为固定大小的patch
-    for i in range(h_patches):
-        for j in range(w_patches):
-            y = i * patch_size
-            x = j * patch_size
-            # 提取patch，边界可能需要填充
-            patch_h = min(patch_size, height - y)
-            patch_w = min(patch_size, width - x)
-            # patch_data = Image.new('RGB', (patch_size, patch_size))
-            patch_data = np.zeros((patch_size, patch_size, channels), dtype=np.uint8)
-            patch_data[:patch_h, :patch_w, :] = image1[y:y+patch_h, x:x+patch_w, :].copy()
-            patches.append([y, x, patch_h, patch_w, patch_data])
-
-    # 替换patch
-    num_patches = len(patches)
-    num_replace = int(num_patches * replace_ratio)
-    replace_indices = random.sample(range(num_patches), num_replace)
-    # labels = np.zeros(num_patches, dtype=np.int32)
-    height2, width2, _ = image2.shape
-    
-    for idx in replace_indices:
-        y, x, h, w, _ = patches[idx]
-        # 从图片B随机选取相同大小的patch
-        y2 = random.randint(0, max(0, height2 - h))
-        x2 = random.randint(0, max(0, width2 - w))
-        patch_data = np.zeros((patch_size, patch_size, channels), dtype=np.uint8)
-        # patch_data = Image.new('RGB', (patch_size, patch_size))
-        patch_data[:h, :w, :] = image2[y2:y2+h, x2:x2+w, :].copy()
-        patches[idx][4] = patch_data
-        # labels[idx] = 1
-
-
-    # 随机打乱patch顺序
-    indices = list(range(num_patches))
-    random.shuffle(indices)
-    patch_data_shuffled = [patches[i][4] for i in indices]
-    # labels = labels[indices]
-    # 生成完全随机的位置
-    # shuffled_patches = []
-    # for idx in range(num_patches):
-    #     y = random.randint(0, max(0, height - patches[idx][2]))
-    #     x = random.randint(0, max(0, width - patches[idx][3]))
-    #     _, _, h, w, patch_data = patches[idx]
-    #     shuffled_patches.append([y, x, h, w, patch_data])
-
-    ##### 重组############
-    # #按照原来的图像结构
-    # reconstructed = np.zeros((height, width, channels), dtype=np.uint8)
-    # # weights = np.zeros((height, width, channels), dtype=np.float32)
-    # for y, x, h, w, patch_data in patches:
-    #     reconstructed[y:y+h, x:x+w, :] += patch_data[:h, :w, :].astype(np.uint8)
-    #     # weights[y:y+h, x:x+w, :] += 1
-    
-    # # weights[weights == 0] = 1
-    # # reconstructed = (reconstructed / weights).astype(np.uint8)
-
-    # 随机重组
-    reconstructed = np.zeros((height, width, channels), dtype=np.uint8)
-    # reconstructed  = Image.new('RGB', (patch_size, patch_size))
-    patch_idx = 0
-    for i in range(h_patches):
-        for j in range(w_patches):
-            y = i * patch_size
-            x = j * patch_size
-            patch_h = min(patch_size, height - y)
-            patch_w = min(patch_size, width - x)
-            if patch_idx < len(patch_data_shuffled):
-                reconstructed[y:y+patch_h, x:x+patch_w, :] = patch_data_shuffled[patch_idx][:patch_h, :patch_w, :]
-                patch_idx += 1
-
-    # 合并patch信息和标签（记录原始网格位置）
-    # patch_attrs = np.array([[i * patch_size, j * patch_size, 
-    #                         min(patch_size, height - i * patch_size), 
-    #                         min(patch_size, width - j * patch_size)] 
-    #                         for i in range(h_patches) for j in range(w_patches)], 
-    #                         dtype=np.int32)
-    # labels = np.column_stack((patch_attrs, labels.reshape(-1, 1)))
-    
-    return Image.fromarray(reconstructed)
-
-
-
 class FastPatchStitchTransform:
     def __init__(self, target_size=(512, 512), min_patch_size=(32, 32), num_patches=40):
         self.target_size = target_size
@@ -481,24 +366,18 @@ def Get_Transforms(args):
 
 # 示例用法
 if __name__ == "__main__":
-    # image = Image.open("/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/1_fake/0a4c84c3-4d77-4a9a-be55-1f433db2aa65.jpg").convert('RGB')
-    # transformtest = transforms.Compose([ #*可以建立很多层,只要用[]的列表写上就行,所以可以用字典来设置不同情况
-    #     # RandomJPEG(quality=(50, 95), interval=5, p=0.5),
-    #     # RandomGaussianBlur(kernel_size=3, sigma=(0.1, 2.0), p=0.5),
-    #     # RandomMask(ratio=0.5, patch_size=16, p=0.5),
-    #     ImageSampler(target_size=(512, 512), min_patch_size=(16, 16), num_patches=200),
+    image = Image.open("/home/yiruolei/ALLDATASET/Chameleon/test/0_real/0a4dcb15-6fe3-4a28-9821-ad8da7823f15.jpg").convert('RGB')
+    transformtest = transforms.compose([ #*可以建立很多层,只要用[]的列表写上就行,所以可以用字典来设置不同情况
+        # RandomJPEG(quality=(50, 95), interval=5, p=0.5),
+        # RandomGaussianBlur(kernel_size=3, sigma=(0.1, 2.0), p=0.5),
+        # RandomMask(ratio=0.5, patch_size=16, p=0.5),
+        ImageSampler(target_size=(512, 512), min_patch_size=(32, 32), num_patches=40),
 
-    # ])
+    ])
 
-    # stitched_image = transformtest(image)
-    # stitched_image.save("output.jpg")
+    stitched_image = transformtest(image)
+    stitched_image.save("output.jpg")
 
-    # transform_to_tensor = transforms.ToTensor()
-    # a = transform_to_tensor(stitched_image)
+    transform_to_tensor = transforms.ToTensor()
+    a = transform_to_tensor(stitched_image)
     # print(a)
-    time1 = time.time()
-    new_image= process_patches('/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/1_fake/0a4c84c3-4d77-4a9a-be55-1f433db2aa65.jpg', '/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/1_fake/0a27a140-fceb-4523-af6c-b4e78c9750b1.jpg', replace_ratio=0.3)
-    new_image.save('new_image.png')
-    time2 = time.time()
-    print(time2-time1)
-    print("新图片已保存为 'new_image.png'，标签已保存为 'patch_labels.npy'")

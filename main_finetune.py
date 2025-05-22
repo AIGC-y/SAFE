@@ -260,9 +260,9 @@ def main(args):
 
     # Init Model
     #!这里先改一下,之后在改回来
-    # model = resnet50(num_classes=2)
-    model = DSEX()
-
+    model = resnet50(num_classes=2)
+    # model = DSEX()
+    print('model = %s' % str(model))
     model.to(device)
 
     mixup_fn = None
