@@ -4,7 +4,7 @@ eval "$(conda shell.bash hook)"
 conda activate SAFE 
 
 #如果要指定一个或者某几个的话
-export CUDA_VISIBLE_DEVICES=1
+export CUDA_VISIBLE_DEVICES=0
 
 GPU_NUM=1
 WORLD_SIZE=1
@@ -23,7 +23,7 @@ DISTRIBUTED_ARGS="
 
 # RESUME_PATH="./checkpoint"
 # RESUME_PATH="/home/data/yrlbp/ALLWEIGHT/SAFE/results/每个分小块都设置trans/20250329_112755/"
-RESUME_PATH="/home/yiruolei/project/AIGCdetector/SAFE/results/Asoftmax分类/bi-resnet(pixel)/20250522_094015"
+RESUME_PATH="/home/yiruolei/project/AIGCdetector/SAFE/results/sdv4test/safe结构测试/vit结构原始测试）/20250524_161936"
 current_time=$(date +"%Y%m%d_%H%M%S")
 output_dir=$RESUME_PATH/eval/$current_time
 mkdir -p $output_dir
@@ -36,7 +36,7 @@ eval_datasets=(
     # "/home/yiruolei/ALLDATASET/AIGCDetect/CNNSpot/val"
     # "data/datasets/test3_Ojha/test" \
     # "/home/yiruolei/ALLDATASET/GenImage" \
-    "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/" 
+    "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/" \
 
 )
 

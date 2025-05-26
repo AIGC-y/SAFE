@@ -2,13 +2,13 @@
 eval "$(conda shell.bash hook)"
 conda activate SAFE 
 
-export CUDA_VISIBLE_DEVICES=1
+export CUDA_VISIBLE_DEVICES=0
 
 GPU_NUM=1
 WORLD_SIZE=1
 RANK=0
 MASTER_ADDR=localhost
-MASTER_PORT=12588
+MASTER_PORT=12588  #原始是12588，修改以下
 
 DISTRIBUTED_ARGS="
     --nproc_per_node $GPU_NUM \
@@ -21,15 +21,17 @@ DISTRIBUTED_ARGS="
 train_datasets=(
     
     # "/home/yiruolei/ALLDATASET/AIGCDetect/CNNSpot/train"\
-    "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test" \
+    # "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test" \
+    "/home/yiruolei/ALLDATASET/AIGCDetect/imagenet_ai_0419_sdv4/train"\
 )
 eval_datasets=(
     # "/home/yiruolei/ALLDATASET/AIGCDetect/CNNSpot/val" \
-    "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test" \
+    # "/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test" \
+    "/home/yiruolei/ALLDATASET/AIGCDetect/imagenet_ai_0419_sdv4/val"\
 )
 ratio_data=0.8
 #"/home/yiruolei/ALLDATASET/GenImage" \
-info="chameleon训练测试/safe测试/patchmix+crop_piexl"
+info="sdv4test/safe结构测试/vit结构原始测试"
 
 #****先把low的也尝试了，然后换resnet
 #这里都是有logging信息的所以不需要自己nohup了
@@ -44,19 +46,18 @@ do
         mkdir -p $OUTPUT_PATH
 
         python -m torch.distributed.run $DISTRIBUTED_ARGS main_finetune.py \
-            --input_size 256 \
+            --input_size 224 \
             --transform_mode 'crop' \
             --data_path "$train_dataset" \
             --eval_data_path "$eval_dataset" \
             --save_ckpt_freq 2 \
-            --batch_size 64 \
+            --batch_size 128 \
             --blr 1e-2 \
             --weight_decay 0.01 \
             --warmup_epochs 1 \
             --epochs 25 \
             --num_workers 8 \
             --output_dir $OUTPUT_PATH \
-            --ratio_train $ratio_data \
         2>&1 | tee -a $OUTPUT_PATH/log_train.txt 
 
     done

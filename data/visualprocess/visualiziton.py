@@ -81,9 +81,9 @@ if __name__ == "__main__":
 
     #**数据的获取就是重写一个test过程，只要数据输出，其他计算全删除就行了。这是最简单的方法，其他方法都需要改好多模块。这个就是需要什么什
     ##**注意别爆内存或者显存，数据一般的就直接保存。不行的需要用txt文件来追加。
-    info = '双vit支路再asoftmax下的效果？'
-    y1 =  np.load('results/visual/datasave/label_feat_双resnet_softmax_label.npy')
-    x1 = np.load('results/visual/datasave/B_feat_双resnet_softmax.npy')
+    info = 'vitsafe-sdv4'
+    y1 =  np.load('/home/yiruolei/project/AIGCdetector/SAFE/results/visual/datasave/label_vitsafe_sdv4.npy')
+    x1 = np.load('/home/yiruolei/project/AIGCdetector/SAFE/results/visual/datasave/B_vitsafe_sdv4.npy')
     tSNE(x1,y1,info)
 
     # y2 = np.load('/home/yiruolei/project/AIGCdetector/SAFE/visual/datasave/b1.npy')

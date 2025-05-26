@@ -260,9 +260,10 @@ def main(args):
 
     # Init Model
     #!这里先改一下,之后在改回来
-    model = resnet50(num_classes=2)
-    # model = DSEX()
-    print('model = %s' % str(model))
+    # model = resnet50(num_classes=2)
+    model = DSEX()
+    # print('model = %s' % str(model))
+    # 
     model.to(device)
 
     mixup_fn = None
@@ -407,8 +408,8 @@ def main(args):
                 pin_memory=args.pin_mem,
                 drop_last=False
             )
-            if len(dataset_val) == 0: break
             print("测试数据大小",len(dataset_val))#?怎么会出来是0呢?
+            if len(dataset_val) == 0: break
             test_stats, acc, ap = evaluate(data_loader_val, model, device, val)
             print(f"Accuracy of the network on {len(dataset_val)} test images: {test_stats['acc1']:.2%}")
 

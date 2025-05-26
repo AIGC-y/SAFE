@@ -158,13 +158,14 @@ class TrainDataset(Dataset):
                     self.data_list = real_list[:real_index-1] + fake_list[:fake_index-1]
                 else:
                     self.data_list = real_list[real_index:] + fake_list[fake_index:]#*这个是测试的时候使用的_list):]
-                print(f"数据长度: {len(self.data_list)}")
+                # print(f"数据长度: {len(self.data_list)}")
             else:
                 # if args.eval:
                 #      self.data_list = fake_list #*现在测试就用假的
                 # else:
                 #     self.data_list = real_list + fake_list
                self.data_list = real_list + fake_list
+            #    print(f"数据长度: {len(self.data_list)}")
         else:
             assert args.num_train is not None
             self.data_list = []
@@ -186,29 +187,31 @@ class TrainDataset(Dataset):
         for root, dirs, files in sorted(os.walk(folder_path, followlinks=True)):#*因为最后会回到大文件夹中,这个结构下是不存在两个列表的.
             if is_train :#训练集,就是给什么就用什么,子目录全用了.
                 for dir_name in sorted(dirs):
-                    if dir_name == "0_real":
+                    if dir_name == "0_real" or dir_name =='nature':
                         real_dir_path = os.path.join(root, dir_name)
                         real_list.extend([{"image_path": image_path, "label" : 0} for image_path in self.get_image_paths(real_dir_path)])
-                    elif dir_name == "1_fake":
+                    elif dir_name == "1_fake" or dir_name == 'ai':
                         fake_dir_path = os.path.join(root, dir_name)
                         fake_list.extend([{"image_path": image_path, "label" : 1} for image_path in self.get_image_paths(fake_dir_path)])
                 continue
             elif not is_train and  "val" in root: #测试集
                 for dir_name in sorted(dirs):
-                    if dir_name == "0_real":
+                    if dir_name == "0_real" or dir_name ==  'nature':
                         real_dir_path = os.path.join(root, dir_name)
                         real_list.extend([{"image_path": image_path, "label" : 0} for image_path in self.get_image_paths(real_dir_path)])
-                    elif dir_name == "1_fake":
+                    elif dir_name == "1_fake" or dir_name == 'ai':
                         fake_dir_path = os.path.join(root, dir_name)
                         fake_list.extend([{"image_path": image_path, "label" : 1} for image_path in self.get_image_paths(fake_dir_path)])
                 continue
             elif not is_train and  "test" in root:
                 for dir_name in sorted(dirs):
-                    if dir_name == "0_real":
+                    if dir_name == "0_real" or dir_name == 'nature':
                         real_dir_path = os.path.join(root, dir_name)
+                        print("real_dir_path",real_dir_path)
                         real_list.extend([{"image_path": image_path, "label" : 0} for image_path in self.get_image_paths(real_dir_path)])
-                    elif dir_name == "1_fake":
+                    elif dir_name == "1_fake" or dir_name == 'ai':
                         fake_dir_path = os.path.join(root, dir_name)
+                        print("fake_dir_path",fake_dir_path)
                         fake_list.extend([{"image_path": image_path, "label" : 1} for image_path in self.get_image_paths(fake_dir_path)])
                 continue
         return real_list, fake_list

@@ -65,8 +65,8 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
                 output = model(samples)
                 # loss = criterion(output, targets)
         else: # full precision
-            output = model(samples[0])
-            # output = model(samples,targets)[3]
+            # output = model(samples[0])
+            output = model(samples,targets)[0]
             ##!这里的对比损失还没修改.可以用度量损失来拉近关系和对比结构
             #*对比损失是否都放在一个球面上还没想好
             
@@ -188,8 +188,8 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
                     output = output['logits']
                 loss = criterion(output, target)
         else:
-            # output,bran1= model(images,target) #[bs, num_cls]
-            output= model(images[0]) #[bs, num_cls]
+            output,bran1= model(images,target) #[bs, num_cls]
+            # output= model(images[0]) #[bs, num_cls]
             # output,bran1,bran2,bran3,bran4 = model(images,target)
             if isinstance(output, dict):
                 output = output['logits']
@@ -209,13 +209,13 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
         if index == 0:
             predictions = output
             labels = target
-            # B1 = bran1 
+            B1 = bran1 
           
             
         else:
             predictions = torch.cat((predictions, output), 0)
             labels = torch.cat((labels, target), 0)
-            # B1 = torch.cat((B1, bran1), 0)
+            B1 = torch.cat((B1, bran1), 0)
 
         torch.cuda.synchronize()
         #*分别计算不同类别
@@ -239,11 +239,11 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
         metric_logger.meters['acc1'].update(acc1.item(), n=batch_size)
 
     #循环结束#?为啥这个内存没爆炸哦,但是之前就爆炸了?果然还是放在显存好?
-    # B = B1.detach().cpu().numpy()
-    # lab = labels.detach().cpu().numpy()
-    # info = "feat_双resnet_softmax"
-    # np.save(f'results/visual/datasave/B_{info}.npy', B)
-    # np.save(f'results/visual/datasave/label_{info}.npy', lab)
+    B = B1.detach().cpu().numpy()
+    lab = labels.detach().cpu().numpy()
+    info = "vitsafe_sdv4"
+    np.save(f'results/visual/datasave/B_{info}.npy', B)
+    np.save(f'results/visual/datasave/label_{info}.npy', lab)
     # print("数据保存完毕")
 
     # gather the stats from all processes

@@ -11,6 +11,8 @@ class DSEX(nn.Module):
     def __init__(self):
         super(DSEX, self).__init__()
         ####resnet####
+        # self.resnet0 = resnet50(num_classes=2)
+
         # self.resnet1 = resnet50(num_classes=512)
         # self.resnet2 = resnet50(num_classes=512)
         # self.mlp1 = nn.Linear(512*2, 512)
@@ -19,15 +21,15 @@ class DSEX(nn.Module):
 
 
         ######vit#####
-        # self.clipvit = CLIPModel.from_pretrained("/home/yiruolei/ALLMODEL/openai/clip-vit-large-patch14").vision_model
-        # for param in self.clipvit.parameters():
-        #     param.requires_grad = False
+        self.clipvit = CLIPModel.from_pretrained("/home/yiruolei/ALLMODEL/openai/clip-vit-large-patch14").vision_model
+        for param in self.clipvit.parameters():
+            param.requires_grad = False
 
-        # self.mlp1 = nn.Linear(1024, 512)
+        self.mlp1 = nn.Linear(1024, 512)
         # # self.mlp2 = nn.Linear(1024, 512)
         # # self.mlp3 = nn.Linear(1024, 512)
         # # self.fc = nn.Linear(512*2, 2)
-        # self.fc1 = nn.Linear(512,2)
+        self.fc1 = nn.Linear(512,2)
         # self.fc2 = nn.Linear(768, 2)
         # self.fc3 = nn.Linear(256, 2)
 
@@ -49,16 +51,17 @@ class DSEX(nn.Module):
         # print("x1:",x1.shape,"x2:",x2.shape,"x3:",x3.shape)#*拼接图象消除了对象的影响,但是后面也没获得什么效果
         
         #resnet
+        ##基础测试
         # feat = self.resnet1(x1)
+        # output = self.fc(feat)
         # x3 = self.resnet2(x3)
         # x_res = torch.cat((x1, x3), dim=1) #[B,512*2]
         # feat = self.mlp1(x_res) #[B,512]
-        
+      
         #vit
-        # x_llm1 = self.clipvit(x1).pooler_output #[B,1024] #*vit的图象embeding方式开始也是他妈conv?
-        # # x1 = self.resnet1(x1)
-        # feat = self.mlp1(x_llm1)
-        # output = self.fc1(feat)
+        x_llm1 = self.clipvit(x1).pooler_output #[B,1024] #*vit的图象embeding方式开始也是他妈conv?
+        feat = self.mlp1(x_llm1)
+        output = self.fc1(feat)
         # x_llm2 = self.clipvit(x4).pooler_output #[B,1024] #*vit的图象embeding方式开始也是他妈conv?
         # x_llm2 = self.mlp2(x_llm2)#[B,512]
         # a_x = torch.cat((x_llm1, x_llm2), dim=1)
