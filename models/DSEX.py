@@ -6,6 +6,8 @@ import torch.nn.functional as F
 from models.resnet import *
 from transformers import CLIPProcessor, CLIPModel
 
+import open_clip
+
 class Mlp(nn.Module):
     """ MLP as used in Vision Transformer, MLP-Mixer and related networks
     """
@@ -93,6 +95,25 @@ class DSEX(nn.Module):
         # a_x = torch.cat((x_llm1, x_llm2), dim=1)
         # a_x = self.mlp3(a_x)#[B,512]
         
+        ##clipconvnext
+        self.openclip_convnext_xxl, _, _ = open_clip.create_model_and_transforms(
+            "convnext_xxlarge", pretrained=""
+        )
+
+        self.openclip_convnext_xxl = self.openclip_convnext_xxl.visual.trunk
+        self.openclip_convnext_xxl.head.global_pool = nn.Identity()
+        self.openclip_convnext_xxl.head.flatten = nn.Identity()
+
+        self.openclip_convnext_xxl.eval()
+        
+        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+        self.convnext_proj = nn.Sequential(
+            nn.Linear(3072, 256),
+
+        )
+        for param in self.openclip_convnext_xxl.parameters():
+            param.requires_grad = False
+
 
         #组合支路
         feat = torch.cat((feat1, feat2), dim=1) #[B,512*2]
