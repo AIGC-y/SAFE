@@ -133,9 +133,13 @@ class ImageSampler:
         """
         img_width, img_height = image.size
 
-        # 随机确定图像块的大小,不手动设置,设置为图的大小为上限
-        patch_width = random.randint(self.min_patch_width, int(img_width/3))
-        patch_height = random.randint(self.min_patch_height, int(img_height/3))
+        # 随机确定图像块的大小
+        if self.min_patch_width >= int(img_width/2) or self.min_patch_height >= int(img_height/2):
+            patch_width = self.min_patch_width
+            patch_height = self.min_patch_height
+        else:#不手动设置,设置为图的大小为上限
+            patch_width = random.randint(self.min_patch_width, int(img_width/2))
+            patch_height = random.randint(self.min_patch_height, int(img_height/2))
 
         max_x = img_width - patch_width
         max_y = img_height - patch_height
@@ -180,8 +184,6 @@ class ImageSampler:
             self.current_x += patch_width
           
 
-            
-
         # 如果拼接图像超出目标大小，则裁剪至目标大小
         stitched_image = stitched_image.crop((0, 0, self.target_width, self.target_height))
         
@@ -194,7 +196,7 @@ class ImageSampler:
 
 
 
-def process_patches(image1_path, image2_path, patch_size=64, replace_ratio=0.3):
+def process_patches(image1_path, image2_path=None, patch_size=64, replace_ratio=0.3):
     """
     将图片A分割为固定大小的patch，以指定比例替换为图片B的patch，随机重组为新图片。
     性能：PIL 的 crop 和 paste 是 Python 级别的调用，每次操作涉及对象创建和内存拷贝，效率低于 numpy 的向量化数组操作。
@@ -211,7 +213,8 @@ def process_patches(image1_path, image2_path, patch_size=64, replace_ratio=0.3):
     """
     # 加载图片
     image1 = np.array(Image.open(image1_path).convert('RGB'), dtype=np.uint8)
-    image2 = np.array(Image.open(image2_path).convert('RGB'), dtype=np.uint8)
+    if image2_path is not None:
+        image2 = np.array(Image.open(image2_path).convert('RGB'), dtype=np.uint8)
     # image1 = Image.open(image1_path).convert('RGB')
     # image2 = Image.open(image2_path).convert('RGB')
     # height, width = image1.size
@@ -236,23 +239,28 @@ def process_patches(image1_path, image2_path, patch_size=64, replace_ratio=0.3):
             patch_data[:patch_h, :patch_w, :] = image1[y:y+patch_h, x:x+patch_w, :].copy()
             patches.append([y, x, patch_h, patch_w, patch_data])
 
-    # 替换patch
+    ##对path2的数据进行处理
     num_patches = len(patches)
-    num_replace = int(num_patches * replace_ratio)
-    replace_indices = random.sample(range(num_patches), num_replace)
-    # labels = np.zeros(num_patches, dtype=np.int32)
-    height2, width2, _ = image2.shape
-    
-    for idx in replace_indices:
-        y, x, h, w, _ = patches[idx]
-        # 从图片B随机选取相同大小的patch
-        y2 = random.randint(0, max(0, height2 - h))
-        x2 = random.randint(0, max(0, width2 - w))
-        patch_data = np.zeros((patch_size, patch_size, channels), dtype=np.uint8)
-        # patch_data = Image.new('RGB', (patch_size, patch_size))
-        patch_data[:h, :w, :] = image2[y2:y2+h, x2:x2+w, :].copy()
-        patches[idx][4] = patch_data
-        # labels[idx] = 1
+    if image2_path is not None:
+        num_replace = int(num_patches * replace_ratio)
+        replace_indices = random.sample(range(num_patches), num_replace)
+        height2, width2, _ = image2.shape
+
+        for idx in replace_indices:
+            y, x, h, w, _ = patches[idx]
+            y2 = random.randint(0, max(0, height2 - h))
+            x2 = random.randint(0, max(0, width2 - w))
+            patch_data = np.zeros((patch_size, patch_size, channels), dtype=np.uint8)
+            patch_data[:h, :w, :] = image2[y2:y2+h, x2:x2+w, :].copy()
+            patches[idx][4] = patch_data
+    elif replace_ratio > 0:
+        num_replace = int(num_patches * replace_ratio)
+        replace_indices = random.sample(range(num_patches), num_replace)
+        for idx in replace_indices:
+            y, x, h, w, _ = patches[idx]
+            # 用全0 patch 替换
+            patch_data = np.zeros((patch_size, patch_size, channels), dtype=np.uint8)
+            patches[idx][4] = patch_data
 
 
     # 随机打乱patch顺序
@@ -317,7 +325,7 @@ class FastPatchStitchTransform:
     
 def fast_patch_stitch(img: torch.Tensor, target_size=(512, 512), min_patch_size=(32, 32), num_patches=40):
     C,H,W = img.shape#*最主要的就是要考虑通道，直接是图片结构不需要考虑下（通道，高，宽）
-    stitched = torch.zeros((C,target_size[1], target_size[0] ), dtype=img.dtype)#,device=img.device
+    stitched = torch.zeros(C,target_size[1], target_size[0] , dtype=img.dtype)#,
     cur_x, cur_y = 0, 0
 
     for _ in range(num_patches):
@@ -496,9 +504,10 @@ if __name__ == "__main__":
     # transform_to_tensor = transforms.ToTensor()
     # a = transform_to_tensor(stitched_image)
     # print(a)
+
+
     time1 = time.time()
-    new_image= process_patches('/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/1_fake/0a4c84c3-4d77-4a9a-be55-1f433db2aa65.jpg', '/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/1_fake/0a27a140-fceb-4523-af6c-b4e78c9750b1.jpg', replace_ratio=0.3)
+    new_image= process_patches('/home/yiruolei/ALLDATASET/AIGCDetect/Chameleon/test/1_fake/0a4c84c3-4d77-4a9a-be55-1f433db2aa65.jpg', replace_ratio=0.3)
     new_image.save('new_image.png')
     time2 = time.time()
-    print(time2-time1)
-    print("新图片已保存为 'new_image.png'，标签已保存为 'patch_labels.npy'")
+    print("新图片已保存为 'new_image.png'，用时{}秒".format(time2-time1))

@@ -6,6 +6,26 @@ import torch.nn.functional as F
 from models.resnet import *
 from transformers import CLIPProcessor, CLIPModel
 
+class Mlp(nn.Module):
+    """ MLP as used in Vision Transformer, MLP-Mixer and related networks
+    """
+
+    def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU):
+        super().__init__()
+        out_features = out_features or in_features
+        hidden_features = hidden_features or in_features
+
+        self.fc1 = nn.Linear(in_features, hidden_features)
+        self.act = act_layer()
+        self.fc2 = nn.Linear(hidden_features, out_features)
+
+    def forward(self, x):
+        x = self.fc1(x)
+        x = self.act(x)
+        x = self.fc2(x)
+        return x
+
+
 
 class DSEX(nn.Module):
     def __init__(self):
@@ -13,8 +33,8 @@ class DSEX(nn.Module):
         ####resnet####
         # self.resnet0 = resnet50(num_classes=2)
 
-        # self.resnet1 = resnet50(num_classes=512)
-        # self.resnet2 = resnet50(num_classes=512)
+        self.resnet1 = resnet50(num_classes=512)
+        self.resnet2 = resnet50(num_classes=512)
         # self.mlp1 = nn.Linear(512*2, 512)
         # self.fc = nn.Linear(512, 2)
 
@@ -26,13 +46,14 @@ class DSEX(nn.Module):
             param.requires_grad = False
 
         self.mlp1 = nn.Linear(1024, 512)
-        # # self.mlp2 = nn.Linear(1024, 512)
+        self.mlp2 = nn.Linear(1024, 512)
         # # self.mlp3 = nn.Linear(1024, 512)
         # # self.fc = nn.Linear(512*2, 2)
-        self.fc1 = nn.Linear(512,2)
+        # self.fc1 = nn.Linear(512,2)
         # self.fc2 = nn.Linear(768, 2)
         # self.fc3 = nn.Linear(256, 2)
 
+        self.fc = Mlp(512+512, 1024, 2) #*分类器优化
         #为了处理最后分类器的变化:不是直接使用归一化?
         self.s = 30
         self.m = 0.3
@@ -48,26 +69,35 @@ class DSEX(nn.Module):
         
     def forward(self, x, y):
         x1,x2,x3,x4 = x[0],x[1],x[2],x[3] #[B,3,224,224]
-        # print("x1:",x1.shape,"x2:",x2.shape,"x3:",x3.shape)#*拼接图象消除了对象的影响,但是后面也没获得什么效果
+        # print("x1:",x1.shape,"x2:",x2.shape,"x3:",x3.shape,"x4:",x4.shape)#*拼接图象消除了对象的影响,但是后面也没获得什么效果
         
         #resnet
         ##基础测试
         # feat = self.resnet1(x1)
         # output = self.fc(feat)
-        # x3 = self.resnet2(x3)
-        # x_res = torch.cat((x1, x3), dim=1) #[B,512*2]
-        # feat = self.mlp1(x_res) #[B,512]
+        #bibranch
+        x_res1 = self.resnet1(x2)
+        x_res2 = self.resnet2(x4)
+        x_res = torch.cat((x_res1, x_res2), dim=1) #[B,512*2]
+        # print("x_res",x_res.shape)
+        feat1 = self.mlp1(x_res) #[B,512]
+        # print("feat1:",feat1.shape)
+
       
         #vit
         x_llm1 = self.clipvit(x1).pooler_output #[B,1024] #*vit的图象embeding方式开始也是他妈conv?
-        feat = self.mlp1(x_llm1)
-        output = self.fc1(feat)
+        feat2 = self.mlp2(x_llm1) #[B,512]
+        # output = self.fc1(feat)
         # x_llm2 = self.clipvit(x4).pooler_output #[B,1024] #*vit的图象embeding方式开始也是他妈conv?
         # x_llm2 = self.mlp2(x_llm2)#[B,512]
         # a_x = torch.cat((x_llm1, x_llm2), dim=1)
         # a_x = self.mlp3(a_x)#[B,512]
         
-        # output = self.fc(feat)#*分类器优化
+
+        #组合支路
+        feat = torch.cat((feat1, feat2), dim=1) #[B,512*2]
+
+        output = self.fc(feat)#*分类器优化
         #  # --------------------------- cos(theta) & phi(theta) ---------------------------
         # cosine = F.linear(F.normalize(feat), F.normalize(self.weight))
         # phi = cosine - self.m
@@ -98,6 +128,7 @@ class DSEX(nn.Module):
         # print(ax.shape)#
         #*直接
         return output, feat
+        # return output, x1
 
 
 

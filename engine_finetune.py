@@ -7,6 +7,7 @@
 
 import os, pdb
 import math
+import time
 import numpy as np
 from typing import Iterable, Optional
 
@@ -161,8 +162,6 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
 
     # switch to evaluation mode
     model.eval()
-    a = []
-    b = []
     for index, batch in enumerate(metric_logger.log_every(data_loader, 500, header)):
         # print("数据:",batch[0].shape,batch[0])
         images = batch[0]
@@ -241,10 +240,12 @@ def evaluate(data_loader, model, device, val=None, use_amp=False):
     #循环结束#?为啥这个内存没爆炸哦,但是之前就爆炸了?果然还是放在显存好?
     B = B1.detach().cpu().numpy()
     lab = labels.detach().cpu().numpy()
-    info = "vitsafe_sdv4"
-    np.save(f'results/visual/datasave/B_{info}.npy', B)
-    np.save(f'results/visual/datasave/label_{info}.npy', lab)
-    # print("数据保存完毕")
+    T = time.time()
+    info = f"sdv4训练/AIDEbibranch/pixel_patch&lowfre-{T}"
+    # info = "chameleon训练0.2测试-数据集crop原始"
+    np.save(f'results/visual/datasave/{info}_feat.npy', B)
+    np.save(f'results/visual/datasave/{info}_label.npy', lab)
+    # print(f"{info}数据保存完毕")
 
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()

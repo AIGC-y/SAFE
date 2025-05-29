@@ -225,46 +225,38 @@ class TrainDataset(Dataset):
         
         sample = self.data_list[index]
         image_path, targets = sample['image_path'], sample['label']
-        try:
-                image_ori = Image.open(image_path).convert('RGB')
-                # print(f'open image: {image_path}',image)
-        except:#*这个是必须的
-                print(f'image error: {image_path}')
-                return self.__getitem__(random.randint(0, len(self.data_list) - 1))
-
-
+        
+        #####训测都变化######
         # add = self.data_list[random.randint(0, len(self.data_list) - 1)]
         # addimg_path, addtargets = add['image_path'], add['label']
         
-        replaceratio=random.random()
+        # replaceratio=random.random()
         # targets = (1-replaceratio) * targets + replaceratio * addtargets
-        image_patch = process_patches(image_path,replace_ratio= replaceratio)##*目前没有第二个图象混合,之后要
-
-
+        # image = process_patches(image_path, addimg_path,replace_ratio= replaceratio)
         #######
-        # if self.is_train:##使用标签融合不行
-        #     add = self.data_list[random.randint(0, len(self.data_list) - 1)]
-        #     addimg_path, addtargets = add['image_path'], add['label']
+        if self.is_train:##使用标签融合不行
+            add = self.data_list[random.randint(0, len(self.data_list) - 1)]
+            addimg_path, addtargets = add['image_path'], add['label']
             
-        #     replaceratio=random.random()
-        #     targets = (1-replaceratio) * targets + replaceratio * addtargets
-        #     image_patch = process_patches(image_path, addimg_path,replace_ratio= replaceratio)
-        # else:
-        #     try:
-        #         image = Image.open(image_path).convert('RGB')
-        #         # print(f'open image: {image_path}',image)
-        #     except:
-        #         print(f'image error: {image_path}')
-        #         return self.__getitem__(random.randint(0, len(self.data_list) - 1))
-        # try:
-        #         image = Image.open(image_path).convert('RGB')
-        #         # print(f'open image: {image_path}',image)
-        # except:
-        #         print(f'image error: {image_path}')
-        #         return self.__getitem__(random.randint(0, len(self.data_list) - 1))
+            replaceratio=random.random()
+            targets = (1-replaceratio) * targets + replaceratio * addtargets
+            image = process_patches(image_path, addimg_path,replace_ratio= replaceratio)
+        else:
+            try:
+                image = Image.open(image_path).convert('RGB')
+                # print(f'open image: {image_path}',image)
+            except:
+                print(f'image error: {image_path}')
+                return self.__getitem__(random.randint(0, len(self.data_list) - 1))
+        try:
+                image = Image.open(image_path).convert('RGB')
+                # print(f'open image: {image_path}',image)
+        except:
+                print(f'image error: {image_path}')
+                return self.__getitem__(random.randint(0, len(self.data_list) - 1))
 
-        image_patch = self.transform1(image_patch)#输出的大小要是固定大小才可以，如果上面的处理删除了，在transform中尺寸久不对了 #[C,H,W]
-        image_ori = self.transform2(image_ori)
+        image_patch = self.transform1(image)#输出的大小要是固定大小才可以，如果上面的处理删除了，在transform中尺寸久不对了 #[C,H,W]
+        image_ori = self.transform2(image)
 
         #todo *对特征进行频谱还是图象频谱,反正得对图象patch然后在分类不同特征.
         #* 潜在DF模型的思路有借鉴意义吗??这个是生成图象,痕迹被消失了.感觉其实一般了这样.?
@@ -285,7 +277,7 @@ class TrainDataset(Dataset):
         # b=0
 
         #*先尝试只用这三个数据看看
-        return (image_ori,image_patch, a, b), torch.tensor(int(targets))
+        return (image_ori,image_patch, a, b,), torch.tensor(int(targets))
         # return image_patch, torch.tensor(int(targets))
 
 

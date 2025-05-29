@@ -30,7 +30,7 @@ def visualize(x1,y1,info=None,size = 20):
                 # )
     #*设置点为颜色点
     COLOR='tab10'
-    plt.scatter(x1[:, 0], x1[:, 1], c=y1+10, cmap=COLOR)#*没有append直接用切片也可以
+    plt.scatter(x1[:, 0], x1[:, 1], c=y1+10, cmap=COLOR,alpha=0.3)#*没有append直接用切片也可以
     # plt.scatter(x2[:, 0], x2[:, 1], c=y2+2, cmap='Oranges')
 
     plt.xticks([])
@@ -44,7 +44,7 @@ def visualize(x1,y1,info=None,size = 20):
 def tSNE(x1,y1,info):
     """x,y,为numpy,
     n_components:是可视化的维度,不是原始维度"""
-    x1_tsne = manifold.TSNE(n_components=2, init='pca', random_state=501, n_iter=1000, verbose=1).fit_transform(x1)
+    x1_tsne = manifold.TSNE(n_components=2, init='pca', random_state=501, max_iter=1000, verbose=1).fit_transform(x1)
     # x2_tsne = manifold.TSNE(n_components=2, init='pca', random_state=501, n_iter=1000, verbose=1).fit_transform(x2)
     print("Org data dimension is {}. Embedded data dimension is {}".format(x1.shape[-1], x1_tsne.shape[-1]))
     visualize(x1_tsne, y1,info)
@@ -81,10 +81,15 @@ if __name__ == "__main__":
 
     #**数据的获取就是重写一个test过程，只要数据输出，其他计算全删除就行了。这是最简单的方法，其他方法都需要改好多模块。这个就是需要什么什
     ##**注意别爆内存或者显存，数据一般的就直接保存。不行的需要用txt文件来追加。
-    info = 'vitsafe-sdv4'
-    y1 =  np.load('/home/yiruolei/project/AIGCdetector/SAFE/results/visual/datasave/label_vitsafe_sdv4.npy')
-    x1 = np.load('/home/yiruolei/project/AIGCdetector/SAFE/results/visual/datasave/B_vitsafe_sdv4.npy')
+    
+    y1 =  np.load('results/visual/datasave/sdv4训练/AIDEbibranch/pixel_patch&lowfre-1748331538.993405_label.npy')
+    x1 = np.load('results/visual/datasave/sdv4训练/AIDEbibranch/pixel_patch&lowfre-1748331538.993405_feat.npy')
+    # print(x1.shape,y1.shape)
+    info = 'sdv4训练/AIDEbibranch-chameleon可视化'
     tSNE(x1,y1,info)
+    PCA(x1,y1,info)
+    # LLE(x1,y1,info)
+    # isomap(x1,y1,info)
 
     # y2 = np.load('/home/yiruolei/project/AIGCdetector/SAFE/visual/datasave/b1.npy')
     # x2 = np.load('/home/yiruolei/project/AIGCdetector/SAFE/visual/datasave/d1.npy')

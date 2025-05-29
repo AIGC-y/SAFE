@@ -31,7 +31,8 @@ eval_datasets=(
 )
 ratio_data=0.8
 #"/home/yiruolei/ALLDATASET/GenImage" \
-info="sdv4test/safe结构测试/vit结构原始测试"
+info="sdv4test/AIDE双支路优化/newpatch均匀大小不mix其他图片-pixel&lowfre"
+# info="chameleontraintest/safe结构测试/vit结构原始测试"
 
 #****先把low的也尝试了，然后换resnet
 #这里都是有logging信息的所以不需要自己nohup了
@@ -51,13 +52,14 @@ do
             --data_path "$train_dataset" \
             --eval_data_path "$eval_dataset" \
             --save_ckpt_freq 2 \
-            --batch_size 128 \
+            --batch_size 64 \
             --blr 1e-2 \
             --weight_decay 0.01 \
             --warmup_epochs 1 \
             --epochs 25 \
             --num_workers 8 \
             --output_dir $OUTPUT_PATH \
+            --ratio_train $ratio_data \
         2>&1 | tee -a $OUTPUT_PATH/log_train.txt 
 
     done
